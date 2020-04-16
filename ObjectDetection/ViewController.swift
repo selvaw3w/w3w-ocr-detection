@@ -21,8 +21,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, JJF
     var ocrEngine: W3WOCREngine? = nil
     // set up video capture view
     var videoCapture: VideoCapture!
-    // Image Buffer Size
-    private var ImageBufferSize = CGSize(width: 1080, height: 1920)
+    // Image Buffer Sizeiter    private var ImageBufferSize = CGSize(width: 1080, height: 1920)
     // current pixel buffer
     var currentBuffer: CVPixelBuffer?
     // save current state to send via email
@@ -109,7 +108,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate, JJF
 
             let mailComposer = MFMailComposeViewController()
             mailComposer.mailComposeDelegate = self
-            let toRecipents = ["selva+OCR@what3words.com"]
+            let toRecipents = ["matt.stuttle+OCR@what3words.com"]
             //Set the subject and message of the email
             mailComposer.setSubject("Issue")
             mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
