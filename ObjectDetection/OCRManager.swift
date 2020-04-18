@@ -9,52 +9,57 @@
 import UIKit
 import Foundation
 import ocrsdk
-import what3words
 
 class OCRManager: NSObject {
     
     // Singleton w3w instance
     static let sharedInstance = OCRManager()
     // initialise w3w Engine
-    var w3wEngine : W3wEngine? = nil
+    var w3wEngine : W3wManager?
+    // set up w3w-days
+    public var w3wModel: W3wDataModel!
     // initialise ocr Engine
     var ocrEngine : W3WOCREngine? = nil
     // get current language
     var currentLanguage : String! {
         get {
-            return self.seelectedOCRLanguage()
+            return self.selectedOCRLanguage()
         }
+    }
+    // get sdk version
+    public var ocrSdkVersion: String? {
+      return ocrEngine?.version
+    }
+    
+    // get dataversion
+    public var ocrTesseractVersion: String? {
+      return ocrEngine?.tesseract_version
     }
     
     override public init() {
         super.init()
         self.setDefaultLanguage()
         do {
-            w3wEngine = try? W3wEngine.newDeviceEngine()
-            let tessdataPath = copyFolders()
-            ocrEngine = try? W3WOCREngine.newOcrEngine(languageCode: "af", tessdataPath: "\(tessdataPath)/tessdata", coreSDK: w3wEngine!)
-            print("w3wsdk version:\(String(describing: w3wEngine?.version))")
-            print("ocrsdk version:\(String(describing: ocrEngine?.version))")
+            w3wModel = W3wDataModel(bundle: Bundle.main)
+            
+            w3wEngine = W3wManager(dataPath: w3wModel.w3wDataLocalPath)
+            
+            ocrEngine = try? W3WOCREngine.newOcrEngine(languageCode: "en", tessdataPath: w3wModel.ocrDataPath!, coreSDK: w3wEngine!.engine!)
+            
+            DLog("OCR-Engine: \(self.ocrSdkVersion!)")
+            DLog("W3W-Data: \(self.ocrTesseractVersion!)")
         }
     }
     
-    /**
-        Set default OCR Language. Default to 'en'
-        - Returns: String
-     
-     */
+    /// - Set default OCR Language. Default to 'en'
     fileprivate func setDefaultLanguage() { /// Localisation
         if let langStr = Locale.current.languageCode {
             Constants.w3w.defaultLanguage = langStr.lowercased()
         }
     }
     
-    //MARK:- Language
-    /**
-        Get selected OCR language from the settings. Defaulted to 'en'
-        - Returns: String
-     */
-    fileprivate func seelectedOCRLanguage() -> String {
+    /// - Get selected OCR language from the settings. Defaulted to 'en'
+    fileprivate func selectedOCRLanguage() -> String {
         if let language = Settings.objectForKey(key: Constants.w3w.Language) as? String {
             return language
         } else {
@@ -62,17 +67,18 @@ class OCRManager: NSObject {
         }
     }
     
-    //MARK: add video buffer
+    /// - parameter image: send UIImage to OCR Engine for recognition
     public func find_3wa(image: UIImage) -> String {
         let recognisedText = ocrEngine?.find_3wa(imageFromBuffer: image)
         return recognisedText!
     }
     
+    /// - parameter CMbuffer: send CMSamplebuffer to OCR engine for recognition
     public func addVideoBuffer(CMBuffer: CMSampleBuffer) {
         ocrEngine?.addVideoBuffer(buffer: CMBuffer)
     }
     
-    //MARK: Set area of interest
+    /// - parameter viewBounds: set the region for recognition and draw the overlay area on the uiview
     public func setAreaOfInterest(viewBounds: CGRect) {
         guard viewBounds.isNull else {
             ocrEngine?.setAreaOfInterest(viewBounds)
@@ -81,34 +87,9 @@ class OCRManager: NSObject {
     }
 }
 
-extension OCRManager {
-    //MARK: load w3w-data
-    func copyFolders() -> String {
-        let filemgr = FileManager.default
-        filemgr.delegate = self as? FileManagerDelegate
-        let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
-        let docsURL = dirPaths[0]
-
-        let folderPath = Bundle.main.resourceURL!.appendingPathComponent("w3w-data").path
-        let docsFolder = docsURL.appendingPathComponent("w3w-data").path
-        copyFiles(pathFromBundle: folderPath, pathDestDocs: docsFolder)
+extension OCRManager: W3WOCRRecognitionDelegate {
     
-        return docsFolder
-    }
-    
-    func copyFiles(pathFromBundle : String, pathDestDocs: String) {
-        let fileManagerIs = FileManager.default
-        fileManagerIs.delegate = self as? FileManagerDelegate
-
-        do {
-            let filelist = try fileManagerIs.contentsOfDirectory(atPath: pathFromBundle)
-            try? fileManagerIs.copyItem(atPath: pathFromBundle, toPath: pathDestDocs)
-
-            for filename in filelist {
-                try? fileManagerIs.copyItem(atPath: "\(pathFromBundle)/\(filename)", toPath: "\(pathDestDocs)/\(filename)")
-            }
-        } catch {
-            print("\nError\n")
-        }
+    func w3wOCRSuggestions(_ recognisedText: String!) {
+        //TODO: add recognition delegate to send receiver
     }
 }

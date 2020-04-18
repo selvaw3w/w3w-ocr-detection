@@ -7,24 +7,27 @@ public protocol VideoCaptureDelegate: class {
 }
 
 public class VideoCapture: NSObject {
-  public var previewLayer: AVCaptureVideoPreviewLayer?
-  public weak var delegate: VideoCaptureDelegate?
+    // preview layer
+    public var previewLayer: AVCaptureVideoPreviewLayer?
+    // set up video capture delegate
+    public weak var delegate: VideoCaptureDelegate?
 
-  let captureSession = AVCaptureSession()
-  let videoOutput = AVCaptureVideoDataOutput()
-  let queue = DispatchQueue(label: "net.what3words.camera-queue")
+    let captureSession = AVCaptureSession()
+    
+    let videoOutput = AVCaptureVideoDataOutput()
+    
+    let queue = DispatchQueue(label: "net.what3words.camera-queue")
 
-  var lastTimestamp = CMTime()
+    var lastTimestamp = CMTime()
 
-  public func setUp(sessionPreset: AVCaptureSession.Preset = .medium,
-                    completion: @escaping (Bool) -> Void) {
-    queue.async {
-      let success = self.setUpCamera(sessionPreset: sessionPreset)
-      DispatchQueue.main.async {
-        completion(success)
-      }
+    public func setUp(sessionPreset: AVCaptureSession.Preset = .medium, completion: @escaping (Bool) -> Void) {
+        queue.async {
+        let success = self.setUpCamera(sessionPreset: sessionPreset)
+            DispatchQueue.main.async {
+                completion(success)
+            }
+        }
     }
-  }
 
   func setUpCamera(sessionPreset: AVCaptureSession.Preset) -> Bool {
     captureSession.beginConfiguration()
@@ -45,6 +48,7 @@ public class VideoCapture: NSObject {
     }
 
     let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+    //TODO:
     previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     previewLayer.connection?.videoOrientation = .portrait
     self.previewLayer = previewLayer

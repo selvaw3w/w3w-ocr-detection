@@ -6,5 +6,6 @@ target 'ObjectDetection' do
   use_frameworks!
 
   # Pods for ObjectDetection
-   pod 'JJFloatingActionButton'
+  pod 'SSZipArchive'
+  pod 'JJFloatingActionButton'
 end
