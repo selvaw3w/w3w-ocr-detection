@@ -6,7 +6,7 @@ import JJFloatingActionButton
 import MessageUI
 import SSZipArchive
 
-class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButtonDelegate {
+class ScanViewController: UIViewController, StoryBoarded {
     
     weak var coordinator: MainCoordinator?
     // action button
@@ -30,17 +30,16 @@ class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButton
     // Render image
     private var context = CIContext()
     // maximum boundingboxes
-    var maxBoundingBoxViews = 10 {
+    var maxBoundingBoxViews = 15 {
         didSet {
             setUpBoundingBoxViews()
         }
     }
-    
     // initialise bounding box view
     var boundingBoxViews = [BoundingBoxView]()
     // color range
     var colors: [String: UIColor] = [:]
-
+    // set up minimum bounding box
     func setUpBoundingBoxViews() {
         for _ in 0..<maxBoundingBoxViews {
           boundingBoxViews.append(BoundingBoxView())
@@ -52,7 +51,7 @@ class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButton
         }
     }
 
-    //MARK: set all views
+    // set all views
     override func viewDidLoad() {
         super.viewDidLoad()
         coreML.delegate = self
@@ -71,55 +70,7 @@ class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButton
     func resizePreviewLayer() {
         videoCapture.previewLayer?.frame = videoPreview.bounds
     }
-    // set upaction buttons
-    func setUpActionButton() {
-        actionButton.addItem(title: "Report Issue", image: UIImage(systemName: "envelope.circle.fill")?.withRenderingMode(.alwaysTemplate)) { item in
-            self.videoCapture.stop()
-            self.sendScreenshotEmail()
-        }
 
-        actionButton.addItem(title: "Multi 3wa detection", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
-          // toggle button
-            self.isMulti3wa = !self.isMulti3wa
-            if self.isMulti3wa {
-                item.titleLabel.text = "Multi 3wa detection"
-                item.imageView.image = UIImage(systemName: "doc.on.clipboard")
-                self.maxBoundingBoxViews = 10
-          } else {
-                item.titleLabel.text = "Single 3wa detection"
-                item.imageView.image = UIImage(systemName: "doc")
-                self.maxBoundingBoxViews = 1
-                
-          }
-        }
-        
-        actionButton.addItem(title: "all labels", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
-            // toggle button
-            self.isallFilter = !self.isallFilter
-            if self.isallFilter {
-               item.titleLabel.text = "w3w Label only"
-               item.imageView.image = UIImage(systemName: "doc.on.clipboard")
-            } else {
-               item.titleLabel.text = "all labels"
-               item.imageView.image = UIImage(systemName: "doc")
-            }
-        }
-        
-        actionButton.addItem(title: "w3w logo", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
-           
-        }
-        
-        view.addSubview(actionButton)
-        actionButton.translatesAutoresizingMaskIntoConstraints = false
-        actionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        actionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
-    }
-    
-    func floatingActionButtonDidClose(_ button: JJFloatingActionButton) {
-        videoCapture.start()
-    }
-    
-    //MARK: Set up camera
     func setUpCamera() {
         videoCapture = VideoCapture()
         videoCapture.delegate = self
@@ -141,6 +92,51 @@ class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButton
     }
 }
 
+//MARK: Menu button
+extension ScanViewController: JJFloatingActionButtonDelegate {
+     
+     func setUpActionButton() {
+         actionButton.addItem(title: "Report Issue", image: UIImage(systemName: "envelope.circle.fill")?.withRenderingMode(.alwaysTemplate)) { item in
+             self.videoCapture.stop()
+             self.sendScreenshotEmail()
+         }
+
+         actionButton.addItem(title: "Multi 3wa detection", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
+             self.isMulti3wa = !self.isMulti3wa
+             if self.isMulti3wa {
+                 item.titleLabel.text = "Multi 3wa detection"
+                 item.imageView.image = UIImage(systemName: "doc.on.clipboard")
+                 self.maxBoundingBoxViews = 10
+           } else {
+                 item.titleLabel.text = "Single 3wa detection"
+                 item.imageView.image = UIImage(systemName: "doc")
+                 self.maxBoundingBoxViews = 1
+            }
+         }
+         
+         actionButton.addItem(title: "all labels", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
+             self.isallFilter = !self.isallFilter
+             if self.isallFilter {
+                item.titleLabel.text = "w3w Label only"
+                item.imageView.image = UIImage(systemName: "doc.on.clipboard")
+             } else {
+                item.titleLabel.text = "all labels"
+                item.imageView.image = UIImage(systemName: "doc")
+             }
+         }
+                  
+         view.addSubview(actionButton)
+         actionButton.translatesAutoresizingMaskIntoConstraints = false
+         actionButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+         actionButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16).isActive = true
+     }
+     
+     func floatingActionButtonDidClose(_ button: JJFloatingActionButton) {
+         videoCapture.start()
+     }
+}
+
+//MARK: Send Email
 extension ScanViewController: MFMailComposeViewControllerDelegate {
     
     private func sendScreenshotEmail() {
@@ -193,7 +189,7 @@ extension ScanViewController: MFMailComposeViewControllerDelegate {
             videoCapture.start()
     }
 }
-
+//MARK: Video capture
 extension ScanViewController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
@@ -201,6 +197,7 @@ extension ScanViewController: VideoCaptureDelegate {
     }
 }
 
+//MARK: Process CoreML 
 extension ScanViewController: processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
         // current frame

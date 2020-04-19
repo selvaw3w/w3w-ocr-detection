@@ -15,7 +15,6 @@ import Vision
 protocol processPredictionsDelegate {
 
     func showPredictions(predictions: [VNRecognizedObjectObservation])
-
 }
 
 class W3wCoreMLModel: NSObject {
