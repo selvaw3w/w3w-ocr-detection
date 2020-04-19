@@ -6,7 +6,7 @@ import JJFloatingActionButton
 import MessageUI
 import SSZipArchive
 
-class ScanViewController: UIViewController, StoryBoarded, MFMailComposeViewControllerDelegate, JJFloatingActionButtonDelegate {
+class ScanViewController: UIViewController, StoryBoarded, JJFloatingActionButtonDelegate {
     
     weak var coordinator: MainCoordinator?
     // action button
@@ -75,29 +75,7 @@ class ScanViewController: UIViewController, StoryBoarded, MFMailComposeViewContr
     func setUpActionButton() {
         actionButton.addItem(title: "Report Issue", image: UIImage(systemName: "envelope.circle.fill")?.withRenderingMode(.alwaysTemplate)) { item in
             self.videoCapture.stop()
-          if( MFMailComposeViewController.canSendMail() ) {
-            print("Can send email.")
-
-            let mailComposer = MFMailComposeViewController()
-            mailComposer.mailComposeDelegate = self
-            let toRecipents = ["matt.stuttle+OCR@what3words.com"]
-            //Set the subject and message of the email
-            mailComposer.setSubject("Issue")
-            mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
-            mailComposer.setToRecipients(toRecipents)
-            //TODO: set up mail
-//            if (self.savedBuffer != nil) {
-//                let ciiimage = CIImage(cvPixelBuffer: self.savedBuffer!)
-//                self.context = CIContext(options: nil)
-//                let cgImage = self.context.createCGImage(ciiimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
-//                let imageObject = UIImage(cgImage: cgImage!)
-//                let imageData = imageObject.jpegData(compressionQuality: 1.0)
-//                mailComposer.addAttachmentData(imageData!, mimeType: "image/jpeg", fileName: "Image.jpeg")
-//                self.present(mailComposer, animated: true, completion: nil)
-//            } else {
-//                print("current buffer nil")
-//            }
-          }
+            self.sendScreenshotEmail()
         }
 
         actionButton.addItem(title: "Multi 3wa detection", image: UIImage(systemName: "doc.on.clipboard")?.withRenderingMode(.alwaysTemplate)) { item in
@@ -141,27 +119,6 @@ class ScanViewController: UIViewController, StoryBoarded, MFMailComposeViewContr
         videoCapture.start()
     }
     
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
-        switch result.rawValue {
-            case MFMailComposeResult.cancelled.rawValue:
-                print("Mail cancelled")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.saved.rawValue:
-                print("Mail saved")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.sent.rawValue:
-                print("Mail sent")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.failed.rawValue:
-                print("Mail sent failure.")
-                controller.dismiss(animated: true, completion: nil)
-            default:
-                break
-            }
-            controller.dismiss(animated: true, completion: nil)
-            videoCapture.start()
-    }
-    
     //MARK: Set up camera
     func setUpCamera() {
         videoCapture = VideoCapture()
@@ -182,41 +139,73 @@ class ScanViewController: UIViewController, StoryBoarded, MFMailComposeViewContr
             }
         }
     }
-    
-    func cropImage(_ rect: CGRect, sampleBuffer: CMSampleBuffer) -> UIImage {
-        let ciImage =  self.imageFromSampleBuffer(sampleBuffer: sampleBuffer)
-        context = CIContext(options: nil)
-        let cgImage = context.createCGImage(ciImage, from: rect)
-        return UIImage(cgImage: cgImage!)
-    }
+}
 
-    private func imageFromSampleBuffer(sampleBuffer:CMSampleBuffer) ->  CIImage {
-        // Create a CIImage from the image buffer
-        let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        return CIImage(cvPixelBuffer: imageBuffer!)
+extension ScanViewController: MFMailComposeViewControllerDelegate {
+    
+    private func sendScreenshotEmail() {
+        guard MFMailComposeViewController.canSendMail() else {
+            fatalError("error sending email ")
+        }
+        
+        let mailComposer = MFMailComposeViewController()
+        mailComposer.mailComposeDelegate = self
+        
+        let emailTo = ["matt.stuttle+OCR@what3words.com"]
+        mailComposer.setSubject("Issue")
+        mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
+        mailComposer.setToRecipients(emailTo)
+        
+        guard coreML.loadCurrentStatebuffer != nil else {
+            //TODO: show alert message
+            return
+        }
+        
+        let ciimage = CIImage(cvPixelBuffer: coreML.loadCurrentStatebuffer!)
+        imageProcess.context = CIContext(options: nil)
+        let cgImage = imageProcess.context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
+        let imageObject = UIImage(cgImage: cgImage!)
+        let imageData = imageObject.jpegData(compressionQuality: 1.0)
+        
+        mailComposer.addAttachmentData(imageData!, mimeType: "image/jpeg", fileName: "Image.jpeg")
+        self.present(mailComposer, animated: true, completion: nil)
+        
     }
     
-    func updateImageBufferSize(sampleBuffer: CMSampleBuffer) {
-        // get the image buffer size and set
-        let width = CVPixelBufferGetWidth(CMSampleBufferGetImageBuffer(sampleBuffer)!);
-        let height = CVPixelBufferGetHeight(CMSampleBufferGetImageBuffer(sampleBuffer)!);
-        ImageBufferSize = CGSize(width: width, height: height)
+    internal func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
+        switch result.rawValue {
+            case MFMailComposeResult.cancelled.rawValue:
+                print("Mail cancelled")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.saved.rawValue:
+                print("Mail saved")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.sent.rawValue:
+                print("Mail sent")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.failed.rawValue:
+                print("Mail sent failure.")
+                controller.dismiss(animated: true, completion: nil)
+            default:
+                break
+            }
+            controller.dismiss(animated: true, completion: nil)
+            videoCapture.start()
     }
 }
 
 extension ScanViewController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
-        updateImageBufferSize(sampleBuffer: sampleBuffer)
+        imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
         coreML.predict(sampleBuffer: sampleBuffer)
     }
 }
 
 extension ScanViewController: processPredictionsDelegate {
-    func processPredictions(predictions: [VNRecognizedObjectObservation]) {
+    func showPredictions(predictions: [VNRecognizedObjectObservation]) {
         // current frame
         for i in 0..<boundingBoxViews.count {
             if i < predictions.count {
-                //TODO: cleanup 
                 let prediction = predictions[i]
                 let width = view.frame.width
                 let height = view.frame.height
@@ -246,3 +235,5 @@ extension ScanViewController: processPredictionsDelegate {
         }
     }
 }
+
+

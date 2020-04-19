@@ -14,9 +14,10 @@ import Vision
 
 protocol processPredictionsDelegate {
 
-    func processPredictions(predictions: [VNRecognizedObjectObservation])
+    func showPredictions(predictions: [VNRecognizedObjectObservation])
 
 }
+
 class W3wCoreMLModel: NSObject {
 
     // set up delegate
@@ -29,7 +30,7 @@ class W3wCoreMLModel: NSObject {
     var currentBuffer: CVPixelBuffer?
     
     // curernt buffer state
-    var loadCurrentbufferState: CVPixelBuffer?
+    var loadCurrentStatebuffer: CVPixelBuffer?
     
     // load coreML model
     lazy var visionModel: VNCoreMLModel = {
@@ -44,7 +45,7 @@ class W3wCoreMLModel: NSObject {
         super.init()
     }
     
-    // make new vision Request
+    /// - Make new vision request
     lazy var visionRequest: VNCoreMLRequest = {
         let request = VNCoreMLRequest(model: visionModel, completionHandler: {
         [weak self] request, error in
@@ -55,6 +56,7 @@ class W3wCoreMLModel: NSObject {
         return request
     }()
     
+    /// - load all the labels from the model
     func loadLabels() -> [String] {
                 
         // The label names are stored inside the MLModel's metadata.
@@ -66,25 +68,26 @@ class W3wCoreMLModel: NSObject {
         return allLabels.components(separatedBy: ",")
     }
     
+    /// - process all observations
     func processObservations(for request: VNRequest, error: Error?) {
         DispatchQueue.main.async {
             if let results = request.results as? [VNRecognizedObjectObservation] {
-                self.show(predictions: results)
+                self.detectedObservation(predictions: results)
                 self.currentBuffer = nil
             } else {
-                self.show(predictions: [])
+                self.detectedObservation(predictions: [])
             }
         }
     }
     
-    func show(predictions: [VNRecognizedObjectObservation]) {
-        self.delegate?.processPredictions(predictions: predictions)
+    func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
+        self.delegate?.showPredictions(predictions: predictions)
     }
     
     func predict(sampleBuffer: CMSampleBuffer) {
         if currentBuffer == nil, let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
           currentBuffer = pixelBuffer
-          loadCurrentbufferState = currentBuffer
+          loadCurrentStatebuffer = currentBuffer
 
           var options: [VNImageOption : Any] = [:]
           if let cameraIntrinsicMatrix = CMGetAttachment(sampleBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {

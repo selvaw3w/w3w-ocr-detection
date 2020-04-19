@@ -24,6 +24,7 @@
 		00BAA460244B42A80036DB0C /* W3wCoreMLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA45F244B42A80036DB0C /* W3wCoreMLModel.swift */; };
 		00BAA463244B44D80036DB0C /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA462244B44D80036DB0C /* Logging.swift */; };
 		00BAA46A244BBE4A0036DB0C /* ImageProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA469244BBE4A0036DB0C /* ImageProcess.swift */; };
+		00BAA46C244C3BC60036DB0C /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA46B244C3BC60036DB0C /* Slider.swift */; };
 		5660C088AF7FB420F6568B12 /* Pods_ObjectDetection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */; };
 		7BCB411B21C3096100BFC4D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB411A21C3096100BFC4D0 /* AppDelegate.swift */; };
 		7BCB411D21C3096100BFC4D0 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB411C21C3096100BFC4D0 /* ScanViewController.swift */; };
@@ -52,6 +53,7 @@
 		00BAA45F244B42A80036DB0C /* W3wCoreMLModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wCoreMLModel.swift; sourceTree = "<group>"; };
 		00BAA462244B44D80036DB0C /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		00BAA469244BBE4A0036DB0C /* ImageProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcess.swift; sourceTree = "<group>"; };
+		00BAA46B244C3BC60036DB0C /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		4BE4A7192C3D1FF47CECAC43 /* Pods-ObjectDetection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectDetection.debug.xcconfig"; path = "Target Support Files/Pods-ObjectDetection/Pods-ObjectDetection.debug.xcconfig"; sourceTree = "<group>"; };
 		73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectDetection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCB411721C3096100BFC4D0 /* ObjectDetection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectDetection.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +113,7 @@
 		00BAA451244B37E70036DB0C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				00BAA46B244C3BC60036DB0C /* Slider.swift */,
 				7BCB412F21C309B900BFC4D0 /* VideoCapture.swift */,
 				00BAA469244BBE4A0036DB0C /* ImageProcess.swift */,
 				00BAA461244B44C70036DB0C /* Others */,
@@ -176,8 +179,8 @@
 			isa = PBXGroup;
 			children = (
 				004E8B6E2449BC8600B25236 /* StoryBoarded.swift */,
-				004E8B6C2448FC8B00B25236 /* Coordinator.swift */,
 				004E8B702449BDB800B25236 /* MainCoordinator.swift */,
+				004E8B6C2448FC8B00B25236 /* Coordinator.swift */,
 			);
 			name = "Flow Coordinator";
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				00BAA463244B44D80036DB0C /* Logging.swift in Sources */,
 				00507203243FD54200DBC581 /* Settings.swift in Sources */,
 				00BAA45E244B429A0036DB0C /* W3wDataModel.swift in Sources */,
+				00BAA46C244C3BC60036DB0C /* Slider.swift in Sources */,
 				7BCB413221C309B900BFC4D0 /* BoundingBoxView.swift in Sources */,
 				004E8B6F2449BC8600B25236 /* StoryBoarded.swift in Sources */,
 				00BAA45A244B425A0036DB0C /* W3wManager.swift in Sources */,

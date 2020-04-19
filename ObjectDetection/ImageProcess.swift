@@ -12,7 +12,7 @@ import Vision
 
 class ImageProcess: NSObject {
     
-    private var context = CIContext()
+    public var context = CIContext()
     
     // Image Buffer Size
     private var ImageBufferSize = CGSize(width: 1080, height: 1920)
@@ -49,7 +49,6 @@ class ImageProcess: NSObject {
     }
     
     func ciImageFromPixelBuffer(pixelBuffer: CVPixelBuffer) -> CIImage {
-        //TODO: validate for nil
         return CIImage(cvPixelBuffer: pixelBuffer)
     }
 }
