@@ -10,9 +10,9 @@ import UIKit
 import SSZipArchive
 
 class W3wDataModel: NSObject {
-    
+    // set w3w data path
     public var w3wDataLocalPath: String!
-        
+    
     public var w3w: W3wManager?
     
     public var ocrDataPath: String? {

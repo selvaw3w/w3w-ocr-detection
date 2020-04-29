@@ -11,7 +11,6 @@ import Foundation
 import ocrsdk
 
 class OCRManager: NSObject {
-    
     // Singleton w3w instance
     static let sharedInstance = OCRManager()
     // initialise w3w Engine
@@ -20,6 +19,8 @@ class OCRManager: NSObject {
     public var w3wModel: W3wDataModel!
     // initialise ocr Engine
     var ocrEngine : W3WOCREngine? = nil
+    // get the engine version
+    public var w3wSDKVersion = String()
     // get current language
     var currentLanguage : String! {
         get {
@@ -45,7 +46,7 @@ class OCRManager: NSObject {
             w3wEngine = W3wManager(dataPath: w3wModel.w3wDataLocalPath)
             
             ocrEngine = try? W3WOCREngine.newOcrEngine(languageCode: "en", tessdataPath: w3wModel.ocrDataPath!, coreSDK: w3wEngine!.engine!)
-            
+            w3wSDKVersion = (w3wEngine?.sdkVersion)!
             DLog("OCR-Engine: \(self.ocrSdkVersion!)")
             DLog("W3W-Data: \(self.ocrTesseractVersion!)")
         }
@@ -54,16 +55,16 @@ class OCRManager: NSObject {
     /// - Set default OCR Language. Default to 'en'
     fileprivate func setDefaultLanguage() { /// Localisation
         if let langStr = Locale.current.languageCode {
-            Constants.w3w.defaultLanguage = langStr.lowercased()
+            Config.w3w.defaultLangauge = langStr.lowercased()
         }
     }
     
     /// - Get selected OCR language from the settings. Defaulted to 'en'
     fileprivate func selectedOCRLanguage() -> String {
-        if let language = Settings.objectForKey(key: Constants.w3w.Language) as? String {
+        if let language = Settings.objectForKey(key: Config.w3w.defaultLangauge) as? String {
             return language
         } else {
-            return Constants.w3w.defaultLanguage
+            return Config.w3w.defaultLangauge
         }
     }
     

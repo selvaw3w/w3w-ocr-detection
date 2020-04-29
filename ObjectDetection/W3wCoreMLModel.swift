@@ -13,7 +13,6 @@ import UIKit
 import Vision
 
 protocol processPredictionsDelegate {
-
     func showPredictions(predictions: [VNRecognizedObjectObservation])
 }
 
