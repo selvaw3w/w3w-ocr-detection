@@ -46,7 +46,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         button.layer.cornerRadius = 30
         button.layer.borderWidth = 2.0
         button.layer.borderColor = UIColor.white.cgColor
-        button.backgroundColor = UIColor.white
+        button.setBackgroundImage(UIImage(named: "circleBtn"), for: .normal)
         button.clipsToBounds = true
 
         return button
