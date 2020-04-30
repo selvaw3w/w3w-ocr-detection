@@ -203,14 +203,7 @@ extension ScanViewController: processPredictionsDelegate {
         for i in 0..<boundingBoxViews.count {
             if i < predictions.count {
                 let prediction = predictions[i]
-                
-                let originX = prediction.boundingBox.minX * ImageBufferSize.width
-                let originY = prediction.boundingBox.minY * ImageBufferSize.height
-                let cropWidth = (prediction.boundingBox.maxX - prediction.boundingBox.minX) * ImageBufferSize.width
-                let cropHeight = (prediction.boundingBox.maxY-prediction.boundingBox.minY)*ImageBufferSize.height
-                let cropRect1 = CGRect(x: originX, y: originY, width: cropWidth, height: cropHeight)
-
-        
+            
                 let width = view.frame.width
                 let height = view.frame.height
                 let scaleFactor = height/ImageBufferSize.height
@@ -218,7 +211,7 @@ extension ScanViewController: processPredictionsDelegate {
                 let offset = ImageBufferSize.width * scaleFactor - width
                 let actualMarginWidth = -offset / 2.0
                 let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
-                let rect = cropRect1.applying(scale).applying(transform)
+                let rect = imageProcess.croppedRect.applying(scale).applying(transform)
 
                 let bestClass = prediction.labels[0].identifier
                 let confidence = prediction.labels[0].confidence

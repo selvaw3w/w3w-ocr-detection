@@ -16,6 +16,8 @@ class ImageProcess: NSObject {
     
     // Image Buffer Size
     private var ImageBufferSize = CGSize(width: 1080, height: 1920)
+    
+    public var croppedRect = CGRect()
 
     override init() {
         super.init()
@@ -34,13 +36,13 @@ class ImageProcess: NSObject {
         let originY = prediction.boundingBox.minY * ImageBufferSize.height
         let cropWidth = (prediction.boundingBox.maxX - prediction.boundingBox.minX) * ImageBufferSize.width
         let cropHeight = (prediction.boundingBox.maxY-prediction.boundingBox.minY)*ImageBufferSize.height
-        let rect = CGRect(x: originX, y: originY, width: cropWidth, height: cropHeight)
+        croppedRect = CGRect(x: originX, y: originY, width: cropWidth, height: cropHeight)
         
-        let croppedImage = UIImage(cgImage: cropRect(rect, pixelBuffer: cvPixelBuffer))
+        let croppedImage = UIImage(cgImage: cropCGImage(croppedRect, pixelBuffer: cvPixelBuffer))
         return croppedImage
     }
     
-    func cropRect(_ rect: CGRect, pixelBuffer: CVPixelBuffer) -> CGImage {
+    func cropCGImage(_ rect: CGRect, pixelBuffer: CVPixelBuffer) -> CGImage {
         //TODO: add validation
         let ciiimage = ciImageFromPixelBuffer(pixelBuffer: pixelBuffer)
         context = CIContext(options: nil)
