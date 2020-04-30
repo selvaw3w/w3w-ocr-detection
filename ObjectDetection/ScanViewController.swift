@@ -160,7 +160,8 @@ extension ScanViewController: VideoCaptureDelegate {
     }
     
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
-        coreML.predictPhoto(image: image)
+        let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
+        coreML.predictPhoto(pixelBuffer: pixelBuffer)
     }
 }
 

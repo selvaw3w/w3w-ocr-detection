@@ -26,7 +26,7 @@ class W3wCoreMLModel: NSObject {
 
     // current pixel buffer
     var currentBuffer: CVPixelBuffer?
-    
+        
     // curernt buffer state
     var loadCurrentStatebuffer: CVPixelBuffer?
     
@@ -101,13 +101,20 @@ class W3wCoreMLModel: NSObject {
         }
     }
 
-    func predictPhoto(image: UIImage) {
-        let ciImage = CIImage(image: image)!
+    func predictPhoto(pixelBuffer: CVPixelBuffer) {
+
+        if currentBuffer == nil {
+            currentBuffer = pixelBuffer
+            loadCurrentStatebuffer = currentBuffer
+        }
         
-        let imageOrientation = CGImagePropertyOrientation(rawValue: UInt32(image.imageOrientation.rawValue))!
-        
-        let handler = VNImageRequestHandler(ciImage: ciImage, orientation: imageOrientation)
-        
+        var options: [VNImageOption : Any] = [:]
+            
+        if let cameraIntrinsicMatrix = CMGetAttachment(pixelBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {
+                options[.cameraIntrinsics] = cameraIntrinsicMatrix
+        }
+          
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: options)
         do {
             try handler.perform([self.visionRequest])
         } catch {
