@@ -82,7 +82,7 @@ class W3wCoreMLModel: NSObject {
         self.delegate?.showPredictions(predictions: predictions)
     }
     
-    func predict(sampleBuffer: CMSampleBuffer) {
+    func predictVideo(sampleBuffer: CMSampleBuffer) {
         if currentBuffer == nil, let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
           currentBuffer = pixelBuffer
           loadCurrentStatebuffer = currentBuffer
@@ -91,13 +91,27 @@ class W3wCoreMLModel: NSObject {
           if let cameraIntrinsicMatrix = CMGetAttachment(sampleBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {
             options[.cameraIntrinsics] = cameraIntrinsicMatrix
           }
-            
+          
           let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: options)
             do {
                 try handler.perform([self.visionRequest])
             } catch {
                 print("Failed to perform Vision request: \(error)")
             }
+        }
+    }
+
+    func predictPhoto(image: UIImage) {
+        let ciImage = CIImage(image: image)!
+        
+        let imageOrientation = CGImagePropertyOrientation(rawValue: UInt32(image.imageOrientation.rawValue))!
+        
+        let handler = VNImageRequestHandler(ciImage: ciImage, orientation: imageOrientation)
+        
+        do {
+            try handler.perform([self.visionRequest])
+        } catch {
+            print("Failed to perform Vision request: \(error)")
         }
     }
 }

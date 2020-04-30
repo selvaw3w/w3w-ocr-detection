@@ -34,7 +34,7 @@ class ScanViewController: UIViewController, StoryBoarded {
     // color range
     var colors: [String: UIColor] = [:]
     // maximum boundingboxes
-    var maxBoundingBoxViews = 15 {
+    var maxBoundingBoxViews = 10 {
         didSet {
             setUpBoundingBoxViews()
         }
@@ -152,6 +152,55 @@ class ScanViewController: UIViewController, StoryBoarded {
     }
 }
 
+//MARK: Video capture
+extension ScanViewController: VideoCaptureDelegate {
+    func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
+        imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
+        coreML.predictVideo(sampleBuffer: sampleBuffer)
+    }
+    
+    func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
+        coreML.predictPhoto(image: image)
+    }
+}
+
+//MARK: Process CoreML
+extension ScanViewController: processPredictionsDelegate {
+    func showPredictions(predictions: [VNRecognizedObjectObservation]) {
+
+        for i in 0..<boundingBoxViews.count {
+            if i < predictions.count {
+                let prediction = predictions[i]
+                let width = view.frame.width
+                let height = view.frame.height
+                let scale = CGAffineTransform.identity.scaledBy(x: width, y: height)
+                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -height)
+                let rect = prediction.boundingBox.applying(scale).applying(transform)
+
+                let bestClass = prediction.labels[0].identifier
+                let confidence = prediction.labels[0].confidence
+                
+                // Display the bounding box.
+                let label = String(format: "%@ %.1f", bestClass, confidence * 100)
+                //let color = colors[bestClass] ?? UIColor.red
+                if bestClass == "w3w" && (confidence * 100) > 75.0 {
+                    if (coreML.currentBuffer != nil) {
+                        let croppedImage = imageProcess.cropImage(prediction, cvPixelBuffer: coreML.currentBuffer!)
+                        let recognisedtext = ocrmanager.find_3wa(image: croppedImage)
+                        guard recognisedtext.isEmpty else {
+                            boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor(displayP3Red: 0.426976, green: 0.882479, blue: 0.143794, alpha: 1.0))
+                            self.selectedarea = rect
+                            return
+                        }
+                    }
+                }
+            } else {
+                boundingBoxViews[i].hide()
+            }
+        }
+    }
+}
+
 //MARK: Send Email
 extension ScanViewController: MFMailComposeViewControllerDelegate {
     
@@ -205,57 +254,3 @@ extension ScanViewController: MFMailComposeViewControllerDelegate {
             videoCapture.start()
     }
 }
-//MARK: Video capture
-extension ScanViewController: VideoCaptureDelegate {
-//    func photoCapture(_ capture: VideoCapture, didCapturePhotoImage: UIImage) {
-//        print(didCapturePhotoImage)
-//    }
-    
-    func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame sampleBuffer: CMSampleBuffer) {
-        imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)        
-        coreML.predict(sampleBuffer: sampleBuffer)
-    }
-    
-    func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
-        imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
-        coreML.predict(sampleBuffer: sampleBuffer)
-    }
-}
-
-//MARK: Process CoreML
-extension ScanViewController: processPredictionsDelegate {
-    func showPredictions(predictions: [VNRecognizedObjectObservation]) {
-        // current frame
-        for i in 0..<boundingBoxViews.count {
-            if i < predictions.count {
-                let prediction = predictions[i]
-                let width = view.frame.width
-                let height = view.frame.height
-                let scale = CGAffineTransform.identity.scaledBy(x: width, y: height)
-                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -height)
-                let rect = prediction.boundingBox.applying(scale).applying(transform)
-
-                let bestClass = prediction.labels[0].identifier
-                let confidence = prediction.labels[0].confidence
-                
-                // Display the bounding box.
-                let label = String(format: "%@ %.1f", bestClass, confidence * 100)
-                //let color = colors[bestClass] ?? UIColor.red
-                if bestClass == "w3w" && (confidence * 100) > 75.0 {
-                    if (coreML.currentBuffer != nil) {
-                        let croppedImage = imageProcess.cropImage(prediction, cvPixelBuffer: coreML.currentBuffer!)
-                        let recognisedtext = ocrmanager.find_3wa(image: croppedImage)
-                        guard recognisedtext.isEmpty else {
-                            boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor(displayP3Red: 0.426976, green: 0.882479, blue: 0.143794, alpha: 1.0))
-                            self.selectedarea = rect
-                            return
-                        }
-                    }
-                }
-            } else {
-                boundingBoxViews[i].hide()
-            }
-        }
-    }
-}
-
