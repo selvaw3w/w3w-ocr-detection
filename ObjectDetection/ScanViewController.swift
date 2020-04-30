@@ -116,7 +116,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         }
         
         // set up report issue button
-        self.overlayView.addSubview(reportBtn)
+        self.view.addSubview(reportBtn)
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
 
         reportBtn.snp.makeConstraints{(make) in
