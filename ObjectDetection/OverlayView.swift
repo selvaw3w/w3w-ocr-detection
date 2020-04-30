@@ -10,13 +10,15 @@ import UIKit
 
 class OverlayView: UIView {
         // Border thickness of capture zone
-        private let areaBorderThickness: CGFloat = 1.0
-        // Background color
-        private let areaFogColor: UIColor = UIColor(red: 0.22, green: 0.33, blue: 0.38, alpha: 0.5)
+        private let boundingBoxBorderThickness: CGFloat = 2.0
         // Border color of capture zone
-        private let areaBorderColor: UIColor = UIColor .clear
+        private let boundingBoxBorderColor: UIColor = UIColor .white
+        //non-w3w detection background color
+        public let nonW3wBackgroundColor: UIColor = UIColor.clear
+        // w3w detection background color
+        public let W3wBackgroundColor: UIColor = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.6)
 
-        public var selectedArea: CGRect = CGRect.zero {
+        public var boundingBox: CGRect = CGRect.zero {
             didSet {
                 DispatchQueue.main.async {
                     self.setNeedsDisplay()
@@ -62,11 +64,11 @@ class OverlayView: UIView {
             let scaledBounds = self.superview?.bounds
 
             // Fill the background
-            context.setFillColor(areaFogColor.cgColor)
+            context.setFillColor(W3wBackgroundColor.cgColor)
             
             context.fill(scaledBounds!)
 
-            let intersection = self.selectedArea.intersection(scaledBounds!)
+            let intersection = self.boundingBox.intersection(scaledBounds!)
             context.addRect(intersection)
             context.clip()
             context.clear(intersection)
@@ -79,21 +81,21 @@ class OverlayView: UIView {
         
         private func drawBorderLayer(_ context: CGContext!) {
             // Draw the outline of the capture zone
-            self.addPathForSelectedArea(context)
-            context.setStrokeColor(areaBorderColor.cgColor)
-            context.setLineWidth(areaBorderThickness)
+            self.addPathForboundingBox(context)
+            context.setStrokeColor(boundingBoxBorderColor.cgColor)
+            context.setLineWidth(boundingBoxBorderThickness)
             context.drawPath(using: CGPathDrawingMode.stroke)
         }
 
-        private func addPathForSelectedArea(_ context: CGContext!) {
-            let origin = self.selectedArea.origin
-            let width = self.selectedArea.width
-            let height = self.selectedArea.height
+        private func addPathForboundingBox(_ context: CGContext!) {
+            let origin = self.boundingBox.origin
+            let width = self.boundingBox.width
+            let height = self.boundingBox.height
 
             let points = [origin,
-                CGPoint.init(x: self.selectedArea.origin.x + width, y: origin.y),
-                CGPoint.init(x: self.selectedArea.origin.x + width, y: origin.y + height),
-                CGPoint.init(x: self.selectedArea.origin.x, y: origin.y + height)]
+                CGPoint.init(x: self.boundingBox.origin.x + width, y: origin.y),
+                CGPoint.init(x: self.boundingBox.origin.x + width, y: origin.y + height),
+                CGPoint.init(x: self.boundingBox.origin.x, y: origin.y + height)]
 
             context.addLines(between: points)
             context.closePath()

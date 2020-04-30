@@ -83,9 +83,9 @@ class ScanViewController: UIViewController, StoryBoarded {
         return overlayView
     }()
     // Selected Area
-    internal var selectedarea : CGRect = CGRect.zero {
+    internal var boundingBox : CGRect = CGRect.zero {
         didSet {
-            self.overlayView.selectedArea = selectedarea
+            self.overlayView.boundingBox = boundingBox
         }
     }
     // set all views
@@ -224,8 +224,9 @@ extension ScanViewController: processPredictionsDelegate {
                         let croppedImage = imageProcess.cropImage(prediction, cvPixelBuffer: coreML.currentBuffer!)
                         let recognisedtext = ocrmanager.find_3wa(image: croppedImage)
                         guard recognisedtext.isEmpty else {
-                            boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor(displayP3Red: 0.426976, green: 0.882479, blue: 0.143794, alpha: 1.0))
-                            self.selectedarea = rect
+                            
+                            //boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor(displayP3Red: 0.426976, green: 0.882479, blue: 0.143794, alpha: 1.0))
+                            self.boundingBox = rect
                             return
                         }
                     }
