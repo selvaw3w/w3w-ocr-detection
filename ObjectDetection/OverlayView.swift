@@ -103,6 +103,5 @@ class OverlayView: UIView {
     extension UIView {
         func removeAllSubView() {
             self.subviews.forEach { $0.removeFromSuperview() }
-        }
-
+    }
 }

@@ -100,6 +100,7 @@ public class VideoCapture: NSObject {
             fatalError("couldn't add photo output")
         }
         photoOutput.isHighResolutionCaptureEnabled = true        
+        
         captureSession.addOutput(photoOutput)
     }
     
@@ -160,13 +161,13 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
         }
         
         let currentCIImage = CIImage(cgImage: cgiImage)
-        
+        // Rotate ciimage
         let rotateCIImage = currentCIImage.oriented(forExifOrientation: Int32(deviceOrientationOnCapture.getCIImageOrientationFromDevice().rawValue))
 
         guard let cgImage = CIContext(options: nil).createCGImage(rotateCIImage, from: rotateCIImage.extent) else {
             fatalError("Error: while generating cgimage from photo capture data")
         }
-        
+        //Final rotated UIImage
         let image = UIImage(cgImage: cgImage)
 
         delegate?.photoCapture(self, didCapturePhotoFrame: image)
@@ -186,19 +187,14 @@ extension UIDeviceOrientation {
     func getCIImageOrientationFromDevice() -> UIImage.Orientation {
         switch UIDevice.current.orientation {
             case .portrait, .faceUp:
-                print(UIImage.Orientation.init(rawValue: 6) as Any)
                 return UIImage.Orientation.init(rawValue: 6)!
             case .landscapeLeft :
-                print(UIImage.Orientation.init(rawValue: 3) as Any)
                 return UIImage.Orientation.init(rawValue: 3)!
             case .landscapeRight :
-                print(UIImage.Orientation.init(rawValue: 1) as Any)
                 return UIImage.Orientation.init(rawValue: 1)!
             case .unknown:
-                print(UIImage.Orientation.init(rawValue: 1) as Any)
                 return UIImage.Orientation.init(rawValue: 1)!
             case .portraitUpsideDown, .faceDown:
-                print(UIImage.Orientation.init(rawValue: 1) as Any)
                 return UIImage.Orientation.init(rawValue: 1)!
         @unknown default:
             return UIImage.Orientation.init(rawValue: 6)!
@@ -207,23 +203,16 @@ extension UIDeviceOrientation {
     
     // TOOD: Incase in future to rotate UIImage from current device orientation.
     func getUIImageOrientationFromDevice() -> UIImage.Orientation {
-        // return CGImagePropertyOrientation based on Device Orientation
-        // This extented function has been determined based on experimentation with how an UIImage gets displayed.
         switch self {
         case UIDeviceOrientation.portrait, .faceUp:
-            print("UIDeviceOrientation.portrait")
             return UIImage.Orientation.right
         case UIDeviceOrientation.portraitUpsideDown, .faceDown:
-            print("UIDeviceOrientation.portraitUpsideDown")
             return UIImage.Orientation.left
         case UIDeviceOrientation.landscapeLeft:
-            print("UIDeviceOrientation.landscapeLeft")
             return UIImage.Orientation.up
         case UIDeviceOrientation.landscapeRight:
-            print("UIDeviceOrientation.landscapeRight")
             return UIImage.Orientation.down
         case UIDeviceOrientation.unknown:
-            print("UIDeviceOrientation.unknown")
             return UIImage.Orientation.up
         @unknown default:
             fatalError("no orientation found")

@@ -81,7 +81,11 @@ class W3wCoreMLModel: NSObject {
     func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
         self.delegate?.showPredictions(predictions: predictions)
     }
-    
+}
+
+// predict video
+extension W3wCoreMLModel {
+    /// - Make new vision request from video
     func predictVideo(sampleBuffer: CMSampleBuffer) {
         if currentBuffer == nil, let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
           currentBuffer = pixelBuffer
@@ -100,7 +104,11 @@ class W3wCoreMLModel: NSObject {
             }
         }
     }
+}
 
+// predict photo
+extension W3wCoreMLModel {
+    /// - Make new vision request from photo
     func predictPhoto(pixelBuffer: CVPixelBuffer) {
 
         if currentBuffer == nil {

@@ -51,6 +51,18 @@ class ScanViewController: UIViewController, StoryBoarded {
 
         return button
     }()
+    
+    // report issue button
+    internal lazy var reportBtn : UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = Config.Font.Color.background
+        button.setTitle("Report an issue", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
+        button.clipsToBounds = true
+        return button
+    }()
+    
     // intro text
     internal lazy var introLbl : UILabel = {
         let label = PaddingUILabel(withInsets: 8, 8, 8, 8)
@@ -59,6 +71,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         label.text = "Frame the 3 word address you want to scan"
         label.backgroundColor = Config.Font.Color.background
         label.textAlignment = .center
+        label.font = label.font.withSize(12.0)
         label.sizeToFit()
         return label
     }()
@@ -94,6 +107,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         //preview view background color
         self.view.addSubview(overlayView)
         
+        // set up intro label
         self.view.addSubview(introLbl)
         introLbl.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.videoPreview).offset(-30)
@@ -101,7 +115,18 @@ class ScanViewController: UIViewController, StoryBoarded {
             make.height.equalTo(30)
         }
         
-        // capture button
+        // set up report issue button
+        self.overlayView.addSubview(reportBtn)
+        reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
+
+        reportBtn.snp.makeConstraints{(make) in
+            make.top.equalTo(self.overlayView).offset(50)
+            make.width.equalTo(120)
+            make.height.equalTo(45)
+            make.right.equalTo(-20)
+        }
+        
+        // set up capture button
         self.view.addSubview(capturebtn)
         capturebtn.addTarget(self, action: #selector(self.startCapture), for: .touchUpInside)
         capturebtn.snp.makeConstraints { (make) in
@@ -150,6 +175,10 @@ class ScanViewController: UIViewController, StoryBoarded {
     @objc func startCapture() {
         videoCapture.photoCapture()
     }
+    
+    @objc func reportIssue() {
+        self.sendScreenshotEmail()
+    }
 }
 
 //MARK: Video capture
@@ -160,7 +189,9 @@ extension ScanViewController: VideoCaptureDelegate {
     }
     
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
+        // Get CVPixel buffer from image
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
+        // send for prediction
         coreML.predictPhoto(pixelBuffer: pixelBuffer)
     }
 }
@@ -172,11 +203,22 @@ extension ScanViewController: processPredictionsDelegate {
         for i in 0..<boundingBoxViews.count {
             if i < predictions.count {
                 let prediction = predictions[i]
+                
+                let originX = prediction.boundingBox.minX * ImageBufferSize.width
+                let originY = prediction.boundingBox.minY * ImageBufferSize.height
+                let cropWidth = (prediction.boundingBox.maxX - prediction.boundingBox.minX) * ImageBufferSize.width
+                let cropHeight = (prediction.boundingBox.maxY-prediction.boundingBox.minY)*ImageBufferSize.height
+                let cropRect1 = CGRect(x: originX, y: originY, width: cropWidth, height: cropHeight)
+
+        
                 let width = view.frame.width
                 let height = view.frame.height
-                let scale = CGAffineTransform.identity.scaledBy(x: width, y: height)
-                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: 0, y: -height)
-                let rect = prediction.boundingBox.applying(scale).applying(transform)
+                let scaleFactor = height/ImageBufferSize.height
+                let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
+                let offset = ImageBufferSize.width * scaleFactor - width
+                let actualMarginWidth = -offset / 2.0
+                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
+                let rect = cropRect1.applying(scale).applying(transform)
 
                 let bestClass = prediction.labels[0].identifier
                 let confidence = prediction.labels[0].confidence
