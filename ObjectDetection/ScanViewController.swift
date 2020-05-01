@@ -164,7 +164,7 @@ class ScanViewController: UIViewController, StoryBoarded {
                 }
                 // Add the bounding box layers to the UI, on top of the video preview.
                 for box in self.boundingBoxViews {
-                    box.addToLayer(self.videoPreview.layer)
+                    box.addToLayer(self.overlayView.layer)
                 }
                 // Once everything is set up, we can start capturing live video.
                 self.videoCapture.start()
@@ -203,7 +203,7 @@ extension ScanViewController: processPredictionsDelegate {
         for i in 0..<boundingBoxViews.count {
             if i < predictions.count {
                 let prediction = predictions[i]
-            
+                
                 let width = view.frame.width
                 let height = view.frame.height
                 let scaleFactor = height/ImageBufferSize.height
@@ -211,7 +211,6 @@ extension ScanViewController: processPredictionsDelegate {
                 let offset = ImageBufferSize.width * scaleFactor - width
                 let actualMarginWidth = -offset / 2.0
                 let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
-                let rect = imageProcess.croppedRect.applying(scale).applying(transform)
 
                 let bestClass = prediction.labels[0].identifier
                 let confidence = prediction.labels[0].confidence
@@ -222,11 +221,11 @@ extension ScanViewController: processPredictionsDelegate {
                 if bestClass == "w3w" && (confidence * 100) > 75.0 {
                     if (coreML.currentBuffer != nil) {
                         let croppedImage = imageProcess.cropImage(prediction, cvPixelBuffer: coreML.currentBuffer!)
-                        let recognisedtext = ocrmanager.find_3wa(image: croppedImage)
+                        let rect = imageProcess.croppedRect.applying(scale).applying(transform)
+                        let recognisedtext = "///\(ocrmanager.find_3wa(image: croppedImage))"
                         guard recognisedtext.isEmpty else {
-                            
-                            //boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor(displayP3Red: 0.426976, green: 0.882479, blue: 0.143794, alpha: 1.0))
-                            self.boundingBox = rect
+                            boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor.white)
+                            //self.boundingBox = rect
                             return
                         }
                     }

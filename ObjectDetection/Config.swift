@@ -16,7 +16,7 @@ struct Config {
             static let sourceExtraLight = "SourceSansPro-ExtraLight"
         }
         struct Color {
-            static let text = UIColor(red: 0.04, green: 0.19, blue: 0.29, alpha: 1)
+            static let text = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 1)
             static let background = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.8)
         }
     }

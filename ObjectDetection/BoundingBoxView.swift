@@ -16,23 +16,25 @@ class BoundingBoxView {
     textLayer.foregroundColor = UIColor.black.cgColor
     textLayer.isHidden = true
     textLayer.contentsScale = UIScreen.main.scale
-    textLayer.fontSize = 14
-    textLayer.font = UIFont(name: "Avenir", size: textLayer.fontSize)
+    textLayer.fontSize = 16
+    textLayer.font = UIFont(name: Config.Font.type.sourceLight, size: textLayer.fontSize)
     textLayer.alignmentMode = CATextLayerAlignmentMode.center
     
     w3wLayer = CATextLayer()
     w3wLayer.foregroundColor = UIColor.black.cgColor
     w3wLayer.isHidden = true
     w3wLayer.contentsScale = UIScreen.main.scale
-    w3wLayer.fontSize = 12
-    w3wLayer.font = UIFont(name: "Avenir", size: textLayer.fontSize)
+    w3wLayer.fontSize = 14
+    w3wLayer.backgroundColor = Config.Font.Color.text.cgColor
+    w3wLayer.font = UIFont(name: Config.Font.type.sourceLight, size: textLayer.fontSize)
     w3wLayer.alignmentMode = CATextLayerAlignmentMode.center
 
   }
 
   func addToLayer(_ parent: CALayer) {
     parent.addSublayer(shapeLayer)
-    parent.addSublayer(textLayer)
+    //TODO: only for development
+    //parent.addSublayer(textLayer)
     parent.addSublayer(w3wLayer)
   }
 
