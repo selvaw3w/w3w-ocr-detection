@@ -114,8 +114,14 @@ public class VideoCapture: NSObject {
         if captureSession.isRunning {
             captureSession.stopRunning()
         }
+        for input in captureSession.inputs {
+            captureSession.removeInput(input)
+        }
+        for output in captureSession.outputs {
+            captureSession.removeOutput(output)
+        }
     }
-  
+
     public func photoCapture() {
 
         let settings = AVCapturePhotoSettings()

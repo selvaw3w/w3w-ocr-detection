@@ -3,7 +3,7 @@
 //  ObjectDetection
 //
 //  Created by Lshiva on 29/04/2020.
-//  Copyright © 2020 MachineThink. All rights reserved.
+//  Copyright © 2020 What3words. All rights reserved.
 //
 
 import UIKit
@@ -16,7 +16,7 @@ class OverlayView: UIView {
         //non-w3w detection background color
         public let nonW3wBackgroundColor: UIColor = UIColor.clear
         // w3w detection background color
-        public let W3wBackgroundColor: UIColor = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.6)
+        public let W3wBackgroundColor: UIColor = UIColor.clear //UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.6)
 
         public var boundingBox: CGRect = CGRect.zero {
             didSet {

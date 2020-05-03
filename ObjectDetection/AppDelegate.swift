@@ -2,19 +2,21 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var coordinator: MainCoordinator?
-    var window: UIWindow?
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // MARK: - Vars & Lets
+    var window: UIWindow?
+    var rootController: CoordinatorNavigationController {
+        return self.window!.rootViewController as! CoordinatorNavigationController
+    }
+    private lazy var dependencyConatiner = DependencyContainer(rootController: self.rootController)
     
-    let navController = UINavigationController()
-    coordinator = MainCoordinator(navigationController: navController)
-    coordinator?.start()
-    window = UIWindow(frame: UIScreen.main.bounds)
-    window?.rootViewController = navController
-    window?.makeKeyAndVisible()
-    self.setupGlobalAppearance()
-    return true
+
+  // MARK: - Application lifecycle
+  
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        self.dependencyConatiner.start()
+        //self.setupGlobalAppearance()
+        return true
   }
   
   //MARK: Appearance

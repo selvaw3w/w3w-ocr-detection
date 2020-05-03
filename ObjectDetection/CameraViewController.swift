@@ -6,9 +6,14 @@ import MessageUI
 import SSZipArchive
 import SnapKit
 
-class ScanViewController: UIViewController, StoryBoarded {
+protocol CameraViewControllerProtocol: class {
+    var onShowPhoto : (() -> Void)? { get set }
+}
+
+class CameraViewController: UIViewController, CameraViewControllerProtocol {
         
-    weak var coordinator: MainCoordinator?
+    // MARK: - CameraViewControllerProtocol
+    var onShowPhoto: (() -> Void)?
     // toggle multi 3wa detection
     var isMulti3wa = true
     // toggle all filter & w3w only
@@ -97,7 +102,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         self.setUpBoundingBoxViews()
         self.setUpCamera()
     }
-
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         resizePreviewLayer()
@@ -106,9 +111,8 @@ class ScanViewController: UIViewController, StoryBoarded {
     func setup() {
         //preview view background color
         self.view.addSubview(overlayView)
-        
         // set up intro label
-        self.view.addSubview(introLbl)
+        self.overlayView.addSubview(introLbl)
         introLbl.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.videoPreview).offset(-30)
             make.centerX.equalTo(self.videoPreview)
@@ -116,7 +120,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         }
         
         // set up report issue button
-        self.view.addSubview(reportBtn)
+        self.overlayView.addSubview(reportBtn)
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
 
         reportBtn.snp.makeConstraints{(make) in
@@ -127,7 +131,7 @@ class ScanViewController: UIViewController, StoryBoarded {
         }
         
         // set up capture button
-        self.view.addSubview(capturebtn)
+        self.overlayView.addSubview(capturebtn)
         capturebtn.addTarget(self, action: #selector(self.startCapture), for: .touchUpInside)
         capturebtn.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.introLbl).offset(-60)
@@ -138,7 +142,7 @@ class ScanViewController: UIViewController, StoryBoarded {
     
     // set up maximum bounding box
     func setUpBoundingBoxViews() {
-        for _ in 0..<maxBoundingBoxViews {
+        for _ in 0..<maxBoundingBoxViews { //10
           boundingBoxViews.append(BoundingBoxView())
         }
         let labels = coreML.loadLabels()
@@ -173,7 +177,7 @@ class ScanViewController: UIViewController, StoryBoarded {
     }
     
     @objc func startCapture() {
-        videoCapture.photoCapture()
+        self.videoCapture.photoCapture()
     }
     
     @objc func reportIssue() {
@@ -182,63 +186,64 @@ class ScanViewController: UIViewController, StoryBoarded {
 }
 
 //MARK: Video capture
-extension ScanViewController: VideoCaptureDelegate {
+extension CameraViewController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
         coreML.predictVideo(sampleBuffer: sampleBuffer)
     }
     
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
-        // Get CVPixel buffer from image
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
-        // send for prediction
         coreML.predictPhoto(pixelBuffer: pixelBuffer)
+        //self.videoCapture.stop()
+        self.onShowPhoto?()
+//        self.coordinator?.photo(to: image)
     }
 }
 
 //MARK: Process CoreML
-extension ScanViewController: processPredictionsDelegate {
+extension CameraViewController: processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
+        UIView.animate(withDuration: 0.1) {
+            for i in 0..<self.boundingBoxViews.count {
+                if i < predictions.count {
+                    let prediction = predictions[i]
+                    let width = self.view.frame.width
+                    let height = self.view.frame.height
+                    let scaleFactor = height/self.ImageBufferSize.height
+                    let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
+                    let offset = self.imageProcess.ImageBufferSize.width * scaleFactor - width
+                    let actualMarginWidth = -offset / 2.0
+                    let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
 
-        for i in 0..<boundingBoxViews.count {
-            if i < predictions.count {
-                let prediction = predictions[i]
-                
-                let width = view.frame.width
-                let height = view.frame.height
-                let scaleFactor = height/ImageBufferSize.height
-                let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
-                let offset = ImageBufferSize.width * scaleFactor - width
-                let actualMarginWidth = -offset / 2.0
-                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
-
-                let bestClass = prediction.labels[0].identifier
-                let confidence = prediction.labels[0].confidence
-                
-                // Display the bounding box.
-                let label = String(format: "%@ %.1f", bestClass, confidence * 100)
-                //let color = colors[bestClass] ?? UIColor.red
-                if bestClass == "w3w" && (confidence * 100) > 75.0 {
-                    if (coreML.currentBuffer != nil) {
-                        let croppedImage = imageProcess.cropImage(prediction, cvPixelBuffer: coreML.currentBuffer!)
-                        let rect = imageProcess.croppedRect.applying(scale).applying(transform)
-                        let recognisedtext = "///\(ocrmanager.find_3wa(image: croppedImage))"
-                        guard recognisedtext.isEmpty else {
-                            boundingBoxViews[i].show(frame: rect, label: label, w3w: recognisedtext, color: UIColor.white)
-                            //self.boundingBox = rect
-                            return
+                    let bestClass = prediction.labels[0].identifier
+                    let confidence = prediction.labels[0].confidence
+                    
+                    // Display the bounding box.
+                    let label = String(format: "%@ %.1f", bestClass, confidence * 100)
+                    //let color = colors[bestClass] ?? UIColor.red
+                    if bestClass == "w3w" && (confidence * 100) > 75.0 {
+                        if (self.coreML.currentBuffer != nil) {
+                            let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreML.currentBuffer!)
+                            let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+                            let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
+                            guard recognisedtext.isEmpty else {
+                                self.boundingBoxViews[i].show(frame: rect, label: label, w3w: "///\(recognisedtext)", color: UIColor.white)
+                                //self.boundingBox = rect
+                                return
+                            }
                         }
                     }
+                } else {
+                    self.boundingBoxViews[i].hide()
                 }
-            } else {
-                boundingBoxViews[i].hide()
             }
         }
     }
 }
 
 //MARK: Send Email
-extension ScanViewController: MFMailComposeViewControllerDelegate {
+extension CameraViewController: MFMailComposeViewControllerDelegate {
     
     private func sendScreenshotEmail() {
         guard MFMailComposeViewController.canSendMail() else {

@@ -7,6 +7,6 @@ target 'ObjectDetection' do
 
   # Pods for ObjectDetection
   pod 'SSZipArchive'
-  pod 'JJFloatingActionButton'
   pod 'SnapKit', '~> 5.0.0'
+  pod 'MBProgressHUD'
 end

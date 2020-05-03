@@ -3,7 +3,7 @@
 //  ObjectDetection
 //
 //  Created by Lshiva on 19/04/2020.
-//  Copyright © 2020 MachineThink. All rights reserved.
+//  Copyright © 2020 What3words. All rights reserved.
 //
 
 import UIKit
@@ -15,7 +15,7 @@ class ImageProcess: NSObject {
     public var context = CIContext()
     
     // Image Buffer Size
-    private var ImageBufferSize = CGSize(width: 1080, height: 1920)
+    public var ImageBufferSize = CGSize(width: 1080, height: 1920)
     
     public var croppedRect = CGRect()
 
