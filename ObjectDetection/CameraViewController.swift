@@ -120,11 +120,11 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
         }
         
         // set up report issue button
-        self.overlayView.addSubview(reportBtn)
+        self.navigationController?.navigationBar.addSubview(reportBtn)
+        //self.overlayView.addSubview(reportBtn)
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
-
         reportBtn.snp.makeConstraints{(make) in
-            make.top.equalTo(self.overlayView).offset(50)
+            make.top.equalTo(self.navigationController!.navigationBar).offset(15)
             make.width.equalTo(120)
             make.height.equalTo(45)
             make.right.equalTo(-20)
