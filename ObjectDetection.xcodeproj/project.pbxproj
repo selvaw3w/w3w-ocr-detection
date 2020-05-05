@@ -57,12 +57,12 @@
 		00A9A3BF245F63AA003FB518 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3BA245F63AA003FB518 /* DateFormatter.swift */; };
 		00A9A3C6245F6522003FB518 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3C4245F6522003FB518 /* AlertMessage.swift */; };
 		00A9A3C7245F6522003FB518 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3C5245F6522003FB518 /* NetworkError.swift */; };
+		00A9A3CA24600861003FB518 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3C924600861003FB518 /* Logging.swift */; };
 		00BAA453244B38100036DB0C /* FIleManager+Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA452244B38100036DB0C /* FIleManager+Dir.swift */; };
 		00BAA45A244B425A0036DB0C /* W3wManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA459244B425A0036DB0C /* W3wManager.swift */; };
 		00BAA45C244B42790036DB0C /* OCRManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA45B244B42790036DB0C /* OCRManager.swift */; };
 		00BAA45E244B429A0036DB0C /* W3wDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA45D244B429A0036DB0C /* W3wDataModel.swift */; };
 		00BAA460244B42A80036DB0C /* W3wCoreMLModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA45F244B42A80036DB0C /* W3wCoreMLModel.swift */; };
-		00BAA463244B44D80036DB0C /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA462244B44D80036DB0C /* Logging.swift */; };
 		00BAA46A244BBE4A0036DB0C /* ImageProcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA469244BBE4A0036DB0C /* ImageProcess.swift */; };
 		5660C088AF7FB420F6568B12 /* Pods_ObjectDetection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */; };
 		7BCB411B21C3096100BFC4D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB411A21C3096100BFC4D0 /* AppDelegate.swift */; };
@@ -125,12 +125,12 @@
 		00A9A3BA245F63AA003FB518 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		00A9A3C4245F6522003FB518 /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		00A9A3C5245F6522003FB518 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		00A9A3C924600861003FB518 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		00BAA452244B38100036DB0C /* FIleManager+Dir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIleManager+Dir.swift"; sourceTree = "<group>"; };
 		00BAA459244B425A0036DB0C /* W3wManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wManager.swift; sourceTree = "<group>"; };
 		00BAA45B244B42790036DB0C /* OCRManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRManager.swift; sourceTree = "<group>"; };
 		00BAA45D244B429A0036DB0C /* W3wDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wDataModel.swift; sourceTree = "<group>"; };
 		00BAA45F244B42A80036DB0C /* W3wCoreMLModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wCoreMLModel.swift; sourceTree = "<group>"; };
-		00BAA462244B44D80036DB0C /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		00BAA469244BBE4A0036DB0C /* ImageProcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProcess.swift; sourceTree = "<group>"; };
 		4BE4A7192C3D1FF47CECAC43 /* Pods-ObjectDetection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectDetection.debug.xcconfig"; path = "Target Support Files/Pods-ObjectDetection/Pods-ObjectDetection.debug.xcconfig"; sourceTree = "<group>"; };
 		73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectDetection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -358,9 +358,11 @@
 		00A9A3B4245F63AA003FB518 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				000087AE245A3575006ACD1C /* PaddingUILabel.swift */,
 				00A9A3B5245F63AA003FB518 /* UIButton.swift */,
 				00A9A3B6245F63AA003FB518 /* UIViewController.swift */,
 				00A9A3B7245F63AA003FB518 /* UINavigationBar.swift */,
+				00008793245A2F62006ACD1C /* Extension.swift */,
 				00A9A3B8245F63AA003FB518 /* UIStoryboard.swift */,
 			);
 			path = UI;
@@ -388,6 +390,7 @@
 			children = (
 				00A9A3C4245F6522003FB518 /* AlertMessage.swift */,
 				00A9A3C5245F6522003FB518 /* NetworkError.swift */,
+				00A9A3C924600861003FB518 /* Logging.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -405,7 +408,6 @@
 			children = (
 				7BCB412F21C309B900BFC4D0 /* VideoCapture.swift */,
 				00BAA469244BBE4A0036DB0C /* ImageProcess.swift */,
-				000087AE245A3575006ACD1C /* PaddingUILabel.swift */,
 				00BAA461244B44C70036DB0C /* Others */,
 				00BAA454244B39650036DB0C /* Categories */,
 			);
@@ -452,8 +454,6 @@
 			children = (
 				005071DF243F66A700DBC581 /* Config.swift */,
 				00507202243FD54200DBC581 /* Settings.swift */,
-				00BAA462244B44D80036DB0C /* Logging.swift */,
-				00008793245A2F62006ACD1C /* Extension.swift */,
 			);
 			name = Others;
 			sourceTree = "<group>";
@@ -679,7 +679,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BCB411D21C3096100BFC4D0 /* CameraViewController.swift in Sources */,
-				00BAA463244B44D80036DB0C /* Logging.swift in Sources */,
+				00A9A3CA24600861003FB518 /* Logging.swift in Sources */,
 				00507203243FD54200DBC581 /* Settings.swift in Sources */,
 				00A9A3B0245F54FA003FB518 /* ViewControllerFactory.swift in Sources */,
 				00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */,

@@ -23,5 +23,6 @@ struct Config {
     
     struct w3w {
         static var defaultLangauge = "en"
+        static var sendEmail = ["matt.stuttle+OCR@what3words.com"]
     }
 }
