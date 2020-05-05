@@ -74,7 +74,6 @@ class BoundingBoxView {
 
     }
 
-    
     func hide() {
         self.shapeLayer.isHidden = true
         self.textLayer.isHidden = true

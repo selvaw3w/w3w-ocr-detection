@@ -146,7 +146,7 @@ extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 
     public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print("get frame dropped reason")
+        //print("get frame dropped reason")
   }
 }
 
