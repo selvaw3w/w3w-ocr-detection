@@ -152,6 +152,25 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
         }
     }
 
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        
+        guard let point = touch?.location(in: self.overlayView) else {
+            return
+        }
+        
+        for view in boundingBoxViews {
+            guard let sublayer = view.shapeLayer as? CAShapeLayer else {
+                return
+            }
+            if let path = sublayer.path, path.contains(point) {
+                print(view.w3wLayer.string as Any)
+            }
+        }
+    }
+
+    
     func resizePreviewLayer() {
         videoCapture.previewLayer?.frame = videoPreview.bounds
     }
@@ -253,13 +272,13 @@ extension CameraViewController: MFMailComposeViewControllerDelegate {
         let mailComposer = MFMailComposeViewController()
         mailComposer.mailComposeDelegate = self
         
-        let emailTo = ["matt.stuttle+OCR@what3words.com"]
+        let emailTo = Config.w3w.sendEmail
         mailComposer.setSubject("Issue")
         mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
         mailComposer.setToRecipients(emailTo)
         
         guard coreML.loadCurrentStatebuffer != nil else {
-            //TODO: show alert message
+            AlertMessage.init(title: "Error", body: "There is an error loading the image. Please try again.")
             return
         }
         
@@ -274,19 +293,19 @@ extension CameraViewController: MFMailComposeViewControllerDelegate {
         
     }
     
-    internal func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
+    internal func mailComposerController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
         switch result.rawValue {
             case MFMailComposeResult.cancelled.rawValue:
-                print("Mail cancelled")
+                DLog("Mail cancelled")
                 controller.dismiss(animated: true, completion: nil)
             case MFMailComposeResult.saved.rawValue:
-                print("Mail saved")
+                DLog("Mail saved")
                 controller.dismiss(animated: true, completion: nil)
             case MFMailComposeResult.sent.rawValue:
-                print("Mail sent")
+                DLog("Mail sent")
                 controller.dismiss(animated: true, completion: nil)
             case MFMailComposeResult.failed.rawValue:
-                print("Mail sent failure.")
+                DLog("Mail sent failure")
                 controller.dismiss(animated: true, completion: nil)
             default:
                 break
