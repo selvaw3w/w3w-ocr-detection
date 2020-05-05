@@ -57,6 +57,7 @@
 		00A9A3BF245F63AA003FB518 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3BA245F63AA003FB518 /* DateFormatter.swift */; };
 		00A9A3C6245F6522003FB518 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3C4245F6522003FB518 /* AlertMessage.swift */; };
 		00A9A3C7245F6522003FB518 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3C5245F6522003FB518 /* NetworkError.swift */; };
+		00A9A3D5246178B2003FB518 /* W3wSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3D4246178B2003FB518 /* W3wSuggestionView.swift */; };
 		00BAA453244B38100036DB0C /* FIleManager+Dir.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA452244B38100036DB0C /* FIleManager+Dir.swift */; };
 		00BAA45A244B425A0036DB0C /* W3wManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA459244B425A0036DB0C /* W3wManager.swift */; };
 		00BAA45C244B42790036DB0C /* OCRManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00BAA45B244B42790036DB0C /* OCRManager.swift */; };
@@ -125,6 +126,7 @@
 		00A9A3BA245F63AA003FB518 /* DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		00A9A3C4245F6522003FB518 /* AlertMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		00A9A3C5245F6522003FB518 /* NetworkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		00A9A3D4246178B2003FB518 /* W3wSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wSuggestionView.swift; sourceTree = "<group>"; };
 		00BAA452244B38100036DB0C /* FIleManager+Dir.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIleManager+Dir.swift"; sourceTree = "<group>"; };
 		00BAA459244B425A0036DB0C /* W3wManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = W3wManager.swift; sourceTree = "<group>"; };
 		00BAA45B244B42790036DB0C /* OCRManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OCRManager.swift; sourceTree = "<group>"; };
@@ -475,6 +477,7 @@
 				7BCB412E21C309B900BFC4D0 /* BoundingBoxView.swift */,
 				00A9A35D245C4A9A003FB518 /* PhotoDetectionView.swift */,
 				00A9A378245F39C2003FB518 /* CustomBackButton.swift */,
+				00A9A3D4246178B2003FB518 /* W3wSuggestionView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -700,6 +703,7 @@
 				004E8B712449BDB800B25236 /* ScanCoordinator.swift in Sources */,
 				7BCB411B21C3096100BFC4D0 /* AppDelegate.swift in Sources */,
 				00A9A3BD245F63AA003FB518 /* UINavigationBar.swift in Sources */,
+				00A9A3D5246178B2003FB518 /* W3wSuggestionView.swift in Sources */,
 				005071E0243F66A700DBC581 /* Config.swift in Sources */,
 				00A9A3BE245F63AA003FB518 /* UIStoryboard.swift in Sources */,
 				00A9A3BF245F63AA003FB518 /* DateFormatter.swift in Sources */,

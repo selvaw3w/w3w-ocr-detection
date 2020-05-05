@@ -44,7 +44,12 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
             setUpBoundingBoxViews()
         }
     }
-    
+    // w3w suggestion view
+    internal lazy var w3wSuggestionView : W3wSuggestionView = {
+        let view = W3wSuggestionView()
+        view.backgroundColor = UIColor.white
+        return view
+    }()
     // record button
     internal lazy var capturebtn : UIButton = {
         let button = UIButton(type: .custom)
@@ -138,6 +143,14 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
             make.centerX.equalTo(self.videoPreview)
             make.width.height.equalTo(60)
         }
+        
+        // set up w3w suggestion view
+        self.overlayView.addSubview(w3wSuggestionView)
+        w3wSuggestionView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(self.overlayView)
+            make.width.equalTo(self.overlayView)
+            make.height.equalTo(self.overlayView).dividedBy(2.5)
+        }
     }
     
     // set up maximum bounding box
@@ -196,7 +209,8 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
     }
     
     @objc func startCapture() {
-        self.videoCapture.photoCapture()
+        self.overlayView.addSubview(self.w3wSuggestionView)
+        //self.videoCapture.photoCapture()
     }
     
     @objc func reportIssue() {
@@ -215,7 +229,7 @@ extension CameraViewController: VideoCaptureDelegate {
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
         coreML.predictPhoto(pixelBuffer: pixelBuffer)
         //self.videoCapture.stop()
-        self.onShowPhoto?()
+        //self.onShowPhoto?()
 //        self.coordinator?.photo(to: image)
     }
 }
