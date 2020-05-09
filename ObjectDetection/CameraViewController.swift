@@ -46,8 +46,7 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
     }
     // w3w suggestion view
     internal lazy var w3wSuggestionView : W3wSuggestionView = {
-        let view = W3wSuggestionView()
-        view.backgroundColor = UIColor.white
+        let view = W3wSuggestionView()        
         return view
     }()
     // record button
@@ -292,7 +291,6 @@ extension CameraViewController: MFMailComposeViewControllerDelegate {
         mailComposer.setToRecipients(emailTo)
         
         guard coreML.loadCurrentStatebuffer != nil else {
-            AlertMessage.init(title: "Error", body: "There is an error loading the image. Please try again.")
             return
         }
         
@@ -307,7 +305,7 @@ extension CameraViewController: MFMailComposeViewControllerDelegate {
         
     }
     
-    internal func mailComposerController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
+    internal func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
         switch result.rawValue {
             case MFMailComposeResult.cancelled.rawValue:
                 DLog("Mail cancelled")

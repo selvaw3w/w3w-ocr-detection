@@ -15,7 +15,7 @@ extension UILabel {
     @objc var substituteFontName : String {
         get { return self.font.fontName }
         set {
-            if self.font.fontName.range(of:"-Bold") == nil {
+            if self.font.fontName.range(of:"-Regular") == nil {
                 self.font = UIFont(name: newValue, size: self.font.pointSize)
             }
         }
@@ -25,6 +25,15 @@ extension UILabel {
         get { return self.font.fontName }
         set {
             if self.font.fontName.range(of:"-Bold") != nil {
+                self.font = UIFont(name: newValue, size: self.font.pointSize)
+            }
+        }
+    }
+    
+    @objc var substituteFontRegular :  String {
+        get { return self.font.fontName }
+        set {
+            if self.font.fontName.range(of: "-Regular") != nil {
                 self.font = UIFont(name: newValue, size: self.font.pointSize)
             }
         }
@@ -40,10 +49,10 @@ extension UITextField {
 //MARK: UIFont
 extension UIFont {
     class func appRegularFontWith( size:CGFloat ) -> UIFont{
-        return  UIFont(name: Config.Font.type.sourceLight, size: size)!
+        return  UIFont(name: Config.Font.type.sourceSanRegular, size: size)!
     }
     
     class func appBoldFontWith( size:CGFloat ) -> UIFont{
-        return  UIFont(name: Config.Font.type.sourceLight, size: size)!
+        return  UIFont(name: Config.Font.type.sourceSanRegular, size: size)!
     }
 }

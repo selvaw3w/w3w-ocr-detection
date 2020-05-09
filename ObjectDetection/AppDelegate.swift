@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       let customFont = UIFont.appRegularFontWith(size: 17)
       UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: customFont], for: .normal)
       UITextField.appearance().substituteFontName = Config.Font.type.sourceLight
-      UILabel.appearance().substituteFontName = Config.Font.type.sourceLight
-      UILabel.appearance().substituteFontNameBold = Config.Font.type.sourceLight
-  }
+      UILabel.appearance().substituteFontName = Config.Font.type.sourceSanRegular
+      UILabel.appearance().substituteFontNameBold = Config.Font.type.sourceSansBold
+    }
 }
  

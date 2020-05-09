@@ -11,25 +11,37 @@ import SnapKit
 
 class W3wSuggestionView: UIView {
 
-    lazy var w3wLbl: UILabel = {
-        let label = PaddingUILabel(withInsets: 8, 8, 8, 8)
-        label.textColor = UIColor.white
+    fileprivate var tableViewdataSource : W3wSuggestionDataSource!
+    
+    internal lazy var closebtn : UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = UIColor.black
+        button.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
+        button.contentMode = .center
+        button.imageView?.contentMode = .scaleAspectFit
+        return button
+    }()
+    
+    internal lazy var w3wLbl: UILabel = {
+        let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.adjustsFontSizeToFitWidth = true
-        label.text = "///summer.drag.clever"
-        label.backgroundColor = Config.Font.Color.background
+        label.textColor = UIColor.black
+        label.backgroundColor = UIColor.white
         label.textAlignment = .left
-        label.font = label.font.withSize(12.0)
+        label.font = UIFont.init(name: Config.Font.type.sourceSanRegular, size: 22.0)
+        label.textColor  = Config.Font.Color.text
         label.sizeToFit()
         return label
     }()
     
-    lazy var tableview: UITableView = {
+    internal lazy var tableview: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.plain)
         tableView.backgroundColor = UIColor.clear
         tableView.separatorStyle = .none
+        tableView.isScrollEnabled = false
+        tableView.isUserInteractionEnabled = false
         return tableView
     }()
-    
         
     init() {
         super.init(frame: CGRect.zero)
@@ -41,7 +53,8 @@ class W3wSuggestionView: UIView {
     }
     
     fileprivate func setup() {
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = Config.Font.Color.backgroundLight
+        self.tableview.backgroundColor = UIColor.red
         // set up w3wlabel
         self.addSubview(w3wLbl)
         self.w3wLbl.snp.makeConstraints { (make) in
@@ -49,11 +62,22 @@ class W3wSuggestionView: UIView {
             make.width.equalToSuperview()
             make.height.equalTo(50)
         }
+        
+        let attributedString = NSMutableAttributedString(string: "///index.home.raft")
+        attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSRange(location: 0, length: 3))
+        w3wLbl.attributedText = attributedString
+        
         // set up table view
+        tableViewdataSource = W3wSuggestionDataSource(tableview: tableview)
+        self.tableview.dataSource = tableViewdataSource
+        self.tableview.delegate = tableViewdataSource
+        self.tableview.register(W3wSuggestionTableViewCell.self, forCellReuseIdentifier: "Cell")
+        self.tableview.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableview)
         self.tableview.snp.makeConstraints { (make) in
-            make.top.equalTo(w3wLbl).offset(50)
-            make.bottom.right.left.equalToSuperview()
+            make.top.equalTo(self.w3wLbl.snp.bottom).offset(5)
+            make.right.left.equalToSuperview()
+            make.bottom.equalTo(self).offset(-30)
         }
     }
 }
