@@ -50,10 +50,6 @@ class W3wSuggestionDataSource : UIView {
         items.append(a2)
         items.append(a3)
     }
-    
-    @objc func reloadData() {
-    
-    }
 }
 
 extension W3wSuggestionDataSource: UITableViewDataSource {

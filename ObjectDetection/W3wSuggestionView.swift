@@ -15,9 +15,10 @@ class W3wSuggestionView: UIView {
     
     internal lazy var closebtn : UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor.clear
         button.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
         button.contentMode = .center
+        button.tintColor = UIColor.black
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
@@ -63,6 +64,17 @@ class W3wSuggestionView: UIView {
             make.height.equalTo(50)
         }
         
+        //add close btn
+        self.addSubview(closebtn)
+        self.bringSubviewToFront(closebtn)
+        self.closebtn.addTarget(self, action: #selector(self.closeView), for: .touchUpInside)
+        self.closebtn.snp.makeConstraints { (make) in
+            //make.top.equalTo(self)
+            make.right.equalTo(self).offset(-20)
+            make.centerY.equalTo(self.w3wLbl.snp.centerY)
+            make.width.equalTo(14)
+            make.height.equalTo(16)
+        }
         let attributedString = NSMutableAttributedString(string: "///index.home.raft")
         attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSRange(location: 0, length: 3))
         w3wLbl.attributedText = attributedString
@@ -79,5 +91,14 @@ class W3wSuggestionView: UIView {
             make.right.left.equalToSuperview()
             make.bottom.equalTo(self).offset(-30)
         }
+    }
+    
+    @objc func closeView() {
+        self.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.alpha = 0
+            self.layoutIfNeeded()
+            self.removeFromSuperview()
+        }, completion: nil)
     }
 }
