@@ -8,17 +8,17 @@
 
 import UIKit
 
-protocol W3wSuggestionProtocol: class {
-    func currentSelected(_ indexPath: IndexPath)
-}
+//protocol W3wSuggestionProtocol: class {
+//    func currentSelected(_ indexPath: IndexPath)
+//}
 
 
 class W3wSuggestionDelegate: NSObject,UITableViewDelegate{
 
-    var delegate: W3wSuggestionProtocol?
+    //var delegate: W3wSuggestionProtocol?
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.currentSelected(indexPath)
+        //delegate?.currentSelected(indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
