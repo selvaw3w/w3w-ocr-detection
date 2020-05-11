@@ -293,8 +293,8 @@
 			isa = PBXGroup;
 			children = (
 				007B502D24689CA0000392E4 /* CameraController.swift */,
-				007B504F24694DF4000392E4 /* CameraModel.swift */,
 				007B505124694E1A000392E4 /* CameraViewModel.swift */,
+				007B504F24694DF4000392E4 /* CameraModel.swift */,
 			);
 			path = CameraViewController;
 			sourceTree = "<group>";

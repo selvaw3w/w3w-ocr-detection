@@ -7,13 +7,21 @@ import SSZipArchive
 import SnapKit
 
 protocol CameraControllerProtocol: class {
+    
     var onShowPhoto : (() -> Void)? { get set }
+}
+
+protocol CameraController3wa: class {
+    func didSelect(threeWordAddress: String)
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
 
+    //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
+    
+    weak var delegate: CameraController3wa?
     // toggle multi 3wa detection
     var isMulti3wa = true
     // toggle all filter & w3w only
@@ -101,6 +109,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
+        //viewModel = CameraViewModel(config: ocrmanager)
         coreML.delegate = self
         self.ocrmanager.setAreaOfInterest(viewBounds: self.view.bounds)
         self.setUpBoundingBoxViews()
@@ -142,8 +151,11 @@ class CameraController: UIViewController, CameraControllerProtocol {
             make.centerX.equalTo(self.videoPreview)
             make.width.height.equalTo(60)
         }
-        
+    }
+    
+    func showSuggestionView(threeWordAddress: String) {
         // set up w3w suggestion view
+        w3wSuggestionView.dataPassed = threeWordAddress
         self.overlayView.addSubview(w3wSuggestionView)
         w3wSuggestionView.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.overlayView)
@@ -151,10 +163,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
             make.height.equalTo(self.overlayView).dividedBy(2.5)
         }
     }
-    
     // set up maximum bounding box
     func setUpBoundingBoxViews() {
-        for _ in 0..<maxBoundingBoxViews { //10
+        for _ in 0..<maxBoundingBoxViews {
           boundingBoxViews.append(BoundingBoxView())
         }
         let labels = coreML.loadLabels()
@@ -163,7 +174,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
             colors[label] = UIColor(red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
         }
     }
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
@@ -177,13 +187,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 return
             }
             if let path = sublayer.path, path.contains(point) {
-                print(view.w3wLayer.string as Any)
-                //send to w3wautosuggestion with the string
-                // present the suggestionview
-                // load themodel 
+                self.showSuggestionView(threeWordAddress: view.w3wLayer.string as! String)
             }
         }
-
     }
 
     

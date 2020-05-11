@@ -15,6 +15,11 @@ class OCRManager: NSObject {
     static let sharedInstance = OCRManager()
     // initialise w3w Engine
     var w3wEngine : W3wManager?
+    
+    public var w3w: W3wManager? {
+      return self.w3wModel.w3w
+    }
+    
     // set up w3w-days
     public var w3wModel: W3wDataModel!
     // initialise ocr Engine

@@ -58,6 +58,12 @@ class W3wManager: NSObject {
         
         // Save instance
         self.engine = engine
+    }
     
+    public func autoAuggest(threeWordAddress: String) -> [W3wSuggestion]? {
+        if let suggestions = try? self.engine?.autosuggest(input: threeWordAddress) {
+            return suggestions
+        }
+        return nil
     }
 }
