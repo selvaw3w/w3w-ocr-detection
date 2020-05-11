@@ -155,13 +155,18 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     func showSuggestionView(threeWordAddress: String) {
         // set up w3w suggestion view
-        w3wSuggestionView.selected3Wa = threeWordAddress
-        self.overlayView.addSubview(w3wSuggestionView)
-        w3wSuggestionView.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.overlayView)
-            make.width.equalTo(self.overlayView)
-            make.height.equalTo(self.overlayView).dividedBy(2.5)
-        }
+        self.w3wSuggestionView.alpha = 0.0
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
+            self.w3wSuggestionView.alpha = 1.0
+            self.w3wSuggestionView.selected3Wa = threeWordAddress
+            self.overlayView.addSubview(self.w3wSuggestionView)
+            self.w3wSuggestionView.snp.makeConstraints { (make) in
+                make.bottom.equalTo(self.overlayView)
+                make.width.equalTo(self.overlayView)
+                make.height.equalTo(self.overlayView).dividedBy(2.5)
+            }
+        }, completion: nil)
+    
     }
     // set up maximum bounding box
     func setUpBoundingBoxViews() {

@@ -79,10 +79,9 @@ class W3wSuggestionView: UIView {
         self.closebtn.snp.makeConstraints { (make) in
             make.right.equalTo(self).offset(-20)
             make.centerY.equalTo(self.w3wLbl.snp.centerY)
-            make.width.equalTo(22)
-            make.height.equalTo(24)
+            make.width.equalTo(27)
+            make.height.equalTo(30)
         }
-        
         tableViewdataSource = W3wSuggestionDataSource(tableview: self.tableview)
         self.tableview.dataSource = tableViewdataSource
         self.tableview.delegate = tableViewdataSource
@@ -97,6 +96,10 @@ class W3wSuggestionView: UIView {
     }
     
     @objc func closeView() {
-        self.removeFromSuperview()
+        print("close tapped")
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.alpha = 0.0
+            
+        }, completion: nil)
     }
 }
