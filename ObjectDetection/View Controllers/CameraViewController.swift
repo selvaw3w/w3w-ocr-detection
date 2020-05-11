@@ -11,7 +11,7 @@ protocol CameraViewControllerProtocol: class {
 }
 
 class CameraViewController: UIViewController, CameraViewControllerProtocol {
-        
+
     // MARK: - CameraViewControllerProtocol
     var onShowPhoto: (() -> Void)?
     // toggle multi 3wa detection
@@ -178,8 +178,12 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
             }
             if let path = sublayer.path, path.contains(point) {
                 print(view.w3wLayer.string as Any)
+                //send to w3wautosuggestion with the string
+                // present the suggestionview
+                // load the model 
             }
         }
+
     }
 
     
