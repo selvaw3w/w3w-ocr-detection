@@ -110,6 +110,16 @@ public class VideoCapture: NSObject {
         }
     }
     
+    public func pause() {
+        if captureSession.isRunning {
+            captureSession.stopRunning()
+        }
+    }
+    
+    public func resume() {
+        self.start()
+    }
+    
     public func stop() {
         if captureSession.isRunning {
             captureSession.stopRunning()

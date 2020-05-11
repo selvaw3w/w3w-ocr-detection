@@ -9,9 +9,17 @@
 import UIKit
 import SnapKit
 
+protocol W3wSuggestionViewProtocol : class {
+    
+    func didResumeVideoSession()
+    
+}
+
 class W3wSuggestionView: UIView {
 
     fileprivate var tableViewdataSource : W3wSuggestionDataSource!
+    
+    weak var delegate : W3wSuggestionViewProtocol?
             
     var selected3Wa: String! {
         didSet {
@@ -97,6 +105,7 @@ class W3wSuggestionView: UIView {
     }
     
     @objc func closeView() {
+        self.delegate?.didResumeVideoSession()
         UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
             self.alpha = 0.0
             self.removeFromSuperview()

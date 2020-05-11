@@ -11,17 +11,12 @@ protocol CameraControllerProtocol: class {
     var onShowPhoto : (() -> Void)? { get set }
 }
 
-protocol CameraController3wa: class {
-    func didSelect(threeWordAddress: String)
-}
-
 class CameraController: UIViewController, CameraControllerProtocol {
 
     //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
     
-    weak var delegate: CameraController3wa?
     // toggle multi 3wa detection
     var isMulti3wa = true
     // toggle all filter & w3w only
@@ -111,6 +106,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
         self.setup()
         //viewModel = CameraViewModel(config: ocrmanager)
         coreML.delegate = self
+        w3wSuggestionView.delegate = self
         self.ocrmanager.setAreaOfInterest(viewBounds: self.view.bounds)
         self.setUpBoundingBoxViews()
         self.setUpCamera()
@@ -195,6 +191,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
             }
             if let path = sublayer.path, path.contains(point) {
                 self.showSuggestionView(threeWordAddress: view.w3wLayer.string as! String)
+                self.videoCapture.pause()
             }
         }
     }
@@ -345,10 +342,8 @@ extension CameraController: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension CameraController: W3wSuggestionProtocol {
-    func currentSelected(_ indexPath: IndexPath) {
-        print("tapped")
+extension CameraController: W3wSuggestionViewProtocol {
+    func didResumeVideoSession() {
+        self.videoCapture.resume()
     }
-    
-
 }
