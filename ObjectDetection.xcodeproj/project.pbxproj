@@ -32,8 +32,8 @@
 		007B502924689C3B000392E4 /* ApplicationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502724689C3B000392E4 /* ApplicationCoordinator.swift */; };
 		007B502A24689C3B000392E4 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502824689C3B000392E4 /* ScanCoordinator.swift */; };
 		007B503024689CA0000392E4 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502C24689CA0000392E4 /* BaseViewController.swift */; };
-		007B503124689CA0000392E4 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502D24689CA0000392E4 /* CameraViewController.swift */; };
-		007B503224689CA0000392E4 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502E24689CA0000392E4 /* PhotoViewController.swift */; };
+		007B503124689CA0000392E4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502D24689CA0000392E4 /* CameraController.swift */; };
+		007B503224689CA0000392E4 /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502E24689CA0000392E4 /* PhotoController.swift */; };
 		007B503324689CA0000392E4 /* CoordinatorNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */; };
 		007B503924689D05000392E4 /* PhotoDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503624689D04000392E4 /* PhotoDetectionView.swift */; };
 		007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503724689D04000392E4 /* BoundingBoxView.swift */; };
@@ -44,6 +44,8 @@
 		007B504724689E06000392E4 /* CustomBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504624689E06000392E4 /* CustomBackButton.swift */; };
 		007B504924689E70000392E4 /* W3wSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504824689E70000392E4 /* W3wSuggestionView.swift */; };
 		007B504B24689E87000392E4 /* W3wSuggestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504A24689E87000392E4 /* W3wSuggestionTableViewCell.swift */; };
+		007B505024694DF4000392E4 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504F24694DF4000392E4 /* CameraModel.swift */; };
+		007B505224694E1A000392E4 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B505124694E1A000392E4 /* CameraViewModel.swift */; };
 		00A9A396245F53F3003FB518 /* DeepLinkOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A389245F53F3003FB518 /* DeepLinkOption.swift */; };
 		00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */; };
 		00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */; };
@@ -105,8 +107,8 @@
 		007B502724689C3B000392E4 /* ApplicationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationCoordinator.swift; sourceTree = "<group>"; };
 		007B502824689C3B000392E4 /* ScanCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanCoordinator.swift; sourceTree = "<group>"; };
 		007B502C24689CA0000392E4 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		007B502D24689CA0000392E4 /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		007B502E24689CA0000392E4 /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
+		007B502D24689CA0000392E4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		007B502E24689CA0000392E4 /* PhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorNavigationController.swift; sourceTree = "<group>"; };
 		007B503624689D04000392E4 /* PhotoDetectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetectionView.swift; sourceTree = "<group>"; };
 		007B503724689D04000392E4 /* BoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxView.swift; sourceTree = "<group>"; };
@@ -117,6 +119,8 @@
 		007B504624689E06000392E4 /* CustomBackButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBackButton.swift; sourceTree = "<group>"; };
 		007B504824689E70000392E4 /* W3wSuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = W3wSuggestionView.swift; path = ObjectDetection/Views/W3wSuggestionView.swift; sourceTree = SOURCE_ROOT; };
 		007B504A24689E87000392E4 /* W3wSuggestionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = W3wSuggestionTableViewCell.swift; path = ../W3wSuggestionTableViewCell.swift; sourceTree = "<group>"; };
+		007B504F24694DF4000392E4 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
+		007B505124694E1A000392E4 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		00A9A389245F53F3003FB518 /* DeepLinkOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkOption.swift; sourceTree = "<group>"; };
 		00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchInstructor.swift; sourceTree = "<group>"; };
 		00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Coordinator.swift"; sourceTree = "<group>"; };
@@ -246,8 +250,8 @@
 			isa = PBXGroup;
 			children = (
 				007B502C24689CA0000392E4 /* BaseViewController.swift */,
-				007B502D24689CA0000392E4 /* CameraViewController.swift */,
-				007B502E24689CA0000392E4 /* PhotoViewController.swift */,
+				007B505324694E21000392E4 /* CameraViewController */,
+				007B5054246955DA000392E4 /* PhotoViewController */,
 				007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */,
 			);
 			path = "View Controllers";
@@ -283,6 +287,24 @@
 				007B504824689E70000392E4 /* W3wSuggestionView.swift */,
 			);
 			path = W3wSuggestionView;
+			sourceTree = "<group>";
+		};
+		007B505324694E21000392E4 /* CameraViewController */ = {
+			isa = PBXGroup;
+			children = (
+				007B502D24689CA0000392E4 /* CameraController.swift */,
+				007B504F24694DF4000392E4 /* CameraModel.swift */,
+				007B505124694E1A000392E4 /* CameraViewModel.swift */,
+			);
+			path = CameraViewController;
+			sourceTree = "<group>";
+		};
+		007B5054246955DA000392E4 /* PhotoViewController */ = {
+			isa = PBXGroup;
+			children = (
+				007B502E24689CA0000392E4 /* PhotoController.swift */,
+			);
+			path = PhotoViewController;
 			sourceTree = "<group>";
 		};
 		00A9A387245F53F3003FB518 /* BaseCoordinator */ = {
@@ -677,6 +699,7 @@
 			files = (
 				00BAA463244B44D80036DB0C /* Logging.swift in Sources */,
 				00507203243FD54200DBC581 /* Settings.swift in Sources */,
+				007B505024694DF4000392E4 /* CameraModel.swift in Sources */,
 				00A9A3B0245F54FA003FB518 /* ViewControllerFactory.swift in Sources */,
 				00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */,
 				00A9A3A7245F54B4003FB518 /* DependencyContainer.swift in Sources */,
@@ -706,6 +729,7 @@
 				00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */,
 				00A9A39A245F53F3003FB518 /* BaseViewControllerProtocol.swift in Sources */,
 				007B502524689B57000392E4 /* NetworkError.swift in Sources */,
+				007B505224694E1A000392E4 /* CameraViewModel.swift in Sources */,
 				00BAA45C244B42790036DB0C /* OCRManager.swift in Sources */,
 				005071D9243F32E600DBC581 /* w3w.mlmodel in Sources */,
 				00008794245A2F62006ACD1C /* Extension.swift in Sources */,
@@ -714,11 +738,11 @@
 				00BAA453244B38100036DB0C /* FIleManager+Dir.swift in Sources */,
 				00A9A39D245F53F3003FB518 /* BaseCoordinator.swift in Sources */,
 				00A9A3BB245F63AA003FB518 /* UIButton.swift in Sources */,
-				007B503124689CA0000392E4 /* CameraViewController.swift in Sources */,
+				007B503124689CA0000392E4 /* CameraController.swift in Sources */,
 				7BCB413321C309B900BFC4D0 /* VideoCapture.swift in Sources */,
 				007B502A24689C3B000392E4 /* ScanCoordinator.swift in Sources */,
 				007B503E24689D33000392E4 /* W3wSuggestionDataSource.swift in Sources */,
-				007B503224689CA0000392E4 /* PhotoViewController.swift in Sources */,
+				007B503224689CA0000392E4 /* PhotoController.swift in Sources */,
 				007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */,
 				007B504B24689E87000392E4 /* W3wSuggestionTableViewCell.swift in Sources */,
 				00BAA46A244BBE4A0036DB0C /* ImageProcess.swift in Sources */,

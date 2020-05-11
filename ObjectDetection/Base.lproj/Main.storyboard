@@ -20,10 +20,10 @@
             </objects>
             <point key="canvasLocation" x="-1268" y="158"/>
         </scene>
-        <!--Camera View Controller-->
+        <!--Camera Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="CameraViewController" id="BYZ-38-t0r" customClass="CameraViewController" customModule="ObjectDetection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CameraController" id="BYZ-38-t0r" customClass="CameraController" customModule="ObjectDetection" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -58,10 +58,10 @@
             </objects>
             <point key="canvasLocation" x="-462" y="158"/>
         </scene>
-        <!--Photo View Controller-->
+        <!--Photo Controller-->
         <scene sceneID="QKa-2t-1Q8">
             <objects>
-                <viewController storyboardIdentifier="PhotoViewController" id="Yqd-2e-Xtj" customClass="PhotoViewController" customModule="ObjectDetection" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoController" id="Yqd-2e-Xtj" customClass="PhotoController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Siz-PO-DRS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

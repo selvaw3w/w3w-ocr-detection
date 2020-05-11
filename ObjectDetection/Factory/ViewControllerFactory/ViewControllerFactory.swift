@@ -7,8 +7,8 @@
 //
 
 protocol ScanViewControllerFactory {
-    func instantiateCameraViewController() -> CameraViewController
-    func instantiatePhotoViewController() -> PhotoViewController
+    func instantiateCameraController() -> CameraController
+    func instantiatePhotoController() -> PhotoController
 }
 
 //    func instantiateRegisterViewController() -> RegisterViewController

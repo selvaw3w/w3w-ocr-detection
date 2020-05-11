@@ -47,7 +47,6 @@ class W3wDataModel: NSObject {
         guard let w3wDataZipPath = bundle.path(forResource: "w3w-data", ofType: "zip") else {
             fatalError("Invalid zip patch or can't find w3w-data in the main bundle")
         }
-        
         // Unzip
         try? SSZipArchive.unzipFile(atPath: w3wDataZipPath, toDestination: destination, overwrite: true, password: nil)
     }

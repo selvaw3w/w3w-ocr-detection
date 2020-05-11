@@ -6,13 +6,13 @@ import MessageUI
 import SSZipArchive
 import SnapKit
 
-protocol CameraViewControllerProtocol: class {
+protocol CameraControllerProtocol: class {
     var onShowPhoto : (() -> Void)? { get set }
 }
 
-class CameraViewController: UIViewController, CameraViewControllerProtocol {
+class CameraController: UIViewController, CameraControllerProtocol {
 
-    // MARK: - CameraViewControllerProtocol
+    // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
     // toggle multi 3wa detection
     var isMulti3wa = true
@@ -180,7 +180,7 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
                 print(view.w3wLayer.string as Any)
                 //send to w3wautosuggestion with the string
                 // present the suggestionview
-                // load the model 
+                // load themodel 
             }
         }
 
@@ -222,7 +222,7 @@ class CameraViewController: UIViewController, CameraViewControllerProtocol {
 }
 
 //MARK: Video capture
-extension CameraViewController: VideoCaptureDelegate {
+extension CameraController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
         coreML.predictVideo(sampleBuffer: sampleBuffer)
@@ -238,7 +238,7 @@ extension CameraViewController: VideoCaptureDelegate {
 }
 
 //MARK: Process CoreML
-extension CameraViewController: processPredictionsDelegate {
+extension CameraController: processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
         UIView.animate(withDuration: 0.1) {
             for i in 0..<self.boundingBoxViews.count {
@@ -279,7 +279,7 @@ extension CameraViewController: processPredictionsDelegate {
 }
 
 //MARK: Send Email
-extension CameraViewController: MFMailComposeViewControllerDelegate {
+extension CameraController: MFMailComposeViewControllerDelegate {
     
     private func sendScreenshotEmail() {
         guard MFMailComposeViewController.canSendMail() else {

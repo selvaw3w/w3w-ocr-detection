@@ -9,11 +9,11 @@
 import UIKit
 import Vision
 
-protocol PhotoViewControllerProtocol: class {
+protocol PhotoControllerProtocol: class {
     var onBack: (() -> Void)? { get set }
 }
 
-class PhotoViewController: BaseViewController, PhotoViewControllerProtocol {
+class PhotoController: BaseViewController, PhotoControllerProtocol {
     
     var onBack: (() -> Void)?
     

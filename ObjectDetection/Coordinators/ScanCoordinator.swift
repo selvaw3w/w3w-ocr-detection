@@ -21,28 +21,28 @@ class ScanCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     private let factory: Factory
 
     // MARK: - Private methods
-    private func showCameraViewController() {
-        let showCameraViewController = self.factory.instantiateCameraViewController()
-        showCameraViewController.onShowPhoto = { [unowned self] in
-            self.showPhotoViewController()
+    private func showCameraController() {
+        let showCameraController = self.factory.instantiateCameraController()
+        showCameraController.onShowPhoto = { [unowned self] in
+            self.showPhotoController()
         }
         
-        self.router.setRootModule(showCameraViewController, hideBar: false, animated: false)
+        self.router.setRootModule(showCameraController, hideBar: false, animated: false)
     }
     
-    private func showPhotoViewController() {
-        let photoViewController = self.factory.instantiatePhotoViewController()
-        photoViewController.onBack = { [unowned self] in
+    private func showPhotoController() {
+        let photoController = self.factory.instantiatePhotoController()
+        photoController.onBack = { [unowned self] in
             self.router.popModule(transition: FadeAnimator(animationDuration: 0.1, isPresenting: true))
         }
         
-        self.router.push(photoViewController, transition: FadeAnimator(animationDuration: 0.2, isPresenting: true))
+        self.router.push(photoController, transition: FadeAnimator(animationDuration: 0.2, isPresenting: true))
     }
     
     // MARK: - Coordinator
     
     override func start() {
-        self.showCameraViewController()
+        self.showCameraController()
     }
     
      // MARK: - Init
