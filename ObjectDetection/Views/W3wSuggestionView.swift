@@ -12,12 +12,14 @@ import SnapKit
 class W3wSuggestionView: UIView {
 
     fileprivate var tableViewdataSource : W3wSuggestionDataSource!
-        
-    var dataPassed: String! {
+            
+    var selected3Wa: String! {
         didSet {
-            let attributedString = NSMutableAttributedString(string: dataPassed)
+            let attributedString = NSMutableAttributedString(string: selected3Wa)
             attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSRange(location: 0, length: 3))
             w3wLbl.attributedText = attributedString
+            tableViewdataSource.threeWordAddress = selected3Wa
+            self.tableview.reloadData()
         }
     }
 
@@ -95,7 +97,6 @@ class W3wSuggestionView: UIView {
     }
     
     @objc func closeView() {
-        print("close tapped")
         self.removeFromSuperview()
     }
 }

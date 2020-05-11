@@ -155,7 +155,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     func showSuggestionView(threeWordAddress: String) {
         // set up w3w suggestion view
-        w3wSuggestionView.dataPassed = threeWordAddress
+        w3wSuggestionView.selected3Wa = threeWordAddress
         self.overlayView.addSubview(w3wSuggestionView)
         w3wSuggestionView.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.overlayView)
