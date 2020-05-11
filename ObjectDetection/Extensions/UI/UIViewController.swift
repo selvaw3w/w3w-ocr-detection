@@ -14,7 +14,24 @@ extension UIViewController {
     // MARK: - Public methods
     
     // MARK: Loader
-    
+    func showHUD(progressLabel:String){
+        DispatchQueue.main.async{
+            let progressHUD = MBProgressHUD.showAdded(to: self.view, animated: true)
+            progressHUD.label.text = progressLabel
+            progressHUD.mode = .customView
+            progressHUD.bezelView.color = Config.Font.Color.background
+            progressHUD.bezelView.style = .solidColor
+            progressHUD.contentColor = UIColor.white
+            progressHUD.hide(animated: true, afterDelay: 1.5)
+        }
+    }
+
+    func dismissHUD(isAnimated:Bool) {
+        DispatchQueue.main.async{
+            MBProgressHUD.hide(for: self.view, animated: isAnimated)
+        }
+    }
+
     func shouldHideLoader(isHidden: Bool) {
         if isHidden {
             MBProgressHUD.hide(for: self.view, animated: true)

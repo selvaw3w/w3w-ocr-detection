@@ -94,7 +94,6 @@
 		0000879E245A3129006ACD1C /* SourceSansPro-It.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-It.ttf"; path = "Fonts/SourceSansPro-It.ttf"; sourceTree = "<group>"; };
 		0000879F245A3129006ACD1C /* SourceSansPro-LightIt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-LightIt.ttf"; path = "Fonts/SourceSansPro-LightIt.ttf"; sourceTree = "<group>"; };
 		000087A0245A3129006ACD1C /* SourceSansPro-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SourceSansPro-Semibold.ttf"; path = "Fonts/SourceSansPro-Semibold.ttf"; sourceTree = "<group>"; };
-		000087AE245A3575006ACD1C /* PaddingUILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingUILabel.swift; sourceTree = "<group>"; };
 		005071D0243F32C300DBC581 /* what3words.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = what3words.framework; path = lib/what3words.framework; sourceTree = "<group>"; };
 		005071D5243F32E600DBC581 /* w3w-data.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; name = "w3w-data.zip"; path = "data/w3w-data.zip"; sourceTree = "<group>"; };
 		005071D6243F32E600DBC581 /* w3w.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = w3w.mlmodel; path = data/w3w.mlmodel; sourceTree = "<group>"; };
@@ -447,7 +446,6 @@
 			children = (
 				7BCB412F21C309B900BFC4D0 /* VideoCapture.swift */,
 				00BAA469244BBE4A0036DB0C /* ImageProcess.swift */,
-				000087AE245A3575006ACD1C /* PaddingUILabel.swift */,
 				00BAA461244B44C70036DB0C /* Others */,
 			);
 			name = Utils;

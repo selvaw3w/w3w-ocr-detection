@@ -225,8 +225,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
     }
     
     @objc func startCapture() {
-        self.overlayView.addSubview(self.w3wSuggestionView)
+        //self.overlayView.addSubview(self.w3wSuggestionView)
         //self.videoCapture.photoCapture()
+        self.showHUD(progressLabel: "In progress")
     }
     
     @objc func reportIssue() {
@@ -274,7 +275,7 @@ extension CameraController: processPredictionsDelegate {
                     if bestClass == "w3w" && (confidence * 100) > 75.0 {
                         if (self.coreML.currentBuffer != nil) {
                             let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreML.currentBuffer!)
-                            var rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+                            let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
                             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
                             guard recognisedtext.isEmpty else {
                                 self.boundingBoxViews[i].show(frame: rect, label: label, w3w: "///\(recognisedtext)", color: UIColor.white)
