@@ -37,7 +37,7 @@ class ImageProcess: NSObject {
         let cropWidth = (prediction.boundingBox.maxX - prediction.boundingBox.minX) * ImageBufferSize.width
         let cropHeight = (prediction.boundingBox.maxY-prediction.boundingBox.minY)*ImageBufferSize.height
         croppedRect = CGRect(x: originX, y: originY, width: cropWidth, height: cropHeight)
-        
+        croppedRect = croppedRect.inset(by: UIEdgeInsets(top: 10.0, left: 20.0, bottom: 10.0, right: -50.0))
         let croppedImage = UIImage(cgImage: cropCGImage(croppedRect, pixelBuffer: cvPixelBuffer))
         return croppedImage
     }

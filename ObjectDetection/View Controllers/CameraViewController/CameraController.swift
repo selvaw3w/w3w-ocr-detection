@@ -165,9 +165,11 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 make.width.equalTo(self.overlayView)
                 make.height.equalTo(self.overlayView).dividedBy(2.5)
             }
+            
         }, completion: nil)
     
     }
+    
     // set up maximum bounding box
     func setUpBoundingBoxViews() {
         for _ in 0..<maxBoundingBoxViews {
@@ -272,7 +274,7 @@ extension CameraController: processPredictionsDelegate {
                     if bestClass == "w3w" && (confidence * 100) > 75.0 {
                         if (self.coreML.currentBuffer != nil) {
                             let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreML.currentBuffer!)
-                            let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+                            var rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
                             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
                             guard recognisedtext.isEmpty else {
                                 self.boundingBoxViews[i].show(frame: rect, label: label, w3w: "///\(recognisedtext)", color: UIColor.white)
@@ -340,4 +342,12 @@ extension CameraController: MFMailComposeViewControllerDelegate {
             controller.dismiss(animated: true, completion: nil)
             videoCapture.start()
     }
+}
+
+extension CameraController: W3wSuggestionProtocol {
+    func currentSelected(_ indexPath: IndexPath) {
+        print("tapped")
+    }
+    
+
 }
