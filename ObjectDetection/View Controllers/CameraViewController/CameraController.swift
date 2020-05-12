@@ -39,6 +39,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     private var context = CIContext()
     // initialise bounding box view
     var boundingBoxViews = [BoundingBoxView]()
+    // color range
+    var colors: [String: UIColor] = [:]
     // maximum boundingboxes
     var maxBoundingBoxViews = 10 {
         didSet {
@@ -86,18 +88,13 @@ class CameraController: UIViewController, CameraControllerProtocol {
         return label
     }()
     
-    internal lazy var overlayView : OverlayView = {
-        let overlayView = OverlayView()
-        overlayView.backgroundColor = UIColor .clear
+    internal lazy var overlayView : UIView = {
+        let overlayView = UIView()
+        overlayView.backgroundColor = UIColor.clear
         overlayView.frame.size = self.view.frame.size
         return overlayView
     }()
-    // Selected Area
-    internal var boundingBox : CGRect = CGRect.zero {
-        didSet {
-            self.overlayView.boundingBox = boundingBox
-        }
-    }
+
     // set all views
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,7 +156,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 make.width.equalTo(self.overlayView)
                 make.height.equalTo(self.overlayView).dividedBy(2.5)
             }
-            
         }, completion: nil)
     
     }
@@ -169,7 +165,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
         for _ in 0..<maxBoundingBoxViews {
           boundingBoxViews.append(BoundingBoxView())
         }
-        let labels = coreML.loadLabels()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -189,6 +184,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
             }
         }
     }
+    
+    
 
     
     func resizePreviewLayer() {
@@ -217,8 +214,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     @objc func startCapture() {
         //self.overlayView.addSubview(self.w3wSuggestionView)
-        //self.videoCapture.photoCapture()
-        self.showHUD(progressLabel: "In progress")
+        self.videoCapture.photoCapture()
+        //sself.showHUD(progressLabel: "In progress")
     }
     
     @objc func reportIssue() {
@@ -269,7 +266,6 @@ extension CameraController: processPredictionsDelegate {
                             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
                             guard recognisedtext.isEmpty else {
                                 self.boundingBoxViews[i].show(frame: rect, label: label, w3w: "///\(recognisedtext)", color: UIColor.white)
-                                //self.boundingBox = rect
                                 return
                             }
                         }

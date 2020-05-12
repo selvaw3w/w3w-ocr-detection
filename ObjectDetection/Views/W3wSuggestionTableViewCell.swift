@@ -29,7 +29,7 @@ class W3wSuggestionTableViewCell: UITableViewCell {
     // W3wSuggestion -nearest_place
     let nearest_place : UILabel = {
         let label = UILabel()
-        label.textColor = Config.Font.Color.textGrayColor
+        label.textColor = Config.Font.Color.textGray
         label.clipsToBounds = true
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont .systemFont(ofSize: 12)
