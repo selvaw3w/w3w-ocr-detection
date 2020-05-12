@@ -6,50 +6,6 @@ import MessageUI
 import SSZipArchive
 import SnapKit
 
-
-class BoundingBox {
-    var threeWordAddress    : String
-    var boundingBoxRect     : CGRect
-    var boundingBoxView     : BoundingBoxView?
-    var countDownTimer      : Int
-    
-    init(threeWordAddress: String, boundingBoxRect: CGRect, boundingBoxView: BoundingBoxView? = nil) {
-        self.threeWordAddress = threeWordAddress
-        self.boundingBoxRect = boundingBoxRect
-        self.boundingBoxView = boundingBoxView
-        self.countDownTimer = Config.w3w.destructBBViewtimer
-    }
-}
-
-class BoundingBoxes {
-    
-    var boundingBoxes : Dictionary<String,BoundingBox> = [:]
-    
-    func add(threeWordAddress: String, rect: CGRect) {
-        if boundingBoxes[threeWordAddress] != nil {
-            boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
-            boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
-        } else {
-            let createboundingBoxView = BoundingBoxView()
-            boundingBoxes[threeWordAddress] = BoundingBox(threeWordAddress: threeWordAddress, boundingBoxRect: rect, boundingBoxView: createboundingBoxView)
-        }
-    }
-    
-    func remove(boundingBox: BoundingBox) {
-        boundingBoxes.removeValue(forKey: boundingBox.threeWordAddress)
-    }
-    
-    func removeBoundingBoxes() {
-        for (_, boundingbox) in boundingBoxes {
-            boundingbox.countDownTimer -= 1
-            if boundingbox.countDownTimer < 1 {
-                self.remove(boundingBox: boundingbox)
-                boundingbox.boundingBoxView?.hide()
-            }
-        }
-    }
-}
-
 protocol CameraControllerProtocol: class {
     
     var onShowPhoto : (() -> Void)? { get set }
@@ -81,16 +37,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     var recognised3wa = [String]()
     // Render image
     private var context = CIContext()
-    // initialise bounding box view
-    var boundingBoxViews = [BoundingBoxView]()
-    // color range
-    var colors: [String: UIColor] = [:]
     // maximum boundingboxes
-    var maxBoundingBoxViews = 10 {
-        didSet {
-            setUpBoundingBoxViews()
-        }
-    }
+    var maxBoundingBoxViews = 10
     // w3w suggestion view
     internal lazy var w3wSuggestionView : W3wSuggestionView = {
         let view = W3wSuggestionView()        
@@ -143,11 +91,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
-        //viewModel = CameraViewModel(config: ocrmanager)
         coreml.delegate = self
         w3wSuggestionView.delegate = self
         self.ocrmanager.setAreaOfInterest(viewBounds: self.view.bounds)
-        self.setUpBoundingBoxViews()
         self.setUpCamera()
     }
     
@@ -204,13 +150,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     }
     
-    // set up maximum bounding box
-    func setUpBoundingBoxViews() {
-        for _ in 0..<maxBoundingBoxViews {
-          boundingBoxViews.append(BoundingBoxView())
-        }
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
         
@@ -242,10 +181,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 if let previewLayer = self.videoCapture.previewLayer {
                     self.videoPreview.layer.addSublayer(previewLayer)
                     self.resizePreviewLayer()
-                }
-                // Add the bounding box layers to the UI, on top of the video preview.
-                for box in self.boundingBoxViews {
-                    box.addToLayer(self.overlayView.layer)
                 }
                 // Once everything is set up, we can start capturing live video.
                 self.videoCapture.start()
@@ -282,7 +217,7 @@ extension CameraController: VideoCaptureDelegate {
 
 extension CameraController {
         
-    func drawLabelBox() {
+    func drawBoundingBox() {
         for (threeWordAddress, boundingbox) in boundingBoxes.boundingBoxes {
             boundingbox.boundingBoxView?.show(frame: boundingbox.boundingBoxRect,
                     label: "w3w", w3w: threeWordAddress,
@@ -296,7 +231,7 @@ extension CameraController {
 //MARK: Process CoreML
 extension CameraController: processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
-        for i in 0..<self.boundingBoxViews.count {
+        for i in 0..<self.maxBoundingBoxViews {
             if i < predictions.count {
                 let prediction = predictions[i]
                 let width = self.view.frame.width
@@ -316,7 +251,7 @@ extension CameraController: processPredictionsDelegate {
                 let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
                 if !recognisedtext.isEmpty {
                     boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
-                    drawLabelBox()
+                    drawBoundingBox()
                 }
             }
         }
@@ -380,5 +315,48 @@ extension CameraController: MFMailComposeViewControllerDelegate {
 extension CameraController: W3wSuggestionViewProtocol {
     func didResumeVideoSession() {
         self.videoCapture.resume()
+    }
+}
+
+class BoundingBox {
+    var threeWordAddress    : String
+    var boundingBoxRect     : CGRect
+    var boundingBoxView     : BoundingBoxView?
+    var countDownTimer      : Int
+    
+    init(threeWordAddress: String, boundingBoxRect: CGRect, boundingBoxView: BoundingBoxView? = nil) {
+        self.threeWordAddress = threeWordAddress
+        self.boundingBoxRect = boundingBoxRect
+        self.boundingBoxView = boundingBoxView
+        self.countDownTimer = Config.w3w.destructBBViewtimer
+    }
+}
+
+class BoundingBoxes {
+    
+    var boundingBoxes : Dictionary<String,BoundingBox> = [:]
+    
+    func add(threeWordAddress: String, rect: CGRect) {
+        if boundingBoxes[threeWordAddress] != nil {
+            boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
+            boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
+        } else {
+            let createboundingBoxView = BoundingBoxView()
+            boundingBoxes[threeWordAddress] = BoundingBox(threeWordAddress: threeWordAddress, boundingBoxRect: rect, boundingBoxView: createboundingBoxView)
+        }
+    }
+    
+    func remove(boundingBox: BoundingBox) {
+        boundingBoxes.removeValue(forKey: boundingBox.threeWordAddress)
+    }
+    
+    func removeBoundingBoxes() {
+        for (_, boundingbox) in boundingBoxes {
+            boundingbox.countDownTimer -= 1
+            if boundingbox.countDownTimer < 1 {
+                self.remove(boundingBox: boundingbox)
+                boundingbox.boundingBoxView?.hide()
+            }
+        }
     }
 }
