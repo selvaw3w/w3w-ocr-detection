@@ -38,7 +38,6 @@
 		007B503924689D05000392E4 /* PhotoDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503624689D04000392E4 /* PhotoDetectionView.swift */; };
 		007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503724689D04000392E4 /* BoundingBoxView.swift */; };
 		007B503E24689D33000392E4 /* W3wSuggestionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503C24689D33000392E4 /* W3wSuggestionDataSource.swift */; };
-		007B504024689D77000392E4 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503F24689D77000392E4 /* OverlayView.swift */; };
 		007B504524689DF4000392E4 /* PaddingUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504424689DF4000392E4 /* PaddingUILabel.swift */; };
 		007B504724689E06000392E4 /* CustomBackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504624689E06000392E4 /* CustomBackButton.swift */; };
 		007B504924689E70000392E4 /* W3wSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504824689E70000392E4 /* W3wSuggestionView.swift */; };
@@ -112,7 +111,6 @@
 		007B503624689D04000392E4 /* PhotoDetectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetectionView.swift; sourceTree = "<group>"; };
 		007B503724689D04000392E4 /* BoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxView.swift; sourceTree = "<group>"; };
 		007B503C24689D33000392E4 /* W3wSuggestionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = W3wSuggestionDataSource.swift; path = ../W3wSuggestionDataSource.swift; sourceTree = "<group>"; };
-		007B503F24689D77000392E4 /* OverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		007B504424689DF4000392E4 /* PaddingUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaddingUILabel.swift; sourceTree = "<group>"; };
 		007B504624689E06000392E4 /* CustomBackButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomBackButton.swift; sourceTree = "<group>"; };
 		007B504824689E70000392E4 /* W3wSuggestionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = W3wSuggestionView.swift; path = ObjectDetection/Views/W3wSuggestionView.swift; sourceTree = SOURCE_ROOT; };
@@ -260,7 +258,6 @@
 			isa = PBXGroup;
 			children = (
 				007B504124689D7E000392E4 /* others */,
-				007B503F24689D77000392E4 /* OverlayView.swift */,
 				007B503624689D04000392E4 /* PhotoDetectionView.swift */,
 				007B503724689D04000392E4 /* BoundingBoxView.swift */,
 				007B504C24689E9B000392E4 /* W3wSuggestionView */,
@@ -700,7 +697,6 @@
 				00A9A39C245F53F3003FB518 /* Coordinator.swift in Sources */,
 				007B504724689E06000392E4 /* CustomBackButton.swift in Sources */,
 				00A9A3BC245F63AA003FB518 /* UIViewController.swift in Sources */,
-				007B504024689D77000392E4 /* OverlayView.swift in Sources */,
 				00A9A399245F53F3003FB518 /* AuthCoordinatorOutput.swift in Sources */,
 				007B503324689CA0000392E4 /* CoordinatorNavigationController.swift in Sources */,
 				00BAA45A244B425A0036DB0C /* W3wManager.swift in Sources */,

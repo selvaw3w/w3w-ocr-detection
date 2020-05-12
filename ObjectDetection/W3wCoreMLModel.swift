@@ -79,7 +79,9 @@ class W3wCoreMLModel: NSObject {
     }
     
     func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
-        self.delegate?.showPredictions(predictions: predictions)
+        self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
+            return prediction.labels[0].identifier == "w3w"
+        }))
     }
 }
 
