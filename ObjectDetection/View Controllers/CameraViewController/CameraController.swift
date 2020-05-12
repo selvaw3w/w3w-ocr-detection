@@ -39,8 +39,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
     private var context = CIContext()
     // initialise bounding box view
     var boundingBoxViews = [BoundingBoxView]()
-    // color range
-    var colors: [String: UIColor] = [:]
     // maximum boundingboxes
     var maxBoundingBoxViews = 10 {
         didSet {
@@ -172,10 +170,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
           boundingBoxViews.append(BoundingBoxView())
         }
         let labels = coreML.loadLabels()
-        // Assign random colors to the classes.
-        for label in labels {
-            colors[label] = UIColor(red: CGFloat.random(in: 0...1), green: CGFloat.random(in: 0...1), blue: CGFloat.random(in: 0...1), alpha: 1)
-        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -268,7 +262,6 @@ extension CameraController: processPredictionsDelegate {
                     
                     // Display the bounding box.
                     let label = String(format: "%@ %.1f", bestClass, confidence * 100)
-                    //let color = colors[bestClass] ?? UIColor.red
                     if bestClass == "w3w" && (confidence * 100) > 75.0 {
                         if (self.coreML.currentBuffer != nil) {
                             let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreML.currentBuffer!)
