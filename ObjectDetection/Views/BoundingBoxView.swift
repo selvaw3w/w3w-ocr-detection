@@ -35,12 +35,11 @@ class BoundingBoxView {
 
     func addToLayer(_ parent: CALayer) {
         parent.addSublayer(shapeLayer)
-        //TODO: show only for development parent.addSublayer(textLayer)
         parent.addSublayer(w3wLayer)
     }
 
-    func show(frame: CGRect, label: String, w3w: String, color: UIColor) {
-        CATransaction.setDisableActions(true)
+    func show(frame: CGRect, label: String, w3w: String, color: UIColor, textColor: UIColor) {
+        CATransaction.setDisableActions(false)
 
         let path = UIBezierPath(rect: frame)
         shapeLayer.path = path.cgPath
@@ -53,19 +52,21 @@ class BoundingBoxView {
 
         w3wLayer.string = w3w
         w3wLayer.backgroundColor = color.cgColor
+        w3wLayer.foregroundColor = textColor.cgColor
         w3wLayer.isHidden = false
 
 
         let attributes = [
           NSAttributedString.Key.font: textLayer.font as Any
         ]
-
+        
+        let originX = max(frame.origin.x, 0)
         let textRect = label.boundingRect(with: CGSize(width: 400, height: 100), options: .truncatesLastVisibleLine, attributes: attributes, context: nil)
         let textSize = CGSize(width: textRect.width + 12, height: textRect.height)
-        let textOrigin = CGPoint(x: frame.origin.x - 2, y: frame.origin.y - textSize.height)
+        let textOrigin = CGPoint(x: originX - 2, y: frame.origin.y - textSize.height)
         textLayer.frame = CGRect(origin: textOrigin, size: textSize)
-            
-            
+        
+        
         //TODO: change the x to 0 if less than zero
         let w3wTextRect = w3w.boundingRect(with: CGSize(width: 400, height: 100), options: .truncatesLastVisibleLine, attributes: attributes, context: nil)
         let w3wTextSize = CGSize(width: w3wTextRect.width + 12, height: w3wTextRect.height)

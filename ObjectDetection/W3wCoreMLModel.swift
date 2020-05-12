@@ -80,7 +80,7 @@ class W3wCoreMLModel: NSObject {
     
     func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
         self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
-            return prediction.labels[0].identifier == "w3w"
+            return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > 75.0
         }))
     }
 }

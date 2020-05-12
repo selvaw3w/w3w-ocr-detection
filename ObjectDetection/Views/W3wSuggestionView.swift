@@ -23,7 +23,7 @@ class W3wSuggestionView: UIView {
             
     var selected3Wa: String! {
         didSet {
-            let attributedString = NSMutableAttributedString(string: selected3Wa)
+            let attributedString = NSMutableAttributedString(string: "///\(selected3Wa!)")
             attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSRange(location: 0, length: 3))
             w3wLbl.attributedText = attributedString
             tableViewdataSource.threeWordAddress = selected3Wa

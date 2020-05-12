@@ -6,17 +6,61 @@ import MessageUI
 import SSZipArchive
 import SnapKit
 
+
+class BoundingBox {
+    var threeWordAddress    : String
+    var boundingBoxRect     : CGRect
+    var boundingBoxView     : BoundingBoxView?
+    var countDownTimer      : Int
+    
+    init(threeWordAddress: String, boundingBoxRect: CGRect, boundingBoxView: BoundingBoxView? = nil) {
+        self.threeWordAddress = threeWordAddress
+        self.boundingBoxRect = boundingBoxRect
+        self.boundingBoxView = boundingBoxView
+        self.countDownTimer = Config.w3w.destructBBViewtimer
+    }
+}
+
+class BoundingBoxes {
+    
+    var boundingBoxes : Dictionary<String,BoundingBox> = [:]
+    
+    func add(threeWordAddress: String, rect: CGRect) {
+        if boundingBoxes[threeWordAddress] != nil {
+            boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
+            boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
+        } else {
+            let createboundingBoxView = BoundingBoxView()
+            boundingBoxes[threeWordAddress] = BoundingBox(threeWordAddress: threeWordAddress, boundingBoxRect: rect, boundingBoxView: createboundingBoxView)
+        }
+    }
+    
+    func remove(boundingBox: BoundingBox) {
+        boundingBoxes.removeValue(forKey: boundingBox.threeWordAddress)
+    }
+    
+    func removeBoundingBoxes() {
+        for (_, boundingbox) in boundingBoxes {
+            boundingbox.countDownTimer -= 1
+            if boundingbox.countDownTimer < 1 {
+                self.remove(boundingBox: boundingbox)
+                boundingbox.boundingBoxView?.hide()
+            }
+        }
+    }
+}
+
 protocol CameraControllerProtocol: class {
     
     var onShowPhoto : (() -> Void)? { get set }
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
-
+    
+    var boundingBoxes = BoundingBoxes()
     //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
-    
     // toggle multi 3wa detection
     var isMulti3wa = true
     // toggle all filter & w3w only
@@ -28,7 +72,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     // image process
     var imageProcess = ImageProcess()
     // set up core ml
-    var coreML = W3wCoreMLModel()
+    var coreml = W3wCoreMLModel()
     // Image Buffer Size
     private var ImageBufferSize = CGSize(width: 1080, height: 1920)
     // ocr
@@ -100,7 +144,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
         super.viewDidLoad()
         self.setup()
         //viewModel = CameraViewModel(config: ocrmanager)
-        coreML.delegate = self
+        coreml.delegate = self
         w3wSuggestionView.delegate = self
         self.ocrmanager.setAreaOfInterest(viewBounds: self.view.bounds)
         self.setUpBoundingBoxViews()
@@ -174,19 +218,16 @@ class CameraController: UIViewController, CameraControllerProtocol {
             return
         }
         
-        for view in boundingBoxViews {
-            guard let sublayer = view.shapeLayer as? CAShapeLayer else {
+         for (_ , boundingbox ) in boundingBoxes.boundingBoxes {
+            guard let sublayer = boundingbox.boundingBoxView!.shapeLayer as? CAShapeLayer else {
                 return
             }
             if let path = sublayer.path, path.contains(point) {
-                self.showSuggestionView(threeWordAddress: view.w3wLayer.string as! String)
+                self.showSuggestionView(threeWordAddress: boundingbox.boundingBoxView!.w3wLayer.string as! String)
                 self.videoCapture.pause()
             }
         }
     }
-    
-    
-
     
     func resizePreviewLayer() {
         videoCapture.previewLayer?.frame = videoPreview.bounds
@@ -227,54 +268,59 @@ class CameraController: UIViewController, CameraControllerProtocol {
 extension CameraController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
-        coreML.predictVideo(sampleBuffer: sampleBuffer)
+        coreml.predictVideo(sampleBuffer: sampleBuffer)
     }
     
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
-        coreML.predictPhoto(pixelBuffer: pixelBuffer)
+        coreml.predictPhoto(pixelBuffer: pixelBuffer)
         //self.videoCapture.stop()
         //self.onShowPhoto?()
 //        self.coordinator?.photo(to: image)
     }
 }
 
+extension CameraController {
+        
+    func drawLabelBox() {
+        for (threeWordAddress, boundingbox) in boundingBoxes.boundingBoxes {
+            boundingbox.boundingBoxView?.show(frame: boundingbox.boundingBoxRect,
+                    label: "w3w", w3w: threeWordAddress,
+                    color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)),
+                    textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)))
+            boundingbox.boundingBoxView?.addToLayer(self.overlayView.layer)
+        }
+    }
+}
+
 //MARK: Process CoreML
 extension CameraController: processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
-        UIView.animate(withDuration: 0.1) {
-            for i in 0..<self.boundingBoxViews.count {
-                if i < predictions.count {
-                    let prediction = predictions[i]
-                    let width = self.view.frame.width
-                    let height = self.view.frame.height
-                    let scaleFactor = height/self.ImageBufferSize.height
-                    let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
-                    let offset = self.imageProcess.ImageBufferSize.width * scaleFactor - width
-                    let actualMarginWidth = -offset / 2.0
-                    let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
-
-                    let bestClass = prediction.labels[0].identifier
-                    let confidence = prediction.labels[0].confidence
-                    
-                    // Display the bounding box.
-                    let label = String(format: "%@ %.1f", bestClass, confidence * 100)
-                    if bestClass == "w3w" && (confidence * 100) > 75.0 {
-                        if (self.coreML.currentBuffer != nil) {
-                            let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreML.currentBuffer!)
-                            let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
-                            let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
-                            guard recognisedtext.isEmpty else {
-                                self.boundingBoxViews[i].show(frame: rect, label: label, w3w: "///\(recognisedtext)", color: UIColor.white)
-                                return
-                            }
-                        }
-                    }
-                } else {
-                    self.boundingBoxViews[i].hide()
+        for i in 0..<self.boundingBoxViews.count {
+            if i < predictions.count {
+                let prediction = predictions[i]
+                let width = self.view.frame.width
+                let height = self.view.frame.height
+                let scaleFactor = height/self.ImageBufferSize.height
+                let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
+                let offset = self.imageProcess.ImageBufferSize.width * scaleFactor - width
+                let actualMarginWidth = -offset / 2.0
+                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
+                
+                guard self.coreml.currentBuffer != nil else {
+                    return
+                }
+                
+                let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
+                let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+                let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
+                if !recognisedtext.isEmpty {
+                    boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
+                    drawLabelBox()
                 }
             }
         }
+        boundingBoxes.removeBoundingBoxes()
     }
 }
 
@@ -294,11 +340,11 @@ extension CameraController: MFMailComposeViewControllerDelegate {
         mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
         mailComposer.setToRecipients(emailTo)
         
-        guard coreML.loadCurrentStatebuffer != nil else {
+        guard coreml.loadCurrentStatebuffer != nil else {
             return
         }
         
-        let ciimage = CIImage(cvPixelBuffer: coreML.loadCurrentStatebuffer!)
+        let ciimage = CIImage(cvPixelBuffer: coreml.loadCurrentStatebuffer!)
         imageProcess.context = CIContext(options: nil)
         let cgImage = imageProcess.context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
         let imageObject = UIImage(cgImage: cgImage!)
