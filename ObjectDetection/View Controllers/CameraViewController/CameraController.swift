@@ -46,7 +46,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     }()
     
     // record button
-    internal lazy var capturebtn : UIButton = {
+    internal lazy var photobtn : UIButton = {
         let button = UIButton(type: .custom)
         button.layer.cornerRadius = 30
         button.layer.borderColor = UIColor.white.cgColor
@@ -126,9 +126,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
         
         // set up capture button
-        self.overlayView.addSubview(capturebtn)
-        capturebtn.addTarget(self, action: #selector(self.startCapture), for: .touchUpInside)
-        capturebtn.snp.makeConstraints { (make) in
+        self.overlayView.addSubview(photobtn)
+        photobtn.addTarget(self, action: #selector(self.capturePhoto), for: .touchUpInside)
+        photobtn.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.introLbl).offset(-60)
             make.centerX.equalTo(self.videoPreview)
             make.width.height.equalTo(60)
@@ -189,9 +189,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
     }
     
-    @objc func startCapture(_ sender: UIButton) {
-        capturebtn.isSelected = !capturebtn.isSelected
-        if capturebtn.isSelected {
+    @objc func capturePhoto(_ sender: UIButton) {
+        photobtn.isSelected = !photobtn.isSelected
+        if photobtn.isSelected {
             self.videoCapture.photoCapture()//TODO: can adjust settings for each photo
             self.videoCapture.pause()
         } else {
@@ -207,8 +207,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
 //MARK: Video capture
 extension CameraController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
-        //print("count:\(count)")
-        //count += 1
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
         coreml.predictVideo(sampleBuffer: sampleBuffer)
     }
@@ -216,8 +214,6 @@ extension CameraController: VideoCaptureDelegate {
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
         coreml.predictPhoto(pixelBuffer: pixelBuffer)
-        //self.onShowPhoto?()
-        //self.coordinator.photo(to: image)
     }
 }
 
@@ -257,7 +253,6 @@ extension CameraController: processPredictionsDelegate {
                 guard self.coreml.currentBuffer != nil else {
                     return
                 }
-                print(prediction.labels[0].identifier, prediction.labels[0].confidence)
                 let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
                 let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
                 let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
@@ -327,7 +322,7 @@ extension CameraController: MFMailComposeViewControllerDelegate {
 extension CameraController: W3wSuggestionViewProtocol {
     func didResumeVideoSession() {
         self.videoCapture.resume()
-        self.capturebtn.isSelected = false
+        self.photobtn.isSelected = false
     }
 }
 
@@ -350,7 +345,6 @@ class BoundingBoxes {
     var boundingBoxes : Dictionary<String,BoundingBox> = [:]
     
     func add(threeWordAddress: String, rect: CGRect) {
-        print("added:\(threeWordAddress)")
         if boundingBoxes[threeWordAddress] != nil {
             boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
             boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
