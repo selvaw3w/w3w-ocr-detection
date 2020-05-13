@@ -1,11 +1,11 @@
-name: CI
+name: ObjectDetection
 
 on:
   push:
     branches:
-    - master
-    - feature/*
-  tags:
+      - master
+      - feature/*
+    tags:
       - 'v1.*'
 
 jobs:
