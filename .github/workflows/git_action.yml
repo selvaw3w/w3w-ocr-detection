@@ -19,6 +19,8 @@ jobs:
         destination: ['platform=iOS Simulator,OS=13.1,name=iPhone 8']
         xcode: ['/Applications/Xcode_11.1.app/Contents/Developer']
     steps:
+      - name: Checkout
+        uses: selvaw3w/w3w-ocr-detection@v1.0.6
       - name: Bundle Install
         run: bundle install
         env:
