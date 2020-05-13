@@ -74,7 +74,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
         let label = PaddingUILabel(withInsets: 8, 8, 8, 8)
         label.textColor = UIColor.white
         label.adjustsFontSizeToFitWidth = true
-        label.text = "Frame the 3 word address you want to scan"
         label.backgroundColor = Config.Font.Color.background
         label.textAlignment = .center
         label.font = label.font.withSize(12.0)
@@ -84,7 +83,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     internal lazy var overlayView : UIView = {
         let overlayView = UIView()
-        overlayView.backgroundColor = Config.Font.Color.overlayW3w
+        overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
         overlayView.frame.size = self.view.frame.size
         return overlayView
     }()
@@ -117,7 +116,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
         
         // set up report issue button
         self.navigationController?.navigationBar.addSubview(reportBtn)
-        //self.overlayView.addSubview(reportBtn)
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
         reportBtn.snp.makeConstraints{(make) in
             make.top.equalTo(self.navigationController!.navigationBar).offset(15)
@@ -245,6 +243,9 @@ extension CameraController {
 //MARK: Process CoreML
 extension CameraController: processPredictionsDelegate {
     func noPredictions() {
+        UIView.animate(withDuration: 0.3) {
+            self.overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
+        }
         let path = UIBezierPath(rect: self.view.bounds)
         maskLayer.fillRule = CAShapeLayerFillRule.nonZero
         maskLayer.path = path.cgPath
@@ -269,6 +270,9 @@ extension CameraController: processPredictionsDelegate {
             let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
             if !recognisedtext.isEmpty {
+                UIView.animate(withDuration: 0.3) {
+                    self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
+                }
                 boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
             }
         }
