@@ -1,9 +1,9 @@
 //
 //  BaseViewControllerProtocol.swift
-//  iOSStyleguide
+//  ObjectDetection
 //
-//  Created by Pavle Pesic on 3/16/18.
-//  Copyright © 2018 Fabrika. All rights reserved.
+//  Created by LShiva on 3/16/18.
+//  Copyright © 2020 What3words. All rights reserved.
 //
 
 import Foundation

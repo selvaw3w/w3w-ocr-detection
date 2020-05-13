@@ -4,7 +4,7 @@
 //  ObjectDetection
 //
 //  Created by Lshiva on 03/05/2020.
-//  Copyright © 2020 MachineThink. All rights reserved.
+//  Copyright © 2020 What3words. All rights reserved.
 //
 
 import UIKit

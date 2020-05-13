@@ -82,7 +82,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     internal lazy var overlayView : UIView = {
         let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.clear
+        overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
         overlayView.frame.size = self.view.frame.size
         return overlayView
     }()
@@ -209,9 +209,9 @@ extension CameraController: VideoCaptureDelegate {
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
         coreml.predictPhoto(pixelBuffer: pixelBuffer)
-        //self.videoCapture.stop()
-        //self.onShowPhoto?()
-//        self.coordinator?.photo(to: image)
+        self.videoCapture.stop()
+        self.onShowPhoto?()
+        //self.coordinator.photo(to: image)
     }
 }
 
@@ -223,6 +223,12 @@ extension CameraController {
                     label: "w3w", w3w: threeWordAddress,
                     color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)),
                     textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)))
+//            let path = UIBezierPath(rect: self.view.bounds)
+//            path.append(UIBezierPath(rect: boundingbox.boundingBoxRect))
+//            let maskLayer = CAShapeLayer()
+//            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+//            maskLayer.path = path.cgPath
+//            self.overlayView.layer.mask = maskLayer
             boundingbox.boundingBoxView?.addToLayer(self.overlayView.layer)
         }
     }

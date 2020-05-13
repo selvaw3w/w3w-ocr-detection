@@ -2,8 +2,8 @@
 //  AlertMessage.swift
 //  HauteCurator
 //
-//  Created by Pavle Pesic on 1/19/19.
-//  Copyright © 2019 Pavle Pesic. All rights reserved.
+//  Created by LShiva on 1/19/19.
+//  Copyright © 2019 What3words. All rights reserved.
 //
 
 import Foundation

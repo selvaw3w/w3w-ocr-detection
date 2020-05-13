@@ -2,8 +2,8 @@
 //  FadeAnimator.swift
 //  EncoreJets
 //
-//  Created by Pavle Pesic on 5/18/18.
-//  Copyright © 2018 Pavle Pesic. All rights reserved.
+//  Created by LShiva on 5/18/18.
+//  Copyright © 2020 LShiva. All rights reserved.
 //
 
 import Foundation

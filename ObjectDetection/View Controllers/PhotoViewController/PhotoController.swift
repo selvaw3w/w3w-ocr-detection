@@ -1,5 +1,5 @@
 //
-//  PhotoViewController.swift
+//  PhotoController.swift
 //  ObjectDetection
 //
 //  Created by Lshiva on 02/05/2020.
