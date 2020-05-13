@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+    - feature/*
+  tags:
+      - 'v1.*'
+
+jobs:
+  job1:
+    name: development
+    runs-on: macOS-latest
+    env:
+      SUPER_SECRET: ${{ secrets.SUPER_SECRET }}      
+    strategy:
+      matrix:
+        destination: ['platform=iOS Simulator,OS=13.1,name=iPhone 8']
+        xcode: ['/Applications/Xcode_11.1.app/Contents/Developer']
+    steps:
+      - name: Checkout
+        uses: selvaw3w/w3w-ocr-detection@v1
+      - name: Bundle Install
+        run: bundle install
+        env:
+          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.GITHUB_PERSONAL_ACCESS_TOKEN }}
+      - name: Dependencies
+        run: |
+          xcodebuild clean test -project ObjectDetection.xcodeproj -scheme ObjectDetection -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO          
+        env: 
+          destination: ${{ matrix.destination }}
+
+
