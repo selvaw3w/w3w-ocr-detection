@@ -61,7 +61,7 @@
         <!--Photo Controller-->
         <scene sceneID="QKa-2t-1Q8">
             <objects>
-                <viewController storyboardIdentifier="PhotoController" id="Yqd-2e-Xtj" customClass="PhotoController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PhotoController" id="Yqd-2e-Xtj" customClass="PhotoController" customModule="ObjectDetection" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Siz-PO-DRS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
