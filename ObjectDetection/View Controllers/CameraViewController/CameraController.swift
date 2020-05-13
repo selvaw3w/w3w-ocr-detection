@@ -12,12 +12,12 @@ protocol CameraControllerProtocol: class {
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
-    
+    var count = 0
     var boundingBoxes = BoundingBoxes()
     //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
-    // toggle multi 3wa detection
+    // toggle multi 3wa detectionvi
     var isMulti3wa = true
     // toggle all filter & w3w only
     var isallFilter = false
@@ -44,13 +44,14 @@ class CameraController: UIViewController, CameraControllerProtocol {
         let view = W3wSuggestionView()        
         return view
     }()
+    
     // record button
     internal lazy var capturebtn : UIButton = {
         let button = UIButton(type: .custom)
         button.layer.cornerRadius = 30
-        button.layer.borderWidth = 2.0
         button.layer.borderColor = UIColor.white.cgColor
-        button.setBackgroundImage(UIImage(named: "circleBtn"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "Shutter_Button"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "closeBtn"), for: .selected)
         button.clipsToBounds = true
 
         return button
@@ -188,10 +189,14 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
     }
     
-    @objc func startCapture() {
-        //self.overlayView.addSubview(self.w3wSuggestionView)
-        self.videoCapture.photoCapture()
-        //sself.showHUD(progressLabel: "In progress")
+    @objc func startCapture(_ sender: UIButton) {
+        capturebtn.isSelected = !capturebtn.isSelected
+        if capturebtn.isSelected {
+            self.videoCapture.photoCapture()//TODO: can adjust settings for each photo
+            self.videoCapture.pause()
+        } else {
+            self.didResumeVideoSession()
+        }
     }
     
     @objc func reportIssue() {
@@ -202,6 +207,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
 //MARK: Video capture
 extension CameraController: VideoCaptureDelegate {
     func videoCapture(_ capture: VideoCapture, didCaptureVideoFrame sampleBuffer: CMSampleBuffer) {
+        //print("count:\(count)")
+        //count += 1
         imageProcess.updateImageBufferSize(sampleBuffer: sampleBuffer)
         coreml.predictVideo(sampleBuffer: sampleBuffer)
     }
@@ -209,8 +216,7 @@ extension CameraController: VideoCaptureDelegate {
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
         let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
         coreml.predictPhoto(pixelBuffer: pixelBuffer)
-        self.videoCapture.stop()
-        self.onShowPhoto?()
+        //self.onShowPhoto?()
         //self.coordinator.photo(to: image)
     }
 }
@@ -251,7 +257,7 @@ extension CameraController: processPredictionsDelegate {
                 guard self.coreml.currentBuffer != nil else {
                     return
                 }
-                
+                print(prediction.labels[0].identifier, prediction.labels[0].confidence)
                 let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
                 let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
                 let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
@@ -321,6 +327,7 @@ extension CameraController: MFMailComposeViewControllerDelegate {
 extension CameraController: W3wSuggestionViewProtocol {
     func didResumeVideoSession() {
         self.videoCapture.resume()
+        self.capturebtn.isSelected = false
     }
 }
 
@@ -343,6 +350,7 @@ class BoundingBoxes {
     var boundingBoxes : Dictionary<String,BoundingBox> = [:]
     
     func add(threeWordAddress: String, rect: CGRect) {
+        print("added:\(threeWordAddress)")
         if boundingBoxes[threeWordAddress] != nil {
             boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
             boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
