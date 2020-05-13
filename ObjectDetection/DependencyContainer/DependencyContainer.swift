@@ -9,7 +9,7 @@
 import UIKit
 
 typealias Factory = CoordinatorFactoryProtocol & ViewControllerFactory
-typealias ViewControllerFactory = ScanViewControllerFactory  //& WalktroughViewControllerFactory
+typealias ViewControllerFactory = ScanViewControllerFactory  //& SettingsViewControllerFactory
 
 class DependencyContainer {
     

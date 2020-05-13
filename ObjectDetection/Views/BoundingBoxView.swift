@@ -3,9 +3,9 @@ import UIKit
 
 class BoundingBoxView {
 
-    let shapeLayer: CAShapeLayer
-    let textLayer: CATextLayer
-    let w3wLayer: CATextLayer
+    let shapeLayer  : CAShapeLayer
+    let textLayer   : CATextLayer
+    let w3wLayer    : CATextLayer
 
     init() {
     
@@ -39,22 +39,17 @@ class BoundingBoxView {
     }
 
     func show(frame: CGRect, label: String, w3w: String, color: UIColor, textColor: UIColor) {
-        CATransaction.setDisableActions(false)
+        //CATransaction.setDisableActions(false)
 
         let path = UIBezierPath(rect: frame)
         shapeLayer.path = path.cgPath
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.isHidden = false
-
-        textLayer.string = label
-        textLayer.backgroundColor = color.cgColor
-        textLayer.isHidden = false
-
+        
         w3wLayer.string = w3w
         w3wLayer.backgroundColor = color.cgColor
         w3wLayer.foregroundColor = textColor.cgColor
         w3wLayer.isHidden = false
-
 
         let attributes = [
           NSAttributedString.Key.font: textLayer.font as Any
@@ -77,7 +72,6 @@ class BoundingBoxView {
 
     func hide() {
         self.shapeLayer.isHidden = true
-        self.textLayer.isHidden = true
         self.w3wLayer.isHidden = true
     }
 }

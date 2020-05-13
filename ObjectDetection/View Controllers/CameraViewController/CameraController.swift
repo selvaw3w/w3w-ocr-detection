@@ -12,7 +12,8 @@ protocol CameraControllerProtocol: class {
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
-    var count = 0
+    let maskLayer = CAShapeLayer()
+
     var boundingBoxes = BoundingBoxes()
     //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
@@ -83,7 +84,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     internal lazy var overlayView : UIView = {
         let overlayView = UIView()
-        overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
+        overlayView.backgroundColor = Config.Font.Color.overlayW3w
         overlayView.frame.size = self.view.frame.size
         return overlayView
     }()
@@ -148,7 +149,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 make.height.equalTo(self.overlayView).dividedBy(2.5)
             }
         }, completion: nil)
-    
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -220,49 +220,62 @@ extension CameraController: VideoCaptureDelegate {
 extension CameraController {
         
     func drawBoundingBox() {
+        let path = UIBezierPath(rect: self.view.bounds)
         for (threeWordAddress, boundingbox) in boundingBoxes.boundingBoxes {
             boundingbox.boundingBoxView?.show(frame: boundingbox.boundingBoxRect,
                     label: "w3w", w3w: threeWordAddress,
                     color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)),
                     textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)))
-//            let path = UIBezierPath(rect: self.view.bounds)
-//            path.append(UIBezierPath(rect: boundingbox.boundingBoxRect))
-//            let maskLayer = CAShapeLayer()
-//            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
-//            maskLayer.path = path.cgPath
-//            self.overlayView.layer.mask = maskLayer
+            
+
+            if boundingbox.countDownTimer > 1 {
+                path.append(UIBezierPath(rect: boundingbox.boundingBoxRect))
+            }
             boundingbox.boundingBoxView?.addToLayer(self.overlayView.layer)
+            
+        }
+        if boundingBoxes.boundingBoxes.count > 0 {
+            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+            maskLayer.path = path.cgPath
+            self.overlayView.layer.mask = maskLayer
         }
     }
 }
 
 //MARK: Process CoreML
 extension CameraController: processPredictionsDelegate {
+    func noPredictions() {
+        let path = UIBezierPath(rect: self.view.bounds)
+        maskLayer.fillRule = CAShapeLayerFillRule.nonZero
+        maskLayer.path = path.cgPath
+        self.overlayView.layer.mask = maskLayer
+        boundingBoxes.removeBoundingBoxes()
+    }
+    
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
-        for i in 0..<self.maxBoundingBoxViews {
-            if i < predictions.count {
-                let prediction = predictions[i]
-                let width = self.view.frame.width
-                let height = self.view.frame.height
-                let scaleFactor = height/self.ImageBufferSize.height
-                let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
-                let offset = self.imageProcess.ImageBufferSize.width * scaleFactor - width
-                let actualMarginWidth = -offset / 2.0
-                let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
-                
-                guard self.coreml.currentBuffer != nil else {
-                    return
-                }
-                let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
-                let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
-                let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
-                if !recognisedtext.isEmpty {
-                    boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
-                    drawBoundingBox()
-                }
+        for prediction in predictions {
+            let width = self.view.frame.width
+            let height = self.view.frame.height
+            let scaleFactor = height/self.ImageBufferSize.height
+            let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
+            let offset = self.imageProcess.ImageBufferSize.width * scaleFactor - width
+            let actualMarginWidth = -offset / 2.0
+            let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
+            
+            guard self.coreml.currentBuffer != nil else {
+                return
+            }
+            let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
+            let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+            let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
+            if !recognisedtext.isEmpty {
+                boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
             }
         }
-        boundingBoxes.removeBoundingBoxes()
+        UIView.animate(withDuration: 0.1) {
+            self.drawBoundingBox()
+            self.boundingBoxes.removeBoundingBoxes()
+        }
     }
 }
 

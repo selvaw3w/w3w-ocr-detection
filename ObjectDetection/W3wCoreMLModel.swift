@@ -14,6 +14,7 @@ import Vision
 
 protocol processPredictionsDelegate {
     func showPredictions(predictions: [VNRecognizedObjectObservation])
+    func noPredictions()
 }
 
 class W3wCoreMLModel: NSObject {
@@ -79,6 +80,10 @@ class W3wCoreMLModel: NSObject {
     }
     
     func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
+        if predictions.count == 0  {
+            self.delegate?.noPredictions()
+        }
+        
         self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
             return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > 75.0
         }))
