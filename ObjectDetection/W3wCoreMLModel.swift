@@ -26,7 +26,7 @@ class W3wCoreMLModel: NSObject {
 
     // current pixel buffer
     var currentBuffer: CVPixelBuffer?
-        
+    
     // curernt buffer state
     var loadCurrentStatebuffer: CVPixelBuffer?
     
@@ -112,18 +112,17 @@ extension W3wCoreMLModel {
 extension W3wCoreMLModel {
     /// - Make new vision request from photo
     func predictPhoto(pixelBuffer: CVPixelBuffer) {
-
         if currentBuffer == nil {
             currentBuffer = pixelBuffer
             loadCurrentStatebuffer = currentBuffer
         }
         
         var options: [VNImageOption : Any] = [:]
-            
+        
         if let cameraIntrinsicMatrix = CMGetAttachment(pixelBuffer, key: kCMSampleBufferAttachmentKey_CameraIntrinsicMatrix, attachmentModeOut: nil) {
                 options[.cameraIntrinsics] = cameraIntrinsicMatrix
         }
-          
+
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, orientation: .up, options: options)
         do {
             try handler.perform([self.visionRequest])

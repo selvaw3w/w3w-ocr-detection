@@ -16,7 +16,7 @@ class ScanCoordinator: BaseCoordinator, CoordinatorFinishOutput {
     var finishFlow: (() -> Void)?
     
     // MARK: - Vars & Lets
-    
+
     private let router: RouterProtocol
     private let factory: Factory
 
@@ -51,30 +51,3 @@ class ScanCoordinator: BaseCoordinator, CoordinatorFinishOutput {
          self.factory = factory
      }
 }
-
-
-
-//var childCoordinators = [Coordinator]()
-//var navigationController: UINavigationController
-
-//init(navigationController: UINavigationController) {
-//    navigationController.setNavigationBarHidden(true, animated: true)
-//    self.navigationController = navigationController
-//}
-//
-//func start() {
-//    self.camera()
-//}
-//
-//func camera() {
-//    let vc = CameraViewController.instantiate()
-//    vc.coordinator = self
-//    navigationController.pushViewController(vc, animated: false)
-//}
-//
-//func photo(to Image: UIImage) {
-//    let vc = PhotoViewController.instantiate()
-//    vc.image = Image
-//    vc.coordinator = self
-//    navigationController.pushViewController(vc, animated: true)
-//}

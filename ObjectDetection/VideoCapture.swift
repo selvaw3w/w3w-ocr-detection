@@ -168,9 +168,9 @@ extension VideoCapture: AVCapturePhotoCaptureDelegate {
             fatalError("Capture failed: \(error.localizedDescription)")
         }
 
-        let photoMetadata = photo.metadata
+        //let photoMetadata = photo.metadata
         
-        print("Metadata orientation with key: \(photoMetadata[String(kCGImagePropertyOrientation)] as Any)")
+        //print("Metadata orientation with key: \(photoMetadata[String(kCGImagePropertyOrientation)] as Any)")
         
         guard let cgiImage = photo.cgImageRepresentation()?.takeUnretainedValue() else {
             fatalError("Error: while generating image from photo capture data.")
