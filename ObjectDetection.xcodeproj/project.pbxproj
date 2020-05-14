@@ -45,6 +45,7 @@
 		007B505024694DF4000392E4 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504F24694DF4000392E4 /* CameraModel.swift */; };
 		007B505224694E1A000392E4 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B505124694E1A000392E4 /* CameraViewModel.swift */; };
 		007B50562469D592000392E4 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B50552469D592000392E4 /* NSAttributedString+Extensions.swift */; };
+		0099AA45246D3EFA0064F515 /* ObjectDetectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099AA44246D3EFA0064F515 /* ObjectDetectionTests.swift */; };
 		00A9A396245F53F3003FB518 /* DeepLinkOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A389245F53F3003FB518 /* DeepLinkOption.swift */; };
 		00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */; };
 		00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */; };
@@ -78,6 +79,16 @@
 		7BCB412521C3096200BFC4D0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BCB412321C3096200BFC4D0 /* LaunchScreen.storyboard */; };
 		7BCB413321C309B900BFC4D0 /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB412F21C309B900BFC4D0 /* VideoCapture.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0099AA47246D3EFA0064F515 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BCB410F21C3096100BFC4D0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BCB411621C3096100BFC4D0;
+			remoteInfo = ObjectDetection;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00008793245A2F62006ACD1C /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -118,6 +129,9 @@
 		007B504F24694DF4000392E4 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
 		007B505124694E1A000392E4 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		007B50552469D592000392E4 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
+		0099AA42246D3EFA0064F515 /* ObjectDetectionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ObjectDetectionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0099AA44246D3EFA0064F515 /* ObjectDetectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetectionTests.swift; sourceTree = "<group>"; };
+		0099AA46246D3EFA0064F515 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00A9A389245F53F3003FB518 /* DeepLinkOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkOption.swift; sourceTree = "<group>"; };
 		00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchInstructor.swift; sourceTree = "<group>"; };
 		00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Coordinator.swift"; sourceTree = "<group>"; };
@@ -157,6 +171,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0099AA3F246D3EFA0064F515 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BCB411421C3096100BFC4D0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -300,6 +321,15 @@
 				007B502E24689CA0000392E4 /* PhotoController.swift */,
 			);
 			path = PhotoViewController;
+			sourceTree = "<group>";
+		};
+		0099AA43246D3EFA0064F515 /* ObjectDetectionTests */ = {
+			isa = PBXGroup;
+			children = (
+				0099AA44246D3EFA0064F515 /* ObjectDetectionTests.swift */,
+				0099AA46246D3EFA0064F515 /* Info.plist */,
+			);
+			path = ObjectDetectionTests;
 			sourceTree = "<group>";
 		};
 		00A9A387245F53F3003FB518 /* BaseCoordinator */ = {
@@ -512,6 +542,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCB411921C3096100BFC4D0 /* ObjectDetection */,
+				0099AA43246D3EFA0064F515 /* ObjectDetectionTests */,
 				7BCB411821C3096100BFC4D0 /* Products */,
 				005071DA243F3DCC00DBC581 /* Frameworks */,
 				D49F4CE87BED73175ED1AD98 /* Pods */,
@@ -522,6 +553,7 @@
 			isa = PBXGroup;
 			children = (
 				7BCB411721C3096100BFC4D0 /* ObjectDetection.app */,
+				0099AA42246D3EFA0064F515 /* ObjectDetectionTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -558,6 +590,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0099AA41246D3EFA0064F515 /* ObjectDetectionTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0099AA4B246D3EFA0064F515 /* Build configuration list for PBXNativeTarget "ObjectDetectionTests" */;
+			buildPhases = (
+				0099AA3E246D3EFA0064F515 /* Sources */,
+				0099AA3F246D3EFA0064F515 /* Frameworks */,
+				0099AA40246D3EFA0064F515 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0099AA48246D3EFA0064F515 /* PBXTargetDependency */,
+			);
+			name = ObjectDetectionTests;
+			productName = ObjectDetectionTests;
+			productReference = 0099AA42246D3EFA0064F515 /* ObjectDetectionTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		7BCB411621C3096100BFC4D0 /* ObjectDetection */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7BCB412921C3096200BFC4D0 /* Build configuration list for PBXNativeTarget "ObjectDetection" */;
@@ -583,10 +633,15 @@
 		7BCB410F21C3096100BFC4D0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				DefaultBuildSystemTypeForWorkspace = Original;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = MachineThink;
 				TargetAttributes = {
+					0099AA41246D3EFA0064F515 = {
+						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 7BCB411621C3096100BFC4D0;
+					};
 					7BCB411621C3096100BFC4D0 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1100;
@@ -607,11 +662,19 @@
 			projectRoot = "";
 			targets = (
 				7BCB411621C3096100BFC4D0 /* ObjectDetection */,
+				0099AA41246D3EFA0064F515 /* ObjectDetectionTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0099AA40246D3EFA0064F515 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BCB411521C3096100BFC4D0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -680,6 +743,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0099AA3E246D3EFA0064F515 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0099AA45246D3EFA0064F515 /* ObjectDetectionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BCB411321C3096100BFC4D0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -739,6 +810,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0099AA48246D3EFA0064F515 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7BCB411621C3096100BFC4D0 /* ObjectDetection */;
+			targetProxy = 0099AA47246D3EFA0064F515 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		7BCB411E21C3096100BFC4D0 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -759,6 +838,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0099AA49246D3EFA0064F515 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YC9564MTQY;
+				INFOPLIST_FILE = ObjectDetectionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.what3words.ObjectDetectionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ObjectDetection.app/ObjectDetection";
+			};
+			name = Debug;
+		};
+		0099AA4A246D3EFA0064F515 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YC9564MTQY;
+				INFOPLIST_FILE = ObjectDetectionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.what3words.ObjectDetectionTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ObjectDetection.app/ObjectDetection";
+			};
+			name = Release;
+		};
 		7BCB412721C3096200BFC4D0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -946,6 +1067,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0099AA4B246D3EFA0064F515 /* Build configuration list for PBXNativeTarget "ObjectDetectionTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0099AA49246D3EFA0064F515 /* Debug */,
+				0099AA4A246D3EFA0064F515 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7BCB411221C3096100BFC4D0 /* Build configuration list for PBXProject "ObjectDetection" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
