@@ -14,7 +14,10 @@ protocol CameraControllerProtocol: class {
 class CameraController: UIViewController, CameraControllerProtocol {
     let maskLayer = CAShapeLayer()
 
-    var boundingBoxes = BoundingBoxes()
+    //var boundingBoxes = BoundingBoxes()
+    
+    var threeWordBoxes = ThreeWordBoxes()
+    
     //var viewModel : CameraViewModel?
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
@@ -148,23 +151,20 @@ class CameraController: UIViewController, CameraControllerProtocol {
             }
         }, completion: nil)
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first
-        
-        guard let point = touch?.location(in: self.overlayView) else {
-            return
-        }
-        
-         for (_ , boundingbox ) in boundingBoxes.boundingBoxes {
-            guard let sublayer = boundingbox.boundingBoxView!.shapeLayer as? CAShapeLayer else {
+        for (_ , threewordbox ) in threeWordBoxes.threeWordBoxes {
+            guard let point = touch?.location(in: threewordbox.threeWordView) else {
                 return
             }
-            if let path = sublayer.path, path.contains(point) {
-                self.showSuggestionView(threeWordAddress: boundingbox.boundingBoxView!.w3wLayer.string as! String)
+
+            if (threewordbox.threeWordView?.bounds.contains(point))! {
+                self.showSuggestionView(threeWordAddress: (threewordbox.threeWordView?.ThreeWordBoundingBoxLbl.text)!)
                 self.videoCapture.pause()
             }
         }
+        
     }
     
     func resizePreviewLayer() {
@@ -217,25 +217,46 @@ extension CameraController: VideoCaptureDelegate {
 
 extension CameraController {
         
-    func drawBoundingBox() {
+//    func drawBoundingBox() {
+//        let path = UIBezierPath(rect: self.view.bounds)
+//        for (threeWordAddress, boundingbox) in boundingBoxes.boundingBoxes {
+//            boundingbox.boundingBoxView?.show(frame: boundingbox.boundingBoxRect,
+//                    label: "w3w", w3w: threeWordAddress,
+//                    color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)),
+//                    textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)))
+//
+//
+//            if boundingbox.countDownTimer > 1 {
+//                path.append(UIBezierPath(rect: boundingbox.boundingBoxRect))
+//            }
+//            boundingbox.boundingBoxView?.addToLayer(self.overlayView.layer)
+//
+//        }
+//        if boundingBoxes.boundingBoxes.count > 0 {
+//            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+//            maskLayer.path = path.cgPath
+//            self.overlayView.layer.mask = maskLayer
+//        }
+//    }
+    
+    func drawThreeWordBox() {
         let path = UIBezierPath(rect: self.view.bounds)
-        for (threeWordAddress, boundingbox) in boundingBoxes.boundingBoxes {
-            boundingbox.boundingBoxView?.show(frame: boundingbox.boundingBoxRect,
-                    label: "w3w", w3w: threeWordAddress,
-                    color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)),
-                    textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(boundingbox.countDownTimer / Config.w3w.destructBBViewtimer)))
+        for (threeWordAddress, threewordbox) in threeWordBoxes.threeWordBoxes {
+            threewordbox.threeWordView?.show(frame: threewordbox.threeWordRect,
+            label: "w3w", w3w: threeWordAddress,
+            color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)),
+            textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)))
             
-
-            if boundingbox.countDownTimer > 1 {
-                path.append(UIBezierPath(rect: boundingbox.boundingBoxRect))
+            if threewordbox.countDownTimer > 1 {
+                path.append(UIBezierPath(rect: threewordbox.threeWordRect))
             }
-            boundingbox.boundingBoxView?.addToLayer(self.overlayView.layer)
-            
+        
+            threewordbox.threeWordView?.add(self.overlayView)
         }
-        if boundingBoxes.boundingBoxes.count > 0 {
+        if threeWordBoxes.threeWordBoxes.count > 0 {
             maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
             maskLayer.path = path.cgPath
-            self.overlayView.layer.mask = maskLayer
+           // self.overlayView.layer.mask = maskLayer
         }
     }
 }
@@ -249,8 +270,9 @@ extension CameraController: processPredictionsDelegate {
         let path = UIBezierPath(rect: self.view.bounds)
         maskLayer.fillRule = CAShapeLayerFillRule.nonZero
         maskLayer.path = path.cgPath
-        self.overlayView.layer.mask = maskLayer
-        boundingBoxes.removeBoundingBoxes()
+        //self.overlayView.layer.mask = maskLayer
+        //boundingBoxes.removeBoundingBoxes()
+        self.threeWordBoxes.removeBoundingBoxes()        
     }
     
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
@@ -273,13 +295,11 @@ extension CameraController: processPredictionsDelegate {
                 UIView.animate(withDuration: 0.3) {
                     self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
                 }
-                boundingBoxes.add(threeWordAddress: recognisedtext, rect: rect)
+                threeWordBoxes.add(threeWordAddress: recognisedtext, rect: rect, parent: self.view)
             }
         }
-        UIView.animate(withDuration: 0.1) {
-            self.drawBoundingBox()
-            self.boundingBoxes.removeBoundingBoxes()
-        }
+            self.drawThreeWordBox()
+            self.threeWordBoxes.removeBoundingBoxes()
     }
 }
 
@@ -343,45 +363,90 @@ extension CameraController: W3wSuggestionViewProtocol {
     }
 }
 
-class BoundingBox {
+class ThreeWordBox {
     var threeWordAddress    : String
-    var boundingBoxRect     : CGRect
-    var boundingBoxView     : BoundingBoxView?
+    var threeWordRect     : CGRect
+    var threeWordView     : ThreeWordBoundingBoxView?
     var countDownTimer      : Int
     
-    init(threeWordAddress: String, boundingBoxRect: CGRect, boundingBoxView: BoundingBoxView? = nil) {
+    init(threeWordAddress: String, threeWordRect: CGRect, threeWordView: ThreeWordBoundingBoxView? = nil) {
         self.threeWordAddress = threeWordAddress
-        self.boundingBoxRect = boundingBoxRect
-        self.boundingBoxView = boundingBoxView
+        self.threeWordRect = threeWordRect
+        self.threeWordView = threeWordView
         self.countDownTimer = Config.w3w.destructBBViewtimer
     }
 }
 
-class BoundingBoxes {
+
+class ThreeWordBoxes {
     
-    var boundingBoxes : Dictionary<String,BoundingBox> = [:]
+    var threeWordBoxes : Dictionary<String,ThreeWordBox> = [:]
     
-    func add(threeWordAddress: String, rect: CGRect) {
-        if boundingBoxes[threeWordAddress] != nil {
-            boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
-            boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
+    func add(threeWordAddress: String, rect: CGRect, parent: UIView) {
+        if threeWordBoxes[threeWordAddress] != nil {
+            threeWordBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
+            threeWordBoxes[threeWordAddress]?.threeWordRect = rect
         } else {
-            let createboundingBoxView = BoundingBoxView()
-            boundingBoxes[threeWordAddress] = BoundingBox(threeWordAddress: threeWordAddress, boundingBoxRect: rect, boundingBoxView: createboundingBoxView)
+            let createboundingBoxView = ThreeWordBoundingBoxView()
+//            createboundingBoxView.addGestureRecognizer(UITapGestureRecognizer(target: parent, action: Selector(("handleTap:"))))
+            threeWordBoxes[threeWordAddress] = ThreeWordBox(threeWordAddress: threeWordAddress, threeWordRect: rect, threeWordView: createboundingBoxView)
         }
     }
     
-    func remove(boundingBox: BoundingBox) {
-        boundingBoxes.removeValue(forKey: boundingBox.threeWordAddress)
+    func remove(threeWordBox: ThreeWordBox) {
+        threeWordBoxes.removeValue(forKey: threeWordBox.threeWordAddress)
     }
     
     func removeBoundingBoxes() {
-        for (_, boundingbox) in boundingBoxes {
-            boundingbox.countDownTimer -= 1
-            if boundingbox.countDownTimer < 1 {
-                self.remove(boundingBox: boundingbox)
-                boundingbox.boundingBoxView?.hide()
+        for (_, threeWordbox) in threeWordBoxes {
+            threeWordbox.countDownTimer -= 1
+            if threeWordbox.countDownTimer < 1 {
+                self.remove(threeWordBox: threeWordbox)
+                threeWordbox.threeWordView?.hide()
             }
         }
     }
 }
+
+//class BoundingBox {
+//    var threeWordAddress    : String
+//    var boundingBoxRect     : CGRect
+//    var boundingBoxView     : BoundingBoxView?
+//    var countDownTimer      : Int
+//
+//    init(threeWordAddress: String, boundingBoxRect: CGRect, boundingBoxView: BoundingBoxView? = nil) {
+//        self.threeWordAddress = threeWordAddress
+//        self.boundingBoxRect = boundingBoxRect
+//        self.boundingBoxView = boundingBoxView
+//        self.countDownTimer = Config.w3w.destructBBViewtimer
+//    }
+//}
+//
+//class BoundingBoxes {
+//
+//    var boundingBoxes : Dictionary<String,BoundingBox> = [:]
+//
+//    func add(threeWordAddress: String, rect: CGRect) {
+//        if boundingBoxes[threeWordAddress] != nil {
+//            boundingBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
+//            boundingBoxes[threeWordAddress]?.boundingBoxRect = rect
+//        } else {
+//            let createboundingBoxView = BoundingBoxView()
+//            boundingBoxes[threeWordAddress] = BoundingBox(threeWordAddress: threeWordAddress, boundingBoxRect: rect, boundingBoxView: createboundingBoxView)
+//        }
+//    }
+//
+//    func remove(boundingBox: BoundingBox) {
+//        boundingBoxes.removeValue(forKey: boundingBox.threeWordAddress)
+//    }
+//
+//    func removeBoundingBoxes() {
+//        for (_, boundingbox) in boundingBoxes {
+//            boundingbox.countDownTimer -= 1
+//            if boundingbox.countDownTimer < 1 {
+//                self.remove(boundingBox: boundingbox)
+//                boundingbox.boundingBoxView?.hide()
+//            }
+//        }
+//    }
+//}

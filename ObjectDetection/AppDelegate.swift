@@ -29,3 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
  
+
+
+//TODO 1: threeword box intersect, Loop through all the boxes, compare athe overlap. add label below from the count of the loop. dynamic uilabel
+

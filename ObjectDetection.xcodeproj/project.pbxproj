@@ -45,6 +45,7 @@
 		007B505024694DF4000392E4 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B504F24694DF4000392E4 /* CameraModel.swift */; };
 		007B505224694E1A000392E4 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B505124694E1A000392E4 /* CameraViewModel.swift */; };
 		007B50562469D592000392E4 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B50552469D592000392E4 /* NSAttributedString+Extensions.swift */; };
+		0099AA4D246D4DB00064F515 /* ThreeWordBoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099AA4C246D4DB00064F515 /* ThreeWordBoundingBoxView.swift */; };
 		00A9A396245F53F3003FB518 /* DeepLinkOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A389245F53F3003FB518 /* DeepLinkOption.swift */; };
 		00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */; };
 		00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */; };
@@ -118,6 +119,7 @@
 		007B504F24694DF4000392E4 /* CameraModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
 		007B505124694E1A000392E4 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		007B50552469D592000392E4 /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
+		0099AA4C246D4DB00064F515 /* ThreeWordBoundingBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeWordBoundingBoxView.swift; sourceTree = "<group>"; };
 		00A9A389245F53F3003FB518 /* DeepLinkOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkOption.swift; sourceTree = "<group>"; };
 		00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchInstructor.swift; sourceTree = "<group>"; };
 		00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Coordinator.swift"; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 			children = (
 				007B504124689D7E000392E4 /* others */,
 				007B503624689D04000392E4 /* PhotoDetectionView.swift */,
+				0099AA4C246D4DB00064F515 /* ThreeWordBoundingBoxView.swift */,
 				007B503724689D04000392E4 /* BoundingBoxView.swift */,
 				007B504C24689E9B000392E4 /* W3wSuggestionView */,
 			);
@@ -685,6 +688,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00BAA463244B44D80036DB0C /* Logging.swift in Sources */,
+				0099AA4D246D4DB00064F515 /* ThreeWordBoundingBoxView.swift in Sources */,
 				00507203243FD54200DBC581 /* Settings.swift in Sources */,
 				007B505024694DF4000392E4 /* CameraModel.swift in Sources */,
 				00A9A3B0245F54FA003FB518 /* ViewControllerFactory.swift in Sources */,
