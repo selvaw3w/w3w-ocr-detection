@@ -187,7 +187,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     @objc func capturePhoto(_ sender: UIButton) {
         photobtn.isSelected = !photobtn.isSelected
         if photobtn.isSelected {
-            self.videoCapture.photoCapture()//TODO: can adjust settings for each photo
+            self.videoCapture.photoCapture()
             self.instructionLbl.text = "Tap to scan again"
             self.videoCapture.pause()
         } else {
