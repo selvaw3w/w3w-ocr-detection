@@ -1,4 +1,5 @@
 import UIKit
+import GDPerformanceView_Swift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   // MARK: - Application lifecycle
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        PerformanceMonitor.shared().start()
         self.dependencyConatiner.start()
         self.setupGlobalAppearance()
         return true

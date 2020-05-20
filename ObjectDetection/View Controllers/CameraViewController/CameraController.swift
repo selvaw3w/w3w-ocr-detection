@@ -5,6 +5,8 @@ import Vision
 import MessageUI
 import SSZipArchive
 import SnapKit
+import GDPerformanceView_Swift
+
 
 protocol CameraControllerProtocol: class {
     
@@ -13,9 +15,14 @@ protocol CameraControllerProtocol: class {
 
 class CameraController: UIViewController, CameraControllerProtocol {
     
+    var wGesture: WGesture!
+
     let maskLayer = CAShapeLayer()
     
     var threeWordBoxes = ThreeWordBoxes()
+    
+    var performanceView = PerformanceView()
+    
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
     // toggle multi 3wa detectionvi
@@ -93,20 +100,43 @@ class CameraController: UIViewController, CameraControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
+        view.isUserInteractionEnabled = true
+        wGesture = WGesture(target: self, action: #selector((showDeveloperMode(gesture:))))
+        view.addGestureRecognizer(wGesture)
+        
         coreml.delegate = self
         w3wSuggestionView.delegate = self
         self.ocrmanager.setAreaOfInterest(viewBounds: self.view.bounds)
         self.setUpCamera()
     }
-    
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        PerformanceMonitor.shared().hide()
+        PerformanceMonitor.shared().delegate = self
+    }
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         resizePreviewLayer()
     }
     
+    @objc func showDeveloperMode(gesture: WGesture) {
+       if gesture.state == .recognized {
+            performanceView.show()
+        }
+    }
+    
     func setup() {
         self.view.addSubview(overlayView)
-        
+        self.performanceView.add(overlayView)
+
+        performanceView.snp.makeConstraints{ (make) in
+            make.top.equalTo(self.overlayView).offset(20)
+            make.left.equalTo(self.overlayView)
+            make.width.equalTo(self.overlayView).dividedBy(2)
+            make.height.equalTo(self.overlayView).dividedBy(2)
+        }
         // set up capture button
         self.overlayView.addSubview(photobtn)
         photobtn.addTarget(self, action: #selector(self.capturePhoto), for: .touchUpInside)
@@ -241,9 +271,6 @@ extension CameraController {
 //MARK: Process CoreML
 extension CameraController: processPredictionsDelegate {
     func noPredictions() {
-        UIView.animate(withDuration: 0.3) {
-            self.overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
-        }
         let path = UIBezierPath(rect: self.view.bounds)
         maskLayer.fillRule = CAShapeLayerFillRule.nonZero
         maskLayer.path = path.cgPath
@@ -269,9 +296,6 @@ extension CameraController: processPredictionsDelegate {
             let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
             if !recognisedtext.isEmpty {
-                UIView.animate(withDuration: 0.3) {
-                    self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
-                }
                 threeWordBoxes.add(threeWordAddress: recognisedtext, rect: rect, parent: self.view)
             }
         }
@@ -285,7 +309,8 @@ extension CameraController: MFMailComposeViewControllerDelegate {
     
     private func sendScreenshotEmail() {
         guard MFMailComposeViewController.canSendMail() else {
-            fatalError("error sending email ")
+            showAlertWith(message: AlertMessage(title: "Error", body: "There is no email account registered"), style: .alert)
+            return
         }
         
         let mailComposer = MFMailComposeViewController()
@@ -341,6 +366,7 @@ extension CameraController: W3wSuggestionViewProtocol {
 }
 
 class ThreeWordBox {
+
     var threeWordAddress    : String
     var threeWordRect     : CGRect
     var threeWordView     : ThreeWordBoundingBoxView?
@@ -382,4 +408,12 @@ class ThreeWordBoxes {
             }
         }
     }
+}
+
+extension CameraController : PerformanceMonitorDelegate {
+
+    func performanceMonitor(didReport performanceReport: PerformanceReport) {
+        performanceView.display(fps: performanceReport.fps, cpu: Int(performanceReport.cpuUsage), memory: performanceReport.memoryUsage)
+    }
+    
 }

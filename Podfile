@@ -9,4 +9,5 @@ target 'ObjectDetection' do
   pod 'SSZipArchive'
   pod 'SnapKit', '~> 5.0.0'
   pod 'MBProgressHUD'
+  pod 'GDPerformanceView-Swift', '~> 2.0.3'
 end
