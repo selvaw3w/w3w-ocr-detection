@@ -280,6 +280,7 @@ extension CameraController: processPredictionsDelegate {
     }
     
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
+        print("prediction:\(predictions.count)")
         for prediction in predictions {
             let width = self.view.frame.width
             let height = self.view.frame.height
@@ -361,6 +362,7 @@ extension CameraController: MFMailComposeViewControllerDelegate {
 extension CameraController: W3wSuggestionViewProtocol {
     func didResumeVideoSession() {
         self.videoCapture.resume()
+        self.instructionLbl.text = "Frame the 3 word address you want to scan"
         self.photobtn.isSelected = false
     }
 }
