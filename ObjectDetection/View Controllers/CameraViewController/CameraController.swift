@@ -8,6 +8,19 @@ import SnapKit
 import GDPerformanceView_Swift
 
 
+enum Counter {
+        case totalPredictions
+        case totalRecognitions
+}
+
+enum DetectionPhase {
+        case W3wNotStarted
+        case W3wDetected
+        case W3wRecognised
+        case W3wNotRecognised
+        case W3wSelected
+}
+
 protocol CameraControllerProtocol: class {
     
     var onShowPhoto : (() -> Void)? { get set }
@@ -17,11 +30,19 @@ class CameraController: UIViewController, CameraControllerProtocol {
     
     var wGesture: WGesture!
 
+    var detectionPhase : DetectionPhase = .W3wNotStarted
+
     let maskLayer = CAShapeLayer()
     
     var threeWordBoxes = ThreeWordBoxes()
     
+    var boundingBoxViews = [BoundingBoxView]()
+    
     var performanceView = PerformanceView()
+    
+    var totalPredictions = 0
+    
+    var totalRecognitions = 0
     
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
@@ -53,6 +74,14 @@ class CameraController: UIViewController, CameraControllerProtocol {
         return view
     }()
     
+    // set up maximum bounding box
+    func setUpBoundingBoxViews() {
+        for _ in 0..<maxBoundingBoxViews { //10
+          boundingBoxViews.append(BoundingBoxView())
+          
+        }
+    }
+
     // record button
     internal lazy var photobtn : UIButton = {
         let button = UIButton(type: .custom)
@@ -100,6 +129,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
+        self.setUpBoundingBoxViews()
         view.isUserInteractionEnabled = true
         wGesture = WGesture(target: self, action: #selector((showDeveloperMode(gesture:))))
         view.addGestureRecognizer(wGesture)
@@ -189,6 +219,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
 
             if (threewordbox.threeWordView?.bounds.contains(point))! {
                 self.showSuggestionView(threeWordAddress: (threewordbox.threeWordView?.ThreeWordBoundingBoxLbl.text)!)
+                detectionPhase = .W3wSelected
+                self.drawThreeWordBox()
                 self.videoCapture.pause()
             }
         }
@@ -207,6 +239,10 @@ class CameraController: UIViewController, CameraControllerProtocol {
                 if let previewLayer = self.videoCapture.previewLayer {
                     self.videoPreview.layer.addSublayer(previewLayer)
                     self.resizePreviewLayer()
+                }
+                // Add the bounding box layers to the UI, on top of the video preview.
+                for box in self.boundingBoxViews {
+                    box.addToLayer(self.overlayView.layer)
                 }
                 // Once everything is set up, we can start capturing live video.
                 self.videoCapture.start()
@@ -249,21 +285,25 @@ extension CameraController {
     func drawThreeWordBox() {
         let path = UIBezierPath(rect: self.view.bounds)
         for (threeWordAddress, threewordbox) in threeWordBoxes.threeWordBoxes {
-            threewordbox.threeWordView?.show(frame: threewordbox.threeWordRect,
-            label: "w3w", w3w: threeWordAddress,
-            color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)),
-            textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)))
+        
+            threewordbox.threeWordView?.show(
+            frame: threewordbox.threeWordRect,
+            label: "w3w",
+            w3w: threeWordAddress,
+                color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)),
+                textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer))
+            , phase: detectionPhase)
             
             if threewordbox.countDownTimer > 1 {
                 path.append(UIBezierPath(rect: threewordbox.threeWordRect))
             }
         
             threewordbox.threeWordView?.add(self.overlayView)
+            threewordbox.threeWordView?.setNeedsDisplay()
         }
         if threeWordBoxes.threeWordBoxes.count > 0 {
             maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
             maskLayer.path = path.cgPath
-           // self.overlayView.layer.mask = maskLayer
         }
     }
 }
@@ -274,14 +314,23 @@ extension CameraController: processPredictionsDelegate {
         let path = UIBezierPath(rect: self.view.bounds)
         maskLayer.fillRule = CAShapeLayerFillRule.nonZero
         maskLayer.path = path.cgPath
+        UIView.animate(withDuration: 0.3) {
+            self.overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
+        }
+
         //self.overlayView.layer.mask = maskLayer
         //boundingBoxes.removeBoundingBoxes()
         self.threeWordBoxes.removeBoundingBoxes()        
     }
     
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
-        print("prediction:\(predictions.count)")
+        var i = 0
+        for j in 0...9 {
+            self.boundingBoxViews[j].hide()
+        }
         for prediction in predictions {
+            detectionPhase = .W3wDetected
+            counterAdd(count: Counter.totalPredictions)
             let width = self.view.frame.width
             let height = self.view.frame.height
             let scaleFactor = height/self.ImageBufferSize.height
@@ -296,12 +345,100 @@ extension CameraController: processPredictionsDelegate {
             let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
             let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
+            
             if !recognisedtext.isEmpty {
+                detectionPhase = .W3wRecognised
+                counterAdd(count: Counter.totalRecognitions)
+                UIView.animate(withDuration: 0.3) {
+                    self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
+                }
+
                 threeWordBoxes.add(threeWordAddress: recognisedtext, rect: rect, parent: self.view)
+            } else {
+            
+                detectionPhase = .W3wNotRecognised
+                self.boundingBoxViews[i].show(frame: rect, label: "", color: UIColor.white)
+                if i <= 10 {
+                    i+=1
+                } else {
+                    i = 0
+                }
             }
         }
-            self.drawThreeWordBox()
+            if detectionPhase != .W3wSelected {
+                self.drawThreeWordBox()
+            }            
             self.threeWordBoxes.removeBoundingBoxes()
+    }
+    
+    func counterAdd(count: Counter) {
+        if (count == Counter.totalPredictions) {
+            totalPredictions = totalPredictions + 1
+        } else if (count == Counter.totalRecognitions) {
+            totalRecognitions = totalRecognitions + 1
+        }
+    }
+    
+    func counterReset(count: Counter) {
+        if (count == Counter.totalPredictions) {
+            totalPredictions = 0
+        } else if (count == Counter.totalRecognitions) {
+            totalRecognitions = 0
+        }
+    }
+    
+    func getMetaData(forImage image: UIImage) {
+            guard let data = image.jpegData(compressionQuality: 1),
+            let source = CGImageSourceCreateWithData(data as CFData, nil) else { return}
+
+        if let type = CGImageSourceGetType(source) {
+            print("type: \(type)")
+        }
+
+        if let properties = CGImageSourceCopyProperties(source, nil) {
+            print("properties - \(properties)")
+        }
+
+        let count = CGImageSourceGetCount(source)
+        print("count: \(count)")
+
+        for index in 0..<count {
+            if let metaData = CGImageSourceCopyMetadataAtIndex(source, index, nil) {
+                print("all metaData[\(index)]: \(metaData)")
+
+                let typeId = CGImageMetadataGetTypeID()
+                print("metadata typeId[\(index)]: \(typeId)")
+
+
+                if let tags = CGImageMetadataCopyTags(metaData) as? [CGImageMetadataTag] {
+
+                    print("number of tags - \(tags.count)")
+
+                    for tag in tags {
+                        if let name = CGImageMetadataTagCopyName(tag) {
+                            print("name: \(name)")
+                        }
+                        if let value = CGImageMetadataTagCopyValue(tag) {
+                            print("value: \(value)")
+                        }
+                        if let prefix = CGImageMetadataTagCopyPrefix(tag) {
+                            print("prefix: \(prefix)")
+                        }
+                        if let namespace = CGImageMetadataTagCopyNamespace(tag) {
+                            print("namespace: \(namespace)")
+                        }
+                        if let qualifiers = CGImageMetadataTagCopyQualifiers(tag) {
+                            print("qualifiers: \(qualifiers)")
+                        }
+                        print("-------")
+                    }
+                }
+            }
+
+            if let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) {
+                print("properties[\(index)]: \(properties)")
+            }
+        }
     }
 }
 
@@ -364,6 +501,7 @@ extension CameraController: W3wSuggestionViewProtocol {
         self.videoCapture.resume()
         self.instructionLbl.text = "Frame the 3 word address you want to scan"
         self.photobtn.isSelected = false
+        detectionPhase = .W3wNotStarted
     }
 }
 
