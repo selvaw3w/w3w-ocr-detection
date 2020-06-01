@@ -85,9 +85,16 @@ class W3wCoreMLModel: NSObject {
         }
         
         self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
-            return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > 75.0
+            print(Settings.boolForKey(key: Config.w3w.current3waFilter) as Any)
+            if  (Settings.boolForKey(key: Config.w3w.current3waFilter) == true) {
+                    return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float
+
+            } else {
+                return (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float
+            }
+
         }))
-    }
+    }   
 }
 
 // predict video

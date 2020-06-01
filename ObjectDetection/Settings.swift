@@ -34,4 +34,13 @@ class Settings {
         let appDomain = Bundle.main.bundleIdentifier!
         userDefaults.removePersistentDomain(forName: appDomain)
     }
+    
+    class public func saveBool(value: Bool, forKey key: String) {
+        self.userDefaults.set(value, forKey: key)
+        self.userDefaults.synchronize()
+    }
+    
+    class public func boolForKey(key: String) -> Bool? {
+        return self.userDefaults.bool(forKey: key) as Bool?
+    }
 }

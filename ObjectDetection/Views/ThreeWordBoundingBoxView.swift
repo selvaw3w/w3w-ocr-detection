@@ -23,7 +23,6 @@ class ThreeWordBoundingBoxView: UIView {
         return label
     }()
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -63,7 +62,6 @@ class ThreeWordBoundingBoxView: UIView {
         attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.red, range: NSRange(location: 0, length: 3))
         self.ThreeWordBoundingBoxLbl.attributedText = attributedString
         
-        print("Phase:\(phase)")
         if self.ThreeWordBoundingBoxLbl.text != nil && phase == .W3wSelected {
             let nss = NSString(string: self.ThreeWordBoundingBoxLbl.text!)
             let size = nss.size(withAttributes:  [.font: UIFont(name: Config.Font.type.sourceLight, size: 20.0)!])

@@ -27,7 +27,7 @@ protocol CameraControllerProtocol: class {
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
-    
+        
     var wGesture: WGesture!
 
     var detectionPhase : DetectionPhase = .W3wNotStarted
@@ -158,13 +158,14 @@ class CameraController: UIViewController, CameraControllerProtocol {
     }
     
     func setup() {
+
         self.view.addSubview(overlayView)
         self.performanceView.add(overlayView)
 
         performanceView.snp.makeConstraints{ (make) in
             make.top.equalTo(self.overlayView).offset(20)
             make.left.equalTo(self.overlayView)
-            make.width.equalTo(self.overlayView).dividedBy(2)
+            make.width.equalTo(self.overlayView)
             make.height.equalTo(self.overlayView).dividedBy(2)
         }
         // set up capture button
