@@ -5,7 +5,6 @@ class BoundingBoxView {
 
     let shapeLayer  : CAShapeLayer
     let textLayer   : CATextLayer
-    //let w3wLayer    : CATextLayer
 
     init() {
     
@@ -22,35 +21,28 @@ class BoundingBoxView {
         textLayer.font = UIFont(name: Config.Font.type.sourceLight, size: textLayer.fontSize)
         textLayer.alignmentMode = CATextLayerAlignmentMode.center
 
-//        w3wLayer = CATextLayer()
-//        w3wLayer.foregroundColor = UIColor.black.cgColor
-//        w3wLayer.isHidden = true
-//        w3wLayer.contentsScale = UIScreen.main.scale
-//        w3wLayer.fontSize = 14
-//        w3wLayer.backgroundColor = Config.Font.Color.text.cgColor
-//        w3wLayer.font = UIFont(name: Config.Font.type.sourceLight, size: textLayer.fontSize)
-//        w3wLayer.alignmentMode = CATextLayerAlignmentMode.center
 
     }
 
     func addToLayer(_ parent: CALayer) {
         parent.addSublayer(shapeLayer)
-        //parent.addSublayer(w3wLayer)
+        if (Settings.boolForKey(key: Config.w3w.developerMode) == true) {
+            parent.addSublayer(textLayer)
+        }
     }
 
     func show(frame: CGRect, label: String, color: UIColor) {
-        //CATransaction.setDisableActions(false)
 
         let path = UIBezierPath(rect: frame)
         shapeLayer.path = path.cgPath
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.isHidden = false
         
-//        w3wLayer.string = w3w
-//        w3wLayer.backgroundColor = color.cgColor
-//        w3wLayer.foregroundColor = textColor.cgColor
-//        w3wLayer.isHidden = false
-
+        textLayer.string = label
+        textLayer.backgroundColor = color.cgColor
+        
+        textLayer.isHidden = false
+        
         let attributes = [
           NSAttributedString.Key.font: textLayer.font as Any
         ]
@@ -61,17 +53,10 @@ class BoundingBoxView {
         let textOrigin = CGPoint(x: originX - 2, y: frame.origin.y - textSize.height)
         textLayer.frame = CGRect(origin: textOrigin, size: textSize)
         
-        
-        //TODO: change the x to 0 if less than zero
-//        let w3wTextRect = w3w.boundingRect(with: CGSize(width: 400, height: 100), options: .truncatesLastVisibleLine, attributes: attributes, context: nil)
-//        let w3wTextSize = CGSize(width: w3wTextRect.width + 12, height: w3wTextRect.height)
-//        let w3wTextOrigin = CGPoint(x: textOrigin.x, y: frame.origin.y + frame.height)
-//        w3wLayer.frame = CGRect(origin: w3wTextOrigin, size: w3wTextSize)
-
     }
 
     func hide() {
         self.shapeLayer.isHidden = true
-        //self.w3wLayer.isHidden = true
+        self.textLayer.isHidden = true
     }
 }

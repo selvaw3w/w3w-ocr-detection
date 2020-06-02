@@ -142,6 +142,7 @@ class PerformanceView : UIView {
         }
         
         thresholdSlider.addTarget(self, action: #selector(self.sliderValueDidChange(_:)), for: .valueChanged)
+        self.sliderValueDidChange(self.thresholdSlider)
         self.addSubview(thresholdSlider)
         self.thresholdSlider.snp.makeConstraints { (make) in
             make.top.equalTo(self.MemoryLbl.snp.bottom)

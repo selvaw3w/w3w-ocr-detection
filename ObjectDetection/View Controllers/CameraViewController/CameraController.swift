@@ -43,7 +43,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     var totalPredictions = 0
     
     var totalRecognitions = 0
-    
+        
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
     // toggle multi 3wa detectionvi
@@ -154,6 +154,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     @objc func showDeveloperMode(gesture: WGesture) {
        if gesture.state == .recognized {
             performanceView.show()
+            Settings.saveBool(value: true, forKey: Config.w3w.developerMode)
+            self.addBoundingBoxToLayer()
         }
     }
     
@@ -161,7 +163,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
 
         self.view.addSubview(overlayView)
         self.performanceView.add(overlayView)
-
+        Settings.saveBool(value: false, forKey: Config.w3w.developerMode)
+        
         performanceView.snp.makeConstraints{ (make) in
             make.top.equalTo(self.overlayView).offset(20)
             make.left.equalTo(self.overlayView)
@@ -241,13 +244,17 @@ class CameraController: UIViewController, CameraControllerProtocol {
                     self.videoPreview.layer.addSublayer(previewLayer)
                     self.resizePreviewLayer()
                 }
-                // Add the bounding box layers to the UI, on top of the video preview.
-                for box in self.boundingBoxViews {
-                    box.addToLayer(self.overlayView.layer)
-                }
+                self.addBoundingBoxToLayer()
                 // Once everything is set up, we can start capturing live video.
                 self.videoCapture.start()
             }
+        }
+    }
+    
+    func addBoundingBoxToLayer() {
+        // Add the bounding box layers to the UI, on top of the video preview.
+        for box in self.boundingBoxViews {
+            box.addToLayer(self.overlayView.layer)
         }
     }
     
@@ -330,6 +337,7 @@ extension CameraController: processPredictionsDelegate {
             self.boundingBoxViews[j].hide()
         }
         for prediction in predictions {
+            print(prediction.labels[0].identifier)
             detectionPhase = .W3wDetected
             counterAdd(count: Counter.totalPredictions)
             let width = self.view.frame.width
@@ -358,7 +366,7 @@ extension CameraController: processPredictionsDelegate {
             } else {
             
                 detectionPhase = .W3wNotRecognised
-                self.boundingBoxViews[i].show(frame: rect, label: "", color: UIColor.white)
+                self.boundingBoxViews[i].show(frame: rect, label: prediction.labels[0].identifier, color: UIColor.white)
                 if i <= 10 {
                     i+=1
                 } else {

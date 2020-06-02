@@ -86,6 +86,7 @@ class W3wCoreMLModel: NSObject {
         
         self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
             if  (Settings.boolForKey(key: Config.w3w.current3waFilter) == true) {
+                print(Settings.objectForKey(key: Config.w3w.currentThreshold)!)
                     return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float
             } else {
                 return (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float

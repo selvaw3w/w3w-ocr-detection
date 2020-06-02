@@ -37,5 +37,6 @@ struct Config {
         
         static let currentThreshold = "currentThreshold"
         static let current3waFilter = "current3waFilter"
+        static let developerMode    = "developerMode"
     }
 }
