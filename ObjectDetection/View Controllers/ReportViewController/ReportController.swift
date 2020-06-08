@@ -14,7 +14,7 @@ import MessageUI
 
  enum ImageSource: Int
   {
-    case camera = 1
+        case camera = 1
     case photoLibrary
   }
   
@@ -179,7 +179,7 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         sender.backgroundColor = UIColor.red
         
         if let labelValue = Labels(rawValue: (sender.titleLabel?.text)!) {
-            print(labelValue)
+            print(String(describing: labelValue))
             annotationView.label = labelValue
         }
     }
@@ -297,15 +297,16 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     }
     
     func writeXMLObject(_ object: AEXMLElement, box: BoundingBox) {
-            let drawRect = self.convertScreenCoordinatesToImageCoordinates(box)
-            object.addChild(name: "name", value: box.name.rawValue)
-            
+        let drawRect = self.convertScreenCoordinatesToImageCoordinates(box)
+        if let labelValue = Labels(rawValue: box.name.rawValue) {
+            object.addChild(name: "name", value: String(describing: labelValue))
             let bndbox = object.addChild(name: "bndbox")
             bndbox.addChild(name: "xmin",value: "\(drawRect[0])")
             bndbox.addChild(name: "ymin",value: "\(drawRect[1])")
             bndbox.addChild(name: "xmax",value: "\(drawRect[2])")
             bndbox.addChild(name: "ymax",value: "\(drawRect[3])")
-            
+
+        }
     }
     
     func convertScreenCoordinatesToImageCoordinates(_ boxes: BoundingBox) -> [CGFloat] {
