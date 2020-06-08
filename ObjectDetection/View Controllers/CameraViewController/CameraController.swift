@@ -273,13 +273,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
             self.didResumeVideoSession()
         }
     }
-    
-    func convert(cmage:CIImage) -> UIImage {
-         let context:CIContext = CIContext.init(options: nil)
-         let cgImage:CGImage = context.createCGImage(cmage, from: cmage.extent)!
-         let image:UIImage = UIImage.init(cgImage: cgImage)
-         return image
-    }
 
     @objc func reportIssue() {
         
@@ -292,8 +285,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
         let cgImage = imageProcess.context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
         let imageObject = UIImage(cgImage: cgImage!)
         self.onShowReportIssue?(imageObject)
-      
-        //self.sendScreenshotEmail()
     }
 }
 
@@ -355,10 +346,7 @@ extension CameraController: processPredictionsDelegate {
         UIView.animate(withDuration: 0.3) {
             self.overlayView.backgroundColor = Config.Font.Color.overlaynonW3w
         }
-
-        //self.overlayView.layer.mask = maskLayer
-        //boundingBoxes.removeBoundingBoxes()
-        self.threeWordBoxes.removeBoundingBoxes()        
+        self.threeWordBoxes.removeBoundingBoxes()
     }
     
     func showPredictions(predictions: [VNRecognizedObjectObservation]) {
@@ -425,114 +413,6 @@ extension CameraController: processPredictionsDelegate {
             totalRecognitions = 0
         }
     }
-    
-    func getMetaData(forImage image: UIImage) {
-            guard let data = image.jpegData(compressionQuality: 1),
-            let source = CGImageSourceCreateWithData(data as CFData, nil) else { return}
-
-        if let type = CGImageSourceGetType(source) {
-            print("type: \(type)")
-        }
-
-        if let properties = CGImageSourceCopyProperties(source, nil) {
-            print("properties - \(properties)")
-        }
-
-        let count = CGImageSourceGetCount(source)
-        print("count: \(count)")
-
-        for index in 0..<count {
-            if let metaData = CGImageSourceCopyMetadataAtIndex(source, index, nil) {
-                print("all metaData[\(index)]: \(metaData)")
-
-                let typeId = CGImageMetadataGetTypeID()
-                print("metadata typeId[\(index)]: \(typeId)")
-
-
-                if let tags = CGImageMetadataCopyTags(metaData) as? [CGImageMetadataTag] {
-
-                    print("number of tags - \(tags.count)")
-
-                    for tag in tags {
-                        if let name = CGImageMetadataTagCopyName(tag) {
-                            print("name: \(name)")
-                        }
-                        if let value = CGImageMetadataTagCopyValue(tag) {
-                            print("value: \(value)")
-                        }
-                        if let prefix = CGImageMetadataTagCopyPrefix(tag) {
-                            print("prefix: \(prefix)")
-                        }
-                        if let namespace = CGImageMetadataTagCopyNamespace(tag) {
-                            print("namespace: \(namespace)")
-                        }
-                        if let qualifiers = CGImageMetadataTagCopyQualifiers(tag) {
-                            print("qualifiers: \(qualifiers)")
-                        }
-                        print("-------")
-                    }
-                }
-            }
-
-            if let properties = CGImageSourceCopyPropertiesAtIndex(source, index, nil) {
-                print("properties[\(index)]: \(properties)")
-            }
-        }
-    }
-}
-
-//MARK: Send Email
-extension CameraController: MFMailComposeViewControllerDelegate {
-    
-    private func sendScreenshotEmail() {
-        guard MFMailComposeViewController.canSendMail() else {
-            showAlertWith(message: AlertMessage(title: "Error", body: "There is no email account registered"), style: .alert)
-            return
-        }
-        
-        let mailComposer = MFMailComposeViewController()
-        mailComposer.mailComposeDelegate = self
-        
-        let emailTo = Config.w3w.sendEmail
-        mailComposer.setSubject("Issue")
-        mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
-        mailComposer.setToRecipients(emailTo)
-        
-        guard coreml.loadCurrentStatebuffer != nil else {
-            return
-        }
-        
-        let ciimage = CIImage(cvPixelBuffer: coreml.loadCurrentStatebuffer!)
-        imageProcess.context = CIContext(options: nil)
-        let cgImage = imageProcess.context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
-        let imageObject = UIImage(cgImage: cgImage!)
-        let imageData = imageObject.jpegData(compressionQuality: 1.0)
-        
-        mailComposer.addAttachmentData(imageData!, mimeType: "image/jpeg", fileName: "Image.jpeg")
-        self.present(mailComposer, animated: true, completion: nil)
-        
-    }
-    
-    internal func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
-        switch result.rawValue {
-            case MFMailComposeResult.cancelled.rawValue:
-                DLog("Mail cancelled")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.saved.rawValue:
-                DLog("Mail saved")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.sent.rawValue:
-                DLog("Mail sent")
-                controller.dismiss(animated: true, completion: nil)
-            case MFMailComposeResult.failed.rawValue:
-                DLog("Mail sent failure")
-                controller.dismiss(animated: true, completion: nil)
-            default:
-                break
-            }
-            controller.dismiss(animated: true, completion: nil)
-            videoCapture.start()
-    }
 }
 
 extension CameraController: W3wSuggestionViewProtocol {
@@ -544,64 +424,10 @@ extension CameraController: W3wSuggestionViewProtocol {
     }
 }
 
-class ThreeWordBox {
-
-    var threeWordAddress    : String
-    var threeWordRect     : CGRect
-    var threeWordView     : ThreeWordBoundingBoxView?
-    var countDownTimer      : Int
-    
-    init(threeWordAddress: String, threeWordRect: CGRect, threeWordView: ThreeWordBoundingBoxView? = nil) {
-        self.threeWordAddress = threeWordAddress
-        self.threeWordRect = threeWordRect
-        self.threeWordView = threeWordView
-        self.countDownTimer = Config.w3w.destructBBViewtimer
-    }
-}
-
-
-class ThreeWordBoxes {
-    
-    var threeWordBoxes : Dictionary<String,ThreeWordBox> = [:]
-    
-    func add(threeWordAddress: String, rect: CGRect, parent: UIView) {
-        if threeWordBoxes[threeWordAddress] != nil {
-            threeWordBoxes[threeWordAddress]?.countDownTimer = Config.w3w.destructBBViewtimer
-            threeWordBoxes[threeWordAddress]?.threeWordRect = rect
-        } else {
-            let createboundingBoxView = ThreeWordBoundingBoxView()
-            threeWordBoxes[threeWordAddress] = ThreeWordBox(threeWordAddress: threeWordAddress, threeWordRect: rect, threeWordView: createboundingBoxView)
-        }
-    }
-    
-    func remove(threeWordBox: ThreeWordBox) {
-        threeWordBoxes.removeValue(forKey: threeWordBox.threeWordAddress)
-    }
-    
-    func removeBoundingBoxes() {
-        for (_, threeWordbox) in threeWordBoxes {
-            threeWordbox.countDownTimer -= 1
-            if threeWordbox.countDownTimer < 1 {
-                self.remove(threeWordBox: threeWordbox)
-                threeWordbox.threeWordView?.hide()
-            }
-        }
-    }
-    
-    func removeAllBoundingBox() {
-        for(_, threeWordbox) in threeWordBoxes {
-            threeWordbox.countDownTimer = 0
-            self.remove(threeWordBox: threeWordbox)
-            threeWordbox.threeWordView?.hide()
-        }
-    }
-}
-
 extension CameraController : PerformanceMonitorDelegate {
 
     func performanceMonitor(didReport performanceReport: PerformanceReport) {
         performanceView.display(fps: performanceReport.fps, cpu: Int(performanceReport.cpuUsage), memory: performanceReport.memoryUsage)
     }
-    
 }
 

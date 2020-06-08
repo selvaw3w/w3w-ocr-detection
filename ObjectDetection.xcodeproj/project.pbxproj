@@ -52,6 +52,7 @@
 		0099AA51246DEDC70064F515 /* IdleTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099AA50246DEDC70064F515 /* IdleTimer.swift */; };
 		0099E18024747B9900BB9D11 /* PerformanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0099E17F24747B9900BB9D11 /* PerformanceView.swift */; };
 		009A6613248C49ED009A74EB /* ReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009A6612248C49ED009A74EB /* ReportModel.swift */; };
+		009A6615248EE846009A74EB /* ThreeWordBoxes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009A6614248EE846009A74EB /* ThreeWordBoxes.swift */; };
 		00A9A396245F53F3003FB518 /* DeepLinkOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A389245F53F3003FB518 /* DeepLinkOption.swift */; };
 		00A9A397245F53F3003FB518 /* LaunchInstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */; };
 		00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */; };
@@ -138,6 +139,7 @@
 		0099AA50246DEDC70064F515 /* IdleTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdleTimer.swift; sourceTree = "<group>"; };
 		0099E17F24747B9900BB9D11 /* PerformanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceView.swift; sourceTree = "<group>"; };
 		009A6612248C49ED009A74EB /* ReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModel.swift; sourceTree = "<group>"; };
+		009A6614248EE846009A74EB /* ThreeWordBoxes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeWordBoxes.swift; sourceTree = "<group>"; };
 		00A9A389245F53F3003FB518 /* DeepLinkOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkOption.swift; sourceTree = "<group>"; };
 		00A9A38A245F53F3003FB518 /* LaunchInstructor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchInstructor.swift; sourceTree = "<group>"; };
 		00A9A38C245F53F3003FB518 /* ViewController+Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Coordinator.swift"; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 				00BAA469244BBE4A0036DB0C /* ImageProcess.swift */,
 				00BAA461244B44C70036DB0C /* Others */,
 				0099AA50246DEDC70064F515 /* IdleTimer.swift */,
+				009A6614248EE846009A74EB /* ThreeWordBoxes.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -735,6 +738,7 @@
 				0099AA4D246D4DB00064F515 /* ThreeWordBoundingBoxView.swift in Sources */,
 				00439ACF248C0AD8001E2675 /* ReportView.swift in Sources */,
 				00507203243FD54200DBC581 /* Settings.swift in Sources */,
+				009A6615248EE846009A74EB /* ThreeWordBoxes.swift in Sources */,
 				0099E18024747B9900BB9D11 /* PerformanceView.swift in Sources */,
 				007B505024694DF4000392E4 /* CameraModel.swift in Sources */,
 				00A9A3B0245F54FA003FB518 /* ViewControllerFactory.swift in Sources */,
