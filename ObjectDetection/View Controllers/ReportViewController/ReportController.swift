@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import AEXML
 import Photos
+import MessageUI
 
  enum ImageSource: Int
   {
@@ -50,7 +51,7 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         return button
     }()
 
-        // report issue button
+    // report issue button
     internal lazy var w3wlogoBtn : UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = Config.Font.Color.text
@@ -82,6 +83,16 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         return button
     }()
 
+    // close button
+    internal lazy var sendEmailbtn : UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = Config.Font.Color.text
+        button.setTitle("Report", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
+        button.clipsToBounds = true
+        return button
+    }()
 
     var onBack: (() -> Void)?
         
@@ -146,9 +157,19 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         }
 
         labelBtnTypes = [w3wBtn, w3wlogoBtn, otherBtn]
+        
         self.view.addSubview(annotationView)
         annotationView.snp.makeConstraints { (make) in
             make.width.height.equalTo(self.view)
+        }
+        
+        // set up capture button
+        self.annotationView.addSubview(sendEmailbtn)
+        sendEmailbtn.addTarget(self, action: #selector(self.sendScreenshotEmail), for: .touchUpInside)
+        sendEmailbtn.snp.makeConstraints { (make) in
+            make.bottom.equalTo(self.annotationView).offset(-30)
+            make.centerX.equalTo(self.annotationView)
+            make.width.height.equalTo(60)
         }
     }
     
@@ -159,9 +180,6 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         if let labelValue = Labels(rawValue: (sender.titleLabel?.text)!) {
             print(labelValue)
             annotationView.label = labelValue
-            if labelValue == Labels.other {
-                saveXML()
-            }
         }
     }
     
@@ -171,9 +189,6 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     @objc func deleteBoundingBox() {
         self.annotationView.deleteBoundingBoxRect()
     }
-//    override func didSelectCustomBackAction() {
-//        self.onBack?()
-//    }
     
     func pickImageFromSource(_ theImageSource: ImageSource) {
         let imagePicker = UIImagePickerController()
@@ -208,19 +223,6 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
           {
             //println("In image picker completion block")
         }
-//        //Import from library on iPad
-//        let pickPhotoPopover = UIPopoverController.init(contentViewController: imagePicker)
-//        //pickPhotoPopover.delegate = self
-//        let buttonRect = fromButton.convertRect(
-//          fromButton.bounds,
-//          toView: self.view.window?.rootViewController?.view)
-//        imagePicker.delegate = self;
-//        pickPhotoPopover.presentPopoverFromRect(
-//          buttonRect,
-//          inView: self.view,
-//          permittedArrowDirections: UIPopoverArrowDirection.Any,
-//          animated: true)
-//
       }
     }
     else
@@ -249,7 +251,6 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
       picker.dismiss(animated: true, completion: nil)
       self.annotationView.imageToCrop = selectedImage
     }
-    //cropView.setNeedsLayout()
 }
 
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -257,7 +258,7 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     picker.dismiss(animated: true, completion: nil)
   }
   
-  func saveXML() {
+  func saveXML(_ filename: String) {
         
         let xmlRequest = AEXMLDocument()
         
@@ -274,18 +275,23 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         size.addChild(name: "height", value: "\(String(describing: self.annotationView.imageSize?.height ?? 0.0))")
         size.addChild(name: "depth", value: "")
         annotation.addChild(name: "segmented", value: "0")
-        
-        let object = annotation.addChild(name: "object")
-        
-        for box in self.annotationView.allBoundingBoxRect {
-            self.writeXMLObject(object, box: box)
+            
+        if self.annotationView.allBoundingBoxRect.count > 0 {
+            for box in self.annotationView.allBoundingBoxRect {
+                let object = annotation.addChild(name: "object")
+                self.writeXMLObject(object, box: box)
+            }
         }
         
-        let drawRect = self.annotationView.selectedBoundingBoxRect
-            self.writeXMLObject (object, box: drawRect!)
-
+        if let drawRect = self.annotationView.selectedBoundingBoxRect {
+            let object = annotation.addChild(name: "object")
+            self.writeXMLObject (object, box: drawRect)
+        }
         // prints the same XML structure as original
         print(xmlRequest.xml)
+        
+        self.save(text: xmlRequest.xml, toDirectory: self.documentDirectory(), withFileName: "\(filename).xml")
+        
 
     }
     
@@ -326,11 +332,118 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     }
     
     func haveValidCropRect(_ haveValidCropRect: Bool) {
-        //self.otherBtn.isEnabled = haveValidCropRect
+        self.sendEmailbtn.isEnabled = haveValidCropRect
     }
     
 }
 
+//MARK: Send Email
+extension ReportController: MFMailComposeViewControllerDelegate {
+    
+    @objc private func sendScreenshotEmail() {
+        let filename = randomString(length: 10)
+        self.saveXML(filename)
+        
+        guard MFMailComposeViewController.canSendMail() else {
+            showAlertWith(message: AlertMessage(title: "Error", body: "There is no email account registered"), style: .alert)
+            return
+        }
+        
+        let mailComposer = MFMailComposeViewController()
+        mailComposer.mailComposeDelegate = self
+        
+        let emailTo = Config.w3w.sendEmail
+        mailComposer.setSubject("Issue")
+        mailComposer.setMessageBody("Hi, this image is not working.", isHTML: true)
+        mailComposer.setToRecipients(emailTo)
+        
+        let imageData = self.annotationView.imageToCrop!.jpegData(compressionQuality: 1.0)
+        
+        mailComposer.addAttachmentData(imageData!, mimeType: "image/jpeg", fileName: "Image_\(filename).jpeg")
+        let filepath =  self.read(fromDocumentsWithFileName: "\(filename).xml")
+        
+        if let fileData = NSData(contentsOfFile: filepath) {
+            print("File data loaded.")
+            mailComposer.addAttachmentData(fileData as Data, mimeType: "application/xml", fileName: "\(filename).xml")
+        }
+
+        self.present(mailComposer, animated: true, completion: nil)
+        
+    }
+    
+    internal func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?){
+        switch result.rawValue {
+            case MFMailComposeResult.cancelled.rawValue:
+                DLog("Mail cancelled")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.saved.rawValue:
+                DLog("Mail saved")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.sent.rawValue:
+                DLog("Mail sent")
+                controller.dismiss(animated: true, completion: nil)
+            case MFMailComposeResult.failed.rawValue:
+                DLog("Mail sent failure")
+                controller.dismiss(animated: true, completion: nil)
+            default:
+                break
+            }
+            controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func randomString(length: Int) -> String {
+        let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        return String((0..<length).map{ _ in letters.randomElement()! })
+    }
+
+}
+
+extension ReportController {
+    private func documentDirectory() -> String {
+        let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory,
+                                                                .userDomainMask,
+                                                                true)
+        return documentDirectory[0]
+    }
+    
+    private func append(toPath path: String, withPathComponent pathComponent: String) -> String? {
+        if var pathURL = URL(string: path) {
+            pathURL.appendPathComponent(pathComponent)
+            
+            return pathURL.absoluteString
+        }
+        return nil
+    }
+    
+    private func read(fromDocumentsWithFileName fileName: String) -> String {
+        guard let filePath = self.append(toPath: self.documentDirectory(), withPathComponent: fileName) else {
+            return ""
+        }
+        return filePath
+//        do {
+//            let savedString = try NSData(contentsOfFile: filePath)
+//            //String(contentsOfFile: filePath)
+//
+//            print(savedString)
+//        } catch {
+//            print("Error reading saved file")
+//        }
+    }
+    private func save(text: String, toDirectory directory: String, withFileName fileName: String) {
+        guard let filePath = self.append(toPath: directory, withPathComponent: fileName) else {
+            return
+        }
+    
+        do {
+            try text.write(toFile: filePath, atomically: true, encoding: .utf8)
+        } catch {
+            print("Error", error)
+            return
+        }
+        print("Save successful")
+    }
+
+}
 
 //            var cropRect = boxes.box
 //            var drawRect: CGRect = CGRect.zero
@@ -364,3 +477,5 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
 //            bndbox.addChild(name: "ymin",value: "\(drawRect.minY)")
 //            bndbox.addChild(name: "xmax",value: "\(drawRect.maxX)")
 //            bndbox.addChild(name: "ymax",value: "\(drawRect.maxY)")
+
+
