@@ -22,7 +22,7 @@ enum DetectionPhase {
 }
 
 protocol CameraControllerProtocol: class {
-    var onShowPhoto : (() -> Void)? { get set }
+    var onShowPhoto : ((UIImage) -> Void)? { get set }
     var onShowReportIssue : ((UIImage) -> Void)? { get set }
 }
 
@@ -47,9 +47,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
     var totalRecognitions = 0
         
     // MARK: - CameraControllerProtocol
-    var onShowPhoto: (() -> Void)?
+    var onShowPhoto: ((UIImage) -> Void)?
         
-    // toggle multi 3wa detectionvi
+    // toggle multi 3wa detection
     var isMulti3wa = true
     // toggle all filter & w3w only
     var isallFilter = false
@@ -127,7 +127,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
         return overlayView
     }()
     
-    // set all views
+    // setup all views
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setup()
@@ -266,8 +266,9 @@ class CameraController: UIViewController, CameraControllerProtocol {
         if photobtn.isSelected {
             self.videoCapture.photoCapture()
             self.instructionLbl.text = "Tap to scan again"
-            self.videoCapture.pause()
         } else {
+            self.threeWordBoxes.removeAllBoundingBox()
+            self.overlayView.setNeedsDisplay()
             self.instructionLbl.text = "Frame the 3 word address you want to scan"
             self.didResumeVideoSession()
         }
@@ -304,8 +305,16 @@ extension CameraController: VideoCaptureDelegate {
     }
     
     func photoCapture(_ capture: VideoCapture, didCapturePhotoFrame image: UIImage) {
-        let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
-        coreml.predictPhoto(pixelBuffer: pixelBuffer)
+        print("captured photo")
+        
+        self.videoCapture.pause()
+        let maxTries = 30
+        var tries = 0
+        while tries < maxTries {
+            let pixelBuffer = imageProcess.getCVPixelbuffer(from: image)!
+            coreml.predictPhoto(pixelBuffer: pixelBuffer)
+            tries += 1
+        }
     }
 }
 
@@ -358,6 +367,7 @@ extension CameraController: processPredictionsDelegate {
             self.boundingBoxViews[j].hide()
         }
         for prediction in predictions {
+            print(prediction.labels[0].identifier)
             detectionPhase = .W3wDetected
             counterAdd(count: Counter.totalPredictions)
             let width = self.view.frame.width
@@ -575,6 +585,14 @@ class ThreeWordBoxes {
                 self.remove(threeWordBox: threeWordbox)
                 threeWordbox.threeWordView?.hide()
             }
+        }
+    }
+    
+    func removeAllBoundingBox() {
+        for(_, threeWordbox) in threeWordBoxes {
+            threeWordbox.countDownTimer = 0
+            self.remove(threeWordBox: threeWordbox)
+            threeWordbox.threeWordView?.hide()
         }
     }
 }

@@ -36,7 +36,6 @@
 		007B502A24689C3B000392E4 /* ScanCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502824689C3B000392E4 /* ScanCoordinator.swift */; };
 		007B503024689CA0000392E4 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502C24689CA0000392E4 /* BaseViewController.swift */; };
 		007B503124689CA0000392E4 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502D24689CA0000392E4 /* CameraController.swift */; };
-		007B503224689CA0000392E4 /* PhotoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502E24689CA0000392E4 /* PhotoController.swift */; };
 		007B503324689CA0000392E4 /* CoordinatorNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */; };
 		007B503924689D05000392E4 /* PhotoDetectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503624689D04000392E4 /* PhotoDetectionView.swift */; };
 		007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B503724689D04000392E4 /* BoundingBoxView.swift */; };
@@ -123,7 +122,6 @@
 		007B502824689C3B000392E4 /* ScanCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanCoordinator.swift; sourceTree = "<group>"; };
 		007B502C24689CA0000392E4 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		007B502D24689CA0000392E4 /* CameraController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
-		007B502E24689CA0000392E4 /* PhotoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoController.swift; sourceTree = "<group>"; };
 		007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorNavigationController.swift; sourceTree = "<group>"; };
 		007B503624689D04000392E4 /* PhotoDetectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetectionView.swift; sourceTree = "<group>"; };
 		007B503724689D04000392E4 /* BoundingBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoundingBoxView.swift; sourceTree = "<group>"; };
@@ -287,7 +285,6 @@
 			children = (
 				007B502C24689CA0000392E4 /* BaseViewController.swift */,
 				007B505324694E21000392E4 /* CameraViewController */,
-				007B5054246955DA000392E4 /* PhotoViewController */,
 				00CDC747248AE683003A9900 /* ReportViewController */,
 				007B502F24689CA0000392E4 /* CoordinatorNavigationController.swift */,
 			);
@@ -337,14 +334,6 @@
 				007B504F24694DF4000392E4 /* CameraModel.swift */,
 			);
 			path = CameraViewController;
-			sourceTree = "<group>";
-		};
-		007B5054246955DA000392E4 /* PhotoViewController */ = {
-			isa = PBXGroup;
-			children = (
-				007B502E24689CA0000392E4 /* PhotoController.swift */,
-			);
-			path = PhotoViewController;
 			sourceTree = "<group>";
 		};
 		00A9A387245F53F3003FB518 /* BaseCoordinator */ = {
@@ -797,7 +786,6 @@
 				7BCB413321C309B900BFC4D0 /* VideoCapture.swift in Sources */,
 				007B502A24689C3B000392E4 /* ScanCoordinator.swift in Sources */,
 				007B503E24689D33000392E4 /* W3wSuggestionDataSource.swift in Sources */,
-				007B503224689CA0000392E4 /* PhotoController.swift in Sources */,
 				009A6613248C49ED009A74EB /* ReportModel.swift in Sources */,
 				0071D4622486E2F600F7DA5B /* Utils.swift in Sources */,
 				007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */,

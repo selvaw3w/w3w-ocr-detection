@@ -162,6 +162,16 @@ extension VideoCapture: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 extension VideoCapture: AVCapturePhotoCaptureDelegate {
     
+    public func photoOutput(_ captureOutput: AVCapturePhotoOutput,
+			didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings,
+			error: Error?) {
+
+		guard error == nil else {
+			print("Error in capture process: \(String(describing: error))")
+			return
+		}
+	}
+
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
     
         if let error = error {

@@ -13,11 +13,6 @@ extension DependencyContainer: ScanViewControllerFactory {
         let cameraController = UIStoryboard.main.instantiateViewController(identifier: "CameraController") as! CameraController
         return cameraController
     }
-    
-    func instantiatePhotoController() -> PhotoController {
-        let photoController = UIStoryboard.main.instantiateViewController(identifier: "PhotoController") as! PhotoController
-        return photoController
-    }
 }
 
 extension DependencyContainer: ReportViewControllerFactory {

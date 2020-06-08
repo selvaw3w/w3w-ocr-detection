@@ -8,7 +8,6 @@
 
 protocol ScanViewControllerFactory {
     func instantiateCameraController() -> CameraController
-    func instantiatePhotoController() -> PhotoController
 }
 
 protocol ReportViewControllerFactory {

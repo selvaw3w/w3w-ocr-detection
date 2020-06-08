@@ -22,7 +22,7 @@ protocol ReportControllerProtocol: class {
     var onBack: (() -> Void)? { get set }
 }
 
-class ReportController: BaseViewController, ReportControllerProtocol, UIImagePickerControllerDelegate,UINavigationControllerDelegate, CroppableImageViewDelegateProtocol  {
+class ReportController: BaseViewController, ReportControllerProtocol, UIImagePickerControllerDelegate,UINavigationControllerDelegate, AnnotationViewDelegateProtocol  {
 
         
     @IBOutlet weak var annotationView: AnnotateView!
