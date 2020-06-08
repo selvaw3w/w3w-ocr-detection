@@ -86,7 +86,7 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     // close button
     internal lazy var sendEmailbtn : UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = Config.Font.Color.text
+        button.backgroundColor = Config.Font.Color.text.withAlphaComponent(0.3)
         button.setTitle("Report", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
@@ -169,7 +169,8 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         sendEmailbtn.snp.makeConstraints { (make) in
             make.bottom.equalTo(self.annotationView).offset(-30)
             make.centerX.equalTo(self.annotationView)
-            make.width.height.equalTo(60)
+            make.width.equalTo(79)
+            make.height.equalTo(45)
         }
     }
     
@@ -324,24 +325,23 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
                 let boxXmax = drawRect.minX + boxRect.width
                 let boxYmax = drawRect.minY + boxRect.height
                 
-                print(boxXmin)
-                print(boxYmin)
-                print(boxXmax)
-                print(boxYmax)
                 return [boxXmin, boxYmin, boxXmax, boxYmax]
     }
     
     func haveValidCropRect(_ haveValidCropRect: Bool) {
-        self.sendEmailbtn.isEnabled = haveValidCropRect
+        if haveValidCropRect {
+            self.sendEmailbtn.backgroundColor = Config.Font.Color.text.withAlphaComponent(1.0)
+            self.sendEmailbtn.isEnabled = haveValidCropRect
+            self.sendEmailbtn.setNeedsDisplay()
+        }
     }
-    
 }
 
 //MARK: Send Email
 extension ReportController: MFMailComposeViewControllerDelegate {
     
     @objc private func sendScreenshotEmail() {
-        let filename = randomString(length: 10)
+        let filename = self.generateFilename(filename: "image_\(randomString(length: 5))")
         self.saveXML(filename)
         
         guard MFMailComposeViewController.canSendMail() else {
@@ -395,7 +395,28 @@ extension ReportController: MFMailComposeViewControllerDelegate {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
     }
+    
+     func generateFilename(filename: String) -> String {
+        /// get deviceInfo
+        var sysinfo = utsname()
+        uname(&sysinfo) // ignore return value
+        var version = String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
+        version = version.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)
+        /// set screen size
+        let screenSize = String(format: "%fx%f", UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+        ///  set timestamp
+        let timeStamp = generateCurrentTimeStamp()
+        ///  set device_type
+        let deviceType = UIDevice().type
 
+        return "\(filename)_\(timeStamp)_\(version)_\(screenSize)_\(deviceType)"
+    }
+    
+    func generateCurrentTimeStamp () -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd-hh-mm-ss"
+        return (formatter.string(from: Date()) as NSString) as String
+    }
 }
 
 extension ReportController {

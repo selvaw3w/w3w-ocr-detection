@@ -358,7 +358,6 @@ extension CameraController: processPredictionsDelegate {
             self.boundingBoxViews[j].hide()
         }
         for prediction in predictions {
-            print(prediction.labels[0].identifier)
             detectionPhase = .W3wDetected
             counterAdd(count: Counter.totalPredictions)
             let width = self.view.frame.width

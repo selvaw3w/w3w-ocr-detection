@@ -66,7 +66,7 @@
 		00A9A3A7245F54B4003FB518 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3A3245F54B4003FB518 /* DependencyContainer.swift */; };
 		00A9A3AF245F54FA003FB518 /* CoordinatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3AC245F54FA003FB518 /* CoordinatorFactory.swift */; };
 		00A9A3B0245F54FA003FB518 /* ViewControllerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3AE245F54FA003FB518 /* ViewControllerFactory.swift */; };
-		00A9A3B2245F6357003FB518 /* ScanViewControllerFactoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3B1245F6357003FB518 /* ScanViewControllerFactoryImp.swift */; };
+		00A9A3B2245F6357003FB518 /* ControllerFactoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3B1245F6357003FB518 /* ControllerFactoryImp.swift */; };
 		00A9A3BB245F63AA003FB518 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3B5245F63AA003FB518 /* UIButton.swift */; };
 		00A9A3BC245F63AA003FB518 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3B6245F63AA003FB518 /* UIViewController.swift */; };
 		00A9A3BD245F63AA003FB518 /* UINavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A9A3B7245F63AA003FB518 /* UINavigationBar.swift */; };
@@ -85,7 +85,6 @@
 		00CDC743248AE590003A9900 /* AnnotateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC741248AE590003A9900 /* AnnotateView.swift */; };
 		00CDC744248AE590003A9900 /* CornerDragView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC742248AE590003A9900 /* CornerDragView.swift */; };
 		00CDC749248AE683003A9900 /* ReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC748248AE683003A9900 /* ReportController.swift */; };
-		00CDC74B248AEACA003A9900 /* ReportViewControllerFactoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC74A248AEACA003A9900 /* ReportViewControllerFactoryImp.swift */; };
 		5660C088AF7FB420F6568B12 /* Pods_ObjectDetection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */; };
 		7BCB411B21C3096100BFC4D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB411A21C3096100BFC4D0 /* AppDelegate.swift */; };
 		7BCB412021C3096100BFC4D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BCB411E21C3096100BFC4D0 /* Main.storyboard */; };
@@ -154,7 +153,7 @@
 		00A9A3A3245F54B4003FB518 /* DependencyContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		00A9A3AC245F54FA003FB518 /* CoordinatorFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatorFactory.swift; sourceTree = "<group>"; };
 		00A9A3AE245F54FA003FB518 /* ViewControllerFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerFactory.swift; sourceTree = "<group>"; };
-		00A9A3B1245F6357003FB518 /* ScanViewControllerFactoryImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanViewControllerFactoryImp.swift; sourceTree = "<group>"; };
+		00A9A3B1245F6357003FB518 /* ControllerFactoryImp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllerFactoryImp.swift; sourceTree = "<group>"; };
 		00A9A3B5245F63AA003FB518 /* UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		00A9A3B6245F63AA003FB518 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		00A9A3B7245F63AA003FB518 /* UINavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationBar.swift; sourceTree = "<group>"; };
@@ -173,7 +172,6 @@
 		00CDC741248AE590003A9900 /* AnnotateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotateView.swift; sourceTree = "<group>"; };
 		00CDC742248AE590003A9900 /* CornerDragView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CornerDragView.swift; sourceTree = "<group>"; };
 		00CDC748248AE683003A9900 /* ReportController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportController.swift; sourceTree = "<group>"; };
-		00CDC74A248AEACA003A9900 /* ReportViewControllerFactoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewControllerFactoryImp.swift; sourceTree = "<group>"; };
 		4BE4A7192C3D1FF47CECAC43 /* Pods-ObjectDetection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectDetection.debug.xcconfig"; path = "Target Support Files/Pods-ObjectDetection/Pods-ObjectDetection.debug.xcconfig"; sourceTree = "<group>"; };
 		73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectDetection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCB411721C3096100BFC4D0 /* ObjectDetection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectDetection.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -425,8 +423,7 @@
 		00A9A3A4245F54B4003FB518 /* FactoryProtocolmp */ = {
 			isa = PBXGroup;
 			children = (
-				00A9A3B1245F6357003FB518 /* ScanViewControllerFactoryImp.swift */,
-				00CDC74A248AEACA003A9900 /* ReportViewControllerFactoryImp.swift */,
+				00A9A3B1245F6357003FB518 /* ControllerFactoryImp.swift */,
 			);
 			path = FactoryProtocolmp;
 			sourceTree = "<group>";
@@ -780,7 +777,7 @@
 				00A9A3BF245F63AA003FB518 /* DateFormatter.swift in Sources */,
 				007B502924689C3B000392E4 /* ApplicationCoordinator.swift in Sources */,
 				00CDC743248AE590003A9900 /* AnnotateView.swift in Sources */,
-				00A9A3B2245F6357003FB518 /* ScanViewControllerFactoryImp.swift in Sources */,
+				00A9A3B2245F6357003FB518 /* ControllerFactoryImp.swift in Sources */,
 				00A9A398245F53F3003FB518 /* ViewController+Coordinator.swift in Sources */,
 				00A9A39A245F53F3003FB518 /* BaseViewControllerProtocol.swift in Sources */,
 				007B502524689B57000392E4 /* NetworkError.swift in Sources */,
@@ -799,7 +796,6 @@
 				007B503124689CA0000392E4 /* CameraController.swift in Sources */,
 				7BCB413321C309B900BFC4D0 /* VideoCapture.swift in Sources */,
 				007B502A24689C3B000392E4 /* ScanCoordinator.swift in Sources */,
-				00CDC74B248AEACA003A9900 /* ReportViewControllerFactoryImp.swift in Sources */,
 				007B503E24689D33000392E4 /* W3wSuggestionDataSource.swift in Sources */,
 				007B503224689CA0000392E4 /* PhotoController.swift in Sources */,
 				009A6613248C49ED009A74EB /* ReportModel.swift in Sources */,
@@ -958,7 +954,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = YC9564MTQY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -992,7 +988,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = YC9564MTQY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

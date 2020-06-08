@@ -19,3 +19,10 @@ extension DependencyContainer: ScanViewControllerFactory {
         return photoController
     }
 }
+
+extension DependencyContainer: ReportViewControllerFactory {
+    func instantiateReportController() -> ReportController {
+        let reportController = UIStoryboard.main.instantiateViewController(identifier: "ReportController") as! ReportController
+        return reportController
+    }
+}
