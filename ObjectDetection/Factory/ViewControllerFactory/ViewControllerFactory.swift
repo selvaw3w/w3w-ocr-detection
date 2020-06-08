@@ -11,9 +11,6 @@ protocol ScanViewControllerFactory {
     func instantiatePhotoController() -> PhotoController
 }
 
-//    func instantiateTermsAndConditionsViewController() -> TermsAndConditionsViewController
-//protocol SettingsViewControllerFactory {
-//    func instantiateSettingsViewController() -> SettingsViewController
-//}
-
-
+protocol ReportViewControllerFactory {
+    func instantiateReportController() -> ReportController
+}

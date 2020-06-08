@@ -22,12 +22,16 @@ class ScanCoordinator: BaseCoordinator, CoordinatorFinishOutput {
 
     // MARK: - Private methods
     private func showCameraController() {
+
         let showCameraController = self.factory.instantiateCameraController()
         showCameraController.onShowPhoto = { [unowned self] in
             self.showPhotoController()
         }
         
-        self.router.setRootModule(showCameraController, hideBar: false, animated: false)
+        showCameraController.onShowReportIssue = { image in
+            self.showReportIssueController(image: image)
+        }
+        self.router.setRootModule(showCameraController, hideBar: true, animated: false)
     }
     
     private func showPhotoController() {
@@ -37,6 +41,15 @@ class ScanCoordinator: BaseCoordinator, CoordinatorFinishOutput {
         }
         
         self.router.push(photoController, transition: FadeAnimator(animationDuration: 0.2, isPresenting: true))
+    }
+    
+    private func showReportIssueController(image: UIImage) {
+        let reportController = self.factory.instantiateReportController()
+        reportController.image = image
+        reportController.onBack = { [unowned self] in
+            self.router.popModule(transition: FadeAnimator(animationDuration: 0.1, isPresenting: true))
+        }
+        self.router.push(reportController, transition: FadeAnimator(animationDuration: 0.2, isPresenting: true))
     }
     
     // MARK: - Coordinator

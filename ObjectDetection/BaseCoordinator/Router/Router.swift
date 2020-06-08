@@ -151,9 +151,9 @@ final class Router: NSObject, RouterProtocol {
     }
     
     func showTitles() {
-        self.rootController?.isNavigationBarHidden = false
-        self.rootController?.navigationBar.prefersLargeTitles = true
-        self.rootController?.navigationBar.tintColor = UIColor.black
+        self.rootController?.isNavigationBarHidden = true
+        self.rootController?.navigationBar.prefersLargeTitles = false
+        self.rootController?.navigationBar.tintColor = UIColor.clear
     }
     
     func hideTitles() {

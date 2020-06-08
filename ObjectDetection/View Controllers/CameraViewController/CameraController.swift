@@ -22,16 +22,18 @@ enum DetectionPhase {
 }
 
 protocol CameraControllerProtocol: class {
-    
     var onShowPhoto : (() -> Void)? { get set }
+    var onShowReportIssue : ((UIImage) -> Void)? { get set }
 }
 
 class CameraController: UIViewController, CameraControllerProtocol {
-        
+
+    var onShowReportIssue: ((UIImage) -> Void)?
+
     var wGesture: WGesture!
 
     var detectionPhase : DetectionPhase = .W3wNotStarted
-
+    
     let maskLayer = CAShapeLayer()
     
     var threeWordBoxes = ThreeWordBoxes()
@@ -46,6 +48,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
         
     // MARK: - CameraControllerProtocol
     var onShowPhoto: (() -> Void)?
+        
     // toggle multi 3wa detectionvi
     var isMulti3wa = true
     // toggle all filter & w3w only
@@ -78,7 +81,6 @@ class CameraController: UIViewController, CameraControllerProtocol {
     func setUpBoundingBoxViews() {
         for _ in 0..<maxBoundingBoxViews { //10
           boundingBoxViews.append(BoundingBoxView())
-          
         }
     }
 
@@ -97,7 +99,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     // report issue button
     internal lazy var reportBtn : UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = Config.Font.Color.background
+        button.backgroundColor = Config.Font.Color.issue
         button.setTitle("Report an issue", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
@@ -124,7 +126,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
         overlayView.frame.size = self.view.frame.size
         return overlayView
     }()
-
+    
     // set all views
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -162,6 +164,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
     func setup() {
 
         self.view.addSubview(overlayView)
+        
         self.performanceView.add(overlayView)
         Settings.saveBool(value: false, forKey: Config.w3w.developerMode)
         
@@ -189,10 +192,10 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
         
         // set up report issue button
-        self.navigationController?.navigationBar.addSubview(reportBtn)
+        self.view.addSubview(reportBtn)
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
         reportBtn.snp.makeConstraints{(make) in
-            make.top.equalTo(self.navigationController!.navigationBar).offset(15)
+            make.top.equalTo(view).offset(45)
             make.width.equalTo(120)
             make.height.equalTo(45)
             make.right.equalTo(-20)
@@ -270,8 +273,26 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
     }
     
+    func convert(cmage:CIImage) -> UIImage {
+         let context:CIContext = CIContext.init(options: nil)
+         let cgImage:CGImage = context.createCGImage(cmage, from: cmage.extent)!
+         let image:UIImage = UIImage.init(cgImage: cgImage)
+         return image
+    }
+
     @objc func reportIssue() {
-        self.sendScreenshotEmail()
+        
+        guard self.coreml.currentBuffer != nil else {
+            return
+        }
+
+        let ciimage = CIImage(cvPixelBuffer: coreml.loadCurrentStatebuffer!)
+        imageProcess.context = CIContext(options: nil)
+        let cgImage = imageProcess.context.createCGImage(ciimage, from: CGRect(x: 0, y: 0, width: self.ImageBufferSize.width, height: self.ImageBufferSize.height))
+        let imageObject = UIImage(cgImage: cgImage!)
+        self.onShowReportIssue?(imageObject)
+      
+        //self.sendScreenshotEmail()
     }
 }
 
@@ -566,3 +587,4 @@ extension CameraController : PerformanceMonitorDelegate {
     }
     
 }
+

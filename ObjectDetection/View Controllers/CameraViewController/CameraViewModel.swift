@@ -12,7 +12,7 @@ import what3words
 class CameraViewModel {
     
     public var suggestion = [CameraModel]()
-    
+        
     var config = OCRManager.sharedInstance
 
     init(config: OCRManager) {

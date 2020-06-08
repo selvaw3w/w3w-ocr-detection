@@ -42,6 +42,21 @@ class ImageProcess: NSObject {
         return croppedImage
     }
     
+    func covertScreenCoordinatestToImageCoordinates(frame: CGSize) -> CGSize {
+        let width = frame.width
+        let height = frame.height
+        let scaleFactor = height/self.ImageBufferSize.height
+        let scale = CGAffineTransform.identity.scaledBy(x: scaleFactor, y: scaleFactor)
+        let offset = self.ImageBufferSize.width * scaleFactor - width
+        let actualMarginWidth = -offset / 2.0
+        let transform = CGAffineTransform(scaleX: 1, y: -1).translatedBy(x: actualMarginWidth , y: -height)
+        let size = frame.applying(scale.inverted()).applying(transform.inverted())
+        return size
+    }
+    
+    func convertImageCoordinatesToScreenCoordinates(point: CGPoint) {
+    }
+    
     func cropCGImage(_ rect: CGRect, pixelBuffer: CVPixelBuffer) -> CGImage {
         //TODO: add validation
         let ciiimage = ciImageFromPixelBuffer(pixelBuffer: pixelBuffer)

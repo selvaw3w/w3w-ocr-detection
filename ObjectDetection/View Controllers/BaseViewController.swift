@@ -26,7 +26,7 @@ class BaseViewController: UIViewController, CoordinatorNavigationControllerDeleg
         }
     }
     
-    // MARK: - SwipeBackNavigationControllerDelegate
+    // MARK: - SwipeBack@objc @objc NavigationControllerDelegate
     
     internal func transitionBackFinished() {
         

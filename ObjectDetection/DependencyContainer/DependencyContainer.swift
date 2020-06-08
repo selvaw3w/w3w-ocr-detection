@@ -9,7 +9,7 @@
 import UIKit
 
 typealias Factory = CoordinatorFactoryProtocol & ViewControllerFactory
-typealias ViewControllerFactory = ScanViewControllerFactory  //& SettingsViewControllerFactory
+typealias ViewControllerFactory = ScanViewControllerFactory & ReportViewControllerFactory
 
 class DependencyContainer {
     
@@ -37,16 +37,17 @@ class DependencyContainer {
     // MARK: - Private methods
     
     private func customizeNavigationController() {
+        self.rootController.navigationController?.setNavigationBarHidden(true, animated: false)
         self.rootController.enableSwipeBack()
-        self.rootController.customizeTitle(titleColor: UIColor.red,
+        self.rootController.customizeTitle(titleColor: UIColor.clear,
                                            largeTextFont: UIFont(name: Config.Font.type.sourceLight, size: 22)!,
                                            smallTextFont: UIFont(name: Config.Font.type.sourceLight, size: 18)!,
                                            isTranslucent: true,
-                                           barTintColor: UIColor.purple)
+                                           barTintColor: UIColor.clear)
         self.rootController.customizeBackButton(backButtonImage: UIImage(named: "GoBack"),
                                       backButtonTitle: "Back3",
                                       backButtonfont: UIFont(name: Config.Font.type.sourceLight, size: 15),
-                                      backButtonTitleColor: .black,
+                                      backButtonTitleColor: .clear,
                                       shouldUseViewControllerTitles: true)
     }
 }
@@ -55,7 +56,7 @@ class DependencyContainer {
 // MARK: - CoordinatorFactoryProtocol
 
 extension DependencyContainer: CoordinatorFactoryProtocol {
-    
+
     func instantiateApplicationCoordinator() -> ApplicationCoordinator {
         return ApplicationCoordinator(router: Router(rootController: rootController), factory: self as Factory, launchInstructor: LaunchInstructor.configure())
     }
@@ -63,7 +64,12 @@ extension DependencyContainer: CoordinatorFactoryProtocol {
     func instantiateScanCoordinator(router: RouterProtocol) -> ScanCoordinator {
         return ScanCoordinator(router: router, factory: self)
     }
+
+    func instantiateReportCoordinator(router: RouterProtocol) -> ReportCoordinator {
+        return ReportCoordinator(router: router, factory: self)
+    }
     
+
 //    func instantiateSettingsCoordinator(router: RouterProtocol) -> WalktroughCoordinator {
 //        return SettingsCoordinator(router: router, factory: self)
 //    }

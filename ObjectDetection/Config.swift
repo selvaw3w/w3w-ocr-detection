@@ -26,6 +26,7 @@ struct Config {
             static let overlayW3w       = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.3)
             static let overlaynonW3w    = UIColor.clear
             static let overlayError     = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.6)
+            static let issue            = UIColor(red: 0.882, green: 0.122, blue: 0.149, alpha: 1)
         }
     }
     

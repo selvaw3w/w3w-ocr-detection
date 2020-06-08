@@ -11,6 +11,9 @@ import UIKit
 protocol CoordinatorFactoryProtocol {
     func instantiateApplicationCoordinator() -> ApplicationCoordinator
     func instantiateScanCoordinator(router: RouterProtocol) -> ScanCoordinator
+    func instantiateReportCoordinator(router: RouterProtocol) -> ReportCoordinator
+    
+    //func instantiateReportCoordinator(router: RouterProtocol) -> 
     //TODO: settings coordinator
     //func instantiatSettingsCoordinator(router: RouterProtocol) -> SettingsCoordinator
 }

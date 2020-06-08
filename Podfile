@@ -10,4 +10,5 @@ target 'ObjectDetection' do
   pod 'SnapKit', '~> 5.0.0'
   pod 'MBProgressHUD'
   pod 'GDPerformanceView-Swift', '~> 2.0.3'
+  pod 'AEXML'
 end

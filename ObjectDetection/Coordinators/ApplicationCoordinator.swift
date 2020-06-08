@@ -48,7 +48,17 @@ final class ApplicationCoordinator: BaseCoordinator {
         self.addDependency(coordinator)
         coordinator.start()
     }
+    
+    private func runReportFlow() {
+        let coordinator = self.factory.instantiateReportCoordinator(router: self.router)
+        coordinator.finishFlow = { [unowned self] in
+            self.removeDependency(coordinator)
+            self.start()
+        }
+        self.addDependency(coordinator)
+        coordinator.start()
 
+    }
     private func runOnboardingFlow() {
 //       let coordinator = self.factory.instantiateWalktroughCoordinator(router: self.router)
 //       coordinator.finishFlow = { [unowned self, unowned coordinator] in
