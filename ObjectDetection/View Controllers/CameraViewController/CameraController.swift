@@ -172,7 +172,7 @@ class CameraController: UIViewController, CameraControllerProtocol {
             make.top.equalTo(self.overlayView).offset(20)
             make.left.equalTo(self.overlayView)
             make.width.equalTo(self.overlayView)
-            make.height.equalTo(self.overlayView).dividedBy(2)
+            make.height.equalTo(self.overlayView).dividedBy(1.5)
         }
         // set up capture button
         self.overlayView.addSubview(photobtn)

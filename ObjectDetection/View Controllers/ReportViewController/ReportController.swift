@@ -292,8 +292,6 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         print(xmlRequest.xml)
         
         self.save(text: xmlRequest.xml, toDirectory: self.documentDirectory(), withFileName: "\(filename).xml")
-        
-
     }
     
     func writeXMLObject(_ object: AEXMLElement, box: BoundingBox) {

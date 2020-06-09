@@ -16,13 +16,21 @@ class PerformanceView : UIView {
     let step : Float = 5
     var slideValue : Float = 75.0
     
+    // semi transparent view for labels
+    internal lazy var opaqueView : UIView = {
+        let view = UIView(frame: CGRect.zero)
+        view.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        view.isUserInteractionEnabled = true
+        return view
+    }()
+    
     // fps
     internal lazy var FpsLbl : UILabel = {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.backgroundColor = UIColor.clear
         label.layer.contentsScale = UIScreen.main.scale
-        label.font = UIFont(name: Config.Font.type.rockWell, size: 25.0)
-        label.textColor = UIColor.white.withAlphaComponent(0.8)
+        label.font = UIFont(name: Config.Font.type.rockWell, size: 15.0)
+        label.textColor = UIColor.black.withAlphaComponent(0.8)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.3
         label.numberOfLines = 2
@@ -35,8 +43,8 @@ class PerformanceView : UIView {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.backgroundColor = UIColor.clear
         label.layer.contentsScale = UIScreen.main.scale
-        label.font = UIFont(name: Config.Font.type.rockWell, size: 25.0)
-        label.textColor = UIColor.white.withAlphaComponent(0.8)
+        label.font = UIFont(name: Config.Font.type.rockWell, size: 15.0)
+        label.textColor = UIColor.black.withAlphaComponent(0.8)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.3
         label.numberOfLines = 2
@@ -49,8 +57,8 @@ class PerformanceView : UIView {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.backgroundColor = UIColor.clear
         label.layer.contentsScale = UIScreen.main.scale
-        label.font = UIFont(name: Config.Font.type.rockWell, size: 25.0)
-        label.textColor = UIColor.white.withAlphaComponent(0.8)
+        label.font = UIFont(name: Config.Font.type.rockWell, size: 15.0)
+        label.textColor = UIColor.black.withAlphaComponent(0.8)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.3
         label.numberOfLines = 2
@@ -71,9 +79,9 @@ class PerformanceView : UIView {
     //slider label
     internal lazy var sliderLbl : UILabel = {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
-        label.backgroundColor = UIColor.clear
+        label.backgroundColor = Config.Font.Color.text
         label.layer.contentsScale = UIScreen.main.scale
-        label.font = UIFont(name: Config.Font.type.rockWell, size: 25.0)
+        label.font = UIFont(name: Config.Font.type.rockWell, size: 20.0)
         label.textColor = UIColor.white.withAlphaComponent(0.8)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.3
@@ -94,8 +102,8 @@ class PerformanceView : UIView {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.backgroundColor = UIColor.clear
         label.layer.contentsScale = UIScreen.main.scale
-        label.font = UIFont(name: Config.Font.type.rockWell, size: 20.0)
-        label.textColor = UIColor.white.withAlphaComponent(0.8)
+        label.font = UIFont(name: Config.Font.type.rockWell, size: 15.0)
+        label.textColor = UIColor.black.withAlphaComponent(0.8)
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.3
         label.numberOfLines = 2
@@ -112,48 +120,61 @@ class PerformanceView : UIView {
         self.isHidden = true
         self.isUserInteractionEnabled = true
         self.backgroundColor = UIColor.clear
-        self.addSubview(FpsLbl)
-        self.addSubview(CpuLbl)
-        self.addSubview(MemoryLbl)
+        
+        self.addSubview(self.opaqueView)
+        self.opaqueView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(self)
+            make.left.equalTo(10)
+            make.width.equalTo(self).dividedBy(2)
+            make.height.equalTo(self).dividedBy(5)
+        }
+
+        
+        self.opaqueView.addSubview(FpsLbl)
+        self.opaqueView.addSubview(CpuLbl)
+        self.opaqueView.addSubview(MemoryLbl)
         
         self.FpsLbl.snp.makeConstraints { (make) in
-            make.top.equalTo(self).offset(10)
-            make.centerX.equalTo(self)
-            make.width.equalTo(self)
-            make.height.equalTo(50)
+            make.top.equalTo(self.opaqueView).offset(10)
+            make.centerX.equalTo(self.opaqueView)
+            make.width.equalTo(self.opaqueView)
+            make.height.equalTo(30)
         }
         
         self.CpuLbl.snp.makeConstraints { (make) in
             make.top.equalTo(FpsLbl.snp.bottom).offset(5)
-            make.centerX.equalTo(self)
-            make.width.equalTo(self)
-            make.height.equalTo(50)
+            make.centerX.equalTo(self.opaqueView)
+            make.width.equalTo(self.opaqueView)
+            make.height.equalTo(30)
         }
         
         self.MemoryLbl.snp.makeConstraints { (make) in
             make.top.equalTo(CpuLbl.snp.bottom)
-            make.centerX.equalTo(self)
-            make.width.equalTo(self)
-            make.height.equalTo(60)
+            make.centerX.equalTo(self.opaqueView)
+            make.width.equalTo(self.opaqueView)
+            make.height.equalTo(40)
         }
         // slider
         UIView.animate(withDuration: 0.8) {
             self.thresholdSlider.setValue(self.slideValue, animated: true)
         }
         
-        thresholdSlider.addTarget(self, action: #selector(self.sliderValueDidChange(_:)), for: .valueChanged)
         self.sliderValueDidChange(self.thresholdSlider)
+        self.thresholdSlider.minimumTrackTintColor = .red
+        self.thresholdSlider.maximumTrackTintColor = .gray
+        self.thresholdSlider.addTarget(self, action: #selector(self.sliderValueDidChange(_:)), for: .valueChanged)
         self.addSubview(thresholdSlider)
         self.thresholdSlider.snp.makeConstraints { (make) in
-            make.top.equalTo(self.MemoryLbl.snp.bottom)
-            make.width.equalTo(self).offset(-20)
+            make.top.equalTo(self).offset(100)
+            make.width.equalTo(self).offset(-30)
             make.centerX.equalTo(self)
         }
+        
         self.addSubview(self.sliderLbl)
         self.sliderLbl.snp.makeConstraints { (make) in
             make.top.equalTo(thresholdSlider.snp.bottom)
             make.centerX.equalTo(self)
-            make.width.equalTo(self)
+            make.width.equalTo(70)
             make.height.equalTo(40)
         }
         
@@ -165,17 +186,14 @@ class PerformanceView : UIView {
             make.right.equalTo(self).offset(-5)
             make.height.equalTo(40)
         }
-        
+
         self.addSubview(self.toggleLbl)
         self.toggleLbl.snp.makeConstraints{ (make) in
             make.top.equalTo(self.sliderLbl.snp.bottom)
-            make.centerX.equalTo(self)
+            make.right.equalTo(self.w3wToggle.snp.left).offset(-5)
             make.width.equalTo(self).dividedBy(2)
             make.height.equalTo(40)
         }
-        
-        
-
     }
     
     func add(_ parent: UIView) {
@@ -200,6 +218,11 @@ class PerformanceView : UIView {
             self.MemoryLbl.text = "MEMORY:\n \((memory.used/1024)/1024) mb / \(round((Double(memory.used)/Double(memory.total)) * 100)) %"
             self.sliderLbl.text = "\(self.slideValue)%"
         }
+    }
+    
+    func trackRectForBounds(bounds: CGRect) -> CGRect {
+        let rect:CGRect = CGRect(x: 0, y: 0, width: 100, height: 30)
+        return rect
     }
     
     @objc func hide() {
