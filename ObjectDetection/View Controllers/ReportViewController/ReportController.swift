@@ -257,6 +257,7 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
     print("In \(#function)")
     picker.dismiss(animated: true, completion: nil)
+    self.onBack?()
   }
   
   func saveXML(_ filename: String) {
