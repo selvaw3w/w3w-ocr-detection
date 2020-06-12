@@ -33,8 +33,8 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
     internal lazy var closetn : UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = UIColor.clear
-        button.setImage(UIImage(named: "closeBtn"), for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setImage(UIImage(named: "close"), for: .normal)
+        button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
         button.clipsToBounds = true
         return button
@@ -112,48 +112,48 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         //self.annotationView.imageToCrop = image
         self.pickImageFromSource(ImageSource.camera)
         
-        self.annotationView.addSubview(self.w3wBtn)
+        self.view.addSubview(self.w3wBtn)
         self.w3wBtn.addTarget(self, action: #selector(self.labelsSelected), for: .touchUpInside)
         self.w3wBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.annotationView).offset(50)
+            make.top.equalTo(self.view).offset(50)
             make.width.equalTo(79)
             make.height.equalTo(45)
             make.right.equalTo(-20)
         }
-        self.annotationView.addSubview(self.w3wlogoBtn)
+        self.view.addSubview(self.w3wlogoBtn)
         self.w3wlogoBtn.addTarget(self, action: #selector(self.labelsSelected), for: .touchUpInside)
         self.w3wlogoBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.annotationView).offset(50)
+            make.top.equalTo(self.view).offset(50)
             make.width.equalTo(100)
             make.height.equalTo(45)
             make.right.equalTo(self.w3wBtn.snp.left).offset(-10)
         }
 
-        self.annotationView.addSubview(self.otherBtn)
+        self.view.addSubview(self.otherBtn)
         self.otherBtn.addTarget(self, action: #selector(self.labelsSelected), for: .touchUpInside)
         self.otherBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.annotationView).offset(50)
+            make.top.equalTo(self.view).offset(50)
             make.width.equalTo(45)
             make.height.equalTo(45)
             make.right.equalTo(self.w3wlogoBtn.snp.left).offset(-10)
         }
 
-        self.annotationView.addSubview(self.deleteBtn)
+        self.view.addSubview(self.deleteBtn)
         self.deleteBtn.addTarget(self, action: #selector(self.deleteBoundingBox), for: .touchUpInside)
         self.deleteBtn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.annotationView).offset(50)
+            make.top.equalTo(self.view).offset(50)
             make.width.equalTo(50)
             make.height.equalTo(50)
             make.right.equalTo(self.otherBtn.snp.left).offset(-10)
         }
         
-        self.annotationView.addSubview(self.closetn)
+        self.view.addSubview(self.closetn)
         self.closetn.addTarget(self, action: #selector(self.closeView), for: .touchUpInside)
         self.closetn.snp.makeConstraints { (make) in
-            make.top.equalTo(self.annotationView).offset(30)
             make.width.equalTo(20)
             make.height.equalTo(20)
-            make.left.equalTo(self.annotationView).offset(30)
+            make.centerY.equalTo(deleteBtn)
+            make.left.equalTo(self.annotationView).offset(10)
         }
 
         labelBtnTypes = [w3wBtn, w3wlogoBtn, otherBtn]
@@ -164,11 +164,11 @@ class ReportController: BaseViewController, ReportControllerProtocol, UIImagePic
         }
         
         // set up capture button
-        self.annotationView.addSubview(sendEmailbtn)
+        self.view.addSubview(sendEmailbtn)
         sendEmailbtn.addTarget(self, action: #selector(self.sendScreenshotEmail), for: .touchUpInside)
         sendEmailbtn.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.annotationView).offset(-30)
-            make.centerX.equalTo(self.annotationView)
+            make.bottom.equalTo(self.view).offset(-30)
+            make.centerX.equalTo(self.view)
             make.width.equalTo(79)
             make.height.equalTo(45)
         }

@@ -73,7 +73,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Hy-uk-ZOM" customClass="AnnotateView" customModule="ObjectDetection" customModuleProvider="target">
-                                <rect key="frame" x="-2" y="6" width="418" height="885"/>
+                                <rect key="frame" x="-2" y="124" width="418" height="885"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="cropDelegate" destination="Yqd-2e-Xtj" id="l4j-BT-nfR"/>
@@ -85,7 +85,7 @@
                             <constraint firstItem="2Hy-uk-ZOM" firstAttribute="height" secondItem="Siz-PO-DRS" secondAttribute="height" multiplier="1.35082" constant="-325.33471999999983" id="EY8-ts-MAK"/>
                             <constraint firstItem="2Hy-uk-ZOM" firstAttribute="centerX" secondItem="Siz-PO-DRS" secondAttribute="centerX" id="JL6-Z1-Pzw"/>
                             <constraint firstItem="2Hy-uk-ZOM" firstAttribute="width" secondItem="Siz-PO-DRS" secondAttribute="width" multiplier="1.104" constant="-39.000000000000057" id="N9l-XH-XbQ"/>
-                            <constraint firstItem="2Hy-uk-ZOM" firstAttribute="centerY" secondItem="Siz-PO-DRS" secondAttribute="centerY" constant="0.5" id="dn8-sv-lng"/>
+                            <constraint firstItem="2Hy-uk-ZOM" firstAttribute="centerY" secondItem="Siz-PO-DRS" secondAttribute="centerY" constant="118.5" id="dn8-sv-lng"/>
                         </constraints>
                     </view>
                     <connections>
