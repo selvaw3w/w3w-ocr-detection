@@ -74,9 +74,10 @@ class OCRManager: NSObject {
     }
     
     /// - parameter image: send UIImage to OCR Engine for recognition
-    public func find_3wa(image: UIImage) -> String {
-        let recognisedText = ocrEngine?.find_3wa(imageFromBuffer: image)
-        return recognisedText!
+    public func find_3wa(image: UIImage) -> [W3wOCRThreeWordAddress] {
+        let recognised3wa = ocrEngine?.find_3wa(imageFromBuffer: image)
+
+        return recognised3wa!
     }
     
     /// - parameter CMbuffer: send CMSamplebuffer to OCR engine for recognition
@@ -93,9 +94,8 @@ class OCRManager: NSObject {
     }
 }
 
-extension OCRManager: W3WOCRRecognitionDelegate {
-    
-    func w3wOCRSuggestions(_ recognisedText: String!) {
-        //TODO: add recognition delegate to send receiver
+extension OCRManager: W3WOCRRecognitionDelegate {        
+    func w3wOCRSuggestions(_ recognisedText: [W3wOCRThreeWordAddress]?) {
+        print(recognisedText)
     }
 }

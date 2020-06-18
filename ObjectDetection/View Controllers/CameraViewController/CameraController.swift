@@ -379,7 +379,7 @@ extension CameraController: processPredictionsDelegate {
                     self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
                 }
 
-                threeWordBoxes.add(threeWordAddress: recognisedtext, rect: rect, parent: self.view)
+                threeWordBoxes.add(threeWordAddress: recognisedtext[0].threeWordAddress, rect: rect, parent: self.view)
             } else {
             
                 detectionPhase = .W3wNotRecognised
