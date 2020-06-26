@@ -378,12 +378,12 @@ extension CameraController: processPredictionsDelegate {
                 UIView.animate(withDuration: 0.3) {
                     self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
                 }
-
                 threeWordBoxes.add(threeWordAddress: recognisedtext[0].threeWordAddress, rect: rect, parent: self.view)
+                self.showSuggestionView(threeWordAddress: (recognisedtext[0].threeWordAddress))
             } else {
             
                 detectionPhase = .W3wNotRecognised
-                self.boundingBoxViews[i].show(frame: rect, label: prediction.labels[0].identifier, color: UIColor.white)
+                self.boundingBoxViews[i].show(frame: rect, label: prediction.labels[0].identifier, color: Config.Font.Color.bordercolor)
                 if i <= 10 {
                     i+=1
                 } else {

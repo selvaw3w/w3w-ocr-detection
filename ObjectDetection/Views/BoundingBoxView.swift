@@ -10,7 +10,7 @@ class BoundingBoxView {
     
         shapeLayer = CAShapeLayer()
         shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineWidth = 4
+        shapeLayer.lineWidth = 3
         shapeLayer.isHidden = true
 
         textLayer = CATextLayer()
@@ -20,8 +20,6 @@ class BoundingBoxView {
         textLayer.fontSize = 16
         textLayer.font = UIFont(name: Config.Font.type.sourceLight, size: textLayer.fontSize)
         textLayer.alignmentMode = CATextLayerAlignmentMode.center
-
-
     }
 
     func addToLayer(_ parent: CALayer) {
@@ -30,14 +28,41 @@ class BoundingBoxView {
             parent.addSublayer(textLayer)
         }
     }
+    
 
     func show(frame: CGRect, label: String, color: UIColor) {
+        
+        let cornerLengthToShow = frame.size.height * 0.25
 
-        let path = UIBezierPath(rect: frame)
-        shapeLayer.path = path.cgPath
+        let topLeftCorner = UIBezierPath()
+        topLeftCorner.move(to: CGPoint(x: frame.minX, y: frame.minY + cornerLengthToShow))
+        topLeftCorner.addLine(to: CGPoint(x: frame.minX, y: frame.minY))
+        topLeftCorner.addLine(to: CGPoint(x: frame.minX + cornerLengthToShow, y: frame.minY))
+
+        let topRightCorner = UIBezierPath()
+        topRightCorner.move(to: CGPoint(x: frame.maxX - cornerLengthToShow, y: frame.minY))
+        topRightCorner.addLine(to: CGPoint(x: frame.maxX, y: frame.minY))
+        topRightCorner.addLine(to: CGPoint(x: frame.maxX, y: frame.minY + cornerLengthToShow))
+
+        let bottomRightCorner = UIBezierPath()
+        bottomRightCorner.move(to: CGPoint(x: frame.maxX, y: frame.maxY - cornerLengthToShow))
+        bottomRightCorner.addLine(to: CGPoint(x: frame.maxX, y: frame.maxY))
+        bottomRightCorner.addLine(to: CGPoint(x: frame.maxX - cornerLengthToShow, y: frame.maxY ))
+
+        let bottomLeftCorner = UIBezierPath()
+        bottomLeftCorner.move(to: CGPoint(x: frame.minX, y: frame.maxY - cornerLengthToShow))
+        bottomLeftCorner.addLine(to: CGPoint(x: frame.minX, y: frame.maxY))
+        bottomLeftCorner.addLine(to: CGPoint(x: frame.minX + cornerLengthToShow, y: frame.maxY))
+
+        let combinedPath = CGMutablePath()
+        combinedPath.addPath(topLeftCorner.cgPath)
+        combinedPath.addPath(topRightCorner.cgPath)
+        combinedPath.addPath(bottomRightCorner.cgPath)
+        combinedPath.addPath(bottomLeftCorner.cgPath)
+        
+        shapeLayer.path = combinedPath
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.isHidden = false
-        
         textLayer.string = label
         textLayer.backgroundColor = color.cgColor
         

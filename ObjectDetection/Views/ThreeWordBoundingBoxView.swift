@@ -31,9 +31,9 @@ class ThreeWordBoundingBoxView: UIView {
     func setup() {
         self.isHidden = true
         self.isUserInteractionEnabled = false
-        self.backgroundColor = UIColor.white.withAlphaComponent(0.3)
-        self.layer.borderWidth = 4
-        self.layer.borderColor = UIColor.white.cgColor
+        self.backgroundColor = UIColor.clear
+        self.layer.borderWidth = 2
+        self.layer.borderColor = Config.Font.Color.bordercolor.cgColor
         self.addSubview(ThreeWordBoundingBoxLbl)
     }
     
@@ -70,7 +70,7 @@ class ThreeWordBoundingBoxView: UIView {
         }
         
         if phase == .W3wNotStarted || phase == .W3wRecognised || phase == .W3wDetected {
-            self.layer.borderColor = UIColor.white.cgColor
+            self.layer.borderColor = Config.Font.Color.bordercolor.cgColor
             self.ThreeWordBoundingBoxLbl.layer.borderColor = UIColor.white.cgColor
             self.ThreeWordBoundingBoxLbl.isHidden = true
         } else if phase == .W3wSelected {
