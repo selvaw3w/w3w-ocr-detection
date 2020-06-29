@@ -217,21 +217,21 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }, completion: nil)
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first
-        for (_ , threewordbox ) in threeWordBoxes.threeWordBoxes {
-            guard let point = touch?.location(in: threewordbox.threeWordView) else {
-                return
-            }
-
-            if (threewordbox.threeWordView?.bounds.contains(point))! {
-                self.showSuggestionView(threeWordAddress: (threewordbox.threeWordView?.ThreeWordBoundingBoxLbl.text)!)
-                detectionPhase = .W3wSelected
-                self.drawThreeWordBox()
-                self.videoCapture.pause()
-            }
-        }
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch = touches.first
+//        for (_ , threewordbox ) in threeWordBoxes.threeWordBoxes {
+//            guard let point = touch?.location(in: threewordbox.threeWordView) else {
+//                return
+//            }
+//
+//            if (threewordbox.threeWordView?.bounds.contains(point))! {
+//                self.showSuggestionView(threeWordAddress: (threewordbox.threeWordView?.ThreeWordBoundingBoxLbl.text)!)
+//                detectionPhase = .W3wSelected
+//                self.drawThreeWordBox()
+//                self.videoCapture.pause()
+//            }
+//        }
+//    }
     
     func resizePreviewLayer() {
         videoCapture.previewLayer?.frame = videoPreview.bounds
@@ -379,7 +379,10 @@ extension CameraController: processPredictionsDelegate {
                     self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
                 }
                 threeWordBoxes.add(threeWordAddress: recognisedtext[0].threeWordAddress, rect: rect, parent: self.view)
-                self.showSuggestionView(threeWordAddress: (recognisedtext[0].threeWordAddress))
+                self.showSuggestionView(threeWordAddress: "///\(recognisedtext[0].threeWordAddress)")
+                detectionPhase = .W3wSelected
+                self.drawThreeWordBox()
+                self.videoCapture.pause()
             } else {
             
                 detectionPhase = .W3wNotRecognised

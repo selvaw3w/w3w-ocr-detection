@@ -34,7 +34,7 @@ class ThreeWordBoundingBoxView: UIView {
         self.backgroundColor = UIColor.clear
         self.layer.borderWidth = 2
         self.layer.borderColor = Config.Font.Color.bordercolor.cgColor
-        self.addSubview(ThreeWordBoundingBoxLbl)
+        //self.addSubview(ThreeWordBoundingBoxLbl)
     }
     
     func add(_ parent: UIView) {
