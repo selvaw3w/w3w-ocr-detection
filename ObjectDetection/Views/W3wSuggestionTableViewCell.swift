@@ -9,7 +9,7 @@
 import UIKit
 
 class W3wSuggestionTableViewCell: UITableViewCell {
-
+    
     //DropDowncell view
     let containerView : UIView = {
         let view = UIView()
@@ -17,9 +17,20 @@ class W3wSuggestionTableViewCell: UITableViewCell {
         view.clipsToBounds = true
         return view
     }()
+    
     // W3wSuggestion -words
     let three_word_address : UILabel = {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
+//        if #available(iOS 13.0, *) {
+//            if UIScreen.main.traitCollection.userInterfaceStyle == .dark {
+//                label.textColor = UIColor.white
+//            } else {
+//                label.textColor = UIColor.black
+//            }
+//        } else {
+//            label.textColor = UIColor.black
+//        }
+        
         label.textColor = Config.Font.Color.text
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.init(name: Config.Font.type.sourceLight, size: 22.0)
@@ -36,7 +47,7 @@ class W3wSuggestionTableViewCell: UITableViewCell {
         return label
 
     }()
-    // W3wSuggestion -country
+    // W3wSuggestion - country
     let country_flag : UIImageView = {
         let flag = UIImageView()
         flag.translatesAutoresizingMaskIntoConstraints = false

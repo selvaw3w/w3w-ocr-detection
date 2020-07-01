@@ -73,7 +73,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     var maxBoundingBoxViews = 10
     // w3w suggestion view
     internal lazy var w3wSuggestionView : W3wSuggestionView = {
-        let view = W3wSuggestionView()        
+        let view = W3wSuggestionView()
+        view.frame = CGRect(x: 0.0, y: self.overlayView.bounds.height, width: self.view.bounds.width, height: 300)
         return view
     }()
     
@@ -84,25 +85,25 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
     }
 
-    // record button
-    internal lazy var photobtn : UIButton = {
-        let button = UIButton(type: .custom)
-        button.layer.cornerRadius = 30
-        button.layer.borderColor = UIColor.white.cgColor
-        button.setBackgroundImage(UIImage(named: "Shutter_Button"), for: .normal)
-        button.setBackgroundImage(UIImage(named: "closeBtn"), for: .selected)
-        button.clipsToBounds = true
-
-        return button
-    }()
-    
+//    // record button
+//    internal lazy var photobtn : UIButton = {
+//        let button = UIButton(type: .custom)
+//        button.layer.cornerRadius = 30
+//        button.layer.borderColor = UIColor.white.cgColor
+//        button.setBackgroundImage(UIImage(named: "Shutter_Button"), for: .normal)
+//        button.setBackgroundImage(UIImage(named: "closeBtn"), for: .selected)
+//        button.clipsToBounds = true
+//
+//        return button
+//    }()
+//
     // report issue button
     internal lazy var reportBtn : UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = Config.Font.Color.issue
+        button.backgroundColor = Config.Font.Color.txtBackground
         button.setTitle("Report an issue", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 14.0)
+        button.titleLabel?.font = UIFont(name: Config.Font.type.sourceLight, size: 12.0)
         button.clipsToBounds = true
         return button
     }()
@@ -112,10 +113,10 @@ class CameraController: UIViewController, CameraControllerProtocol {
         let label = PaddingUILabel(withInsets: 8, 8, 8, 8)
         label.textColor = UIColor.white
         label.adjustsFontSizeToFitWidth = true
-        label.backgroundColor = Config.Font.Color.background
         label.text = "Frame the 3 word address you want to scan"
         label.textAlignment = .center
-        label.font = label.font.withSize(12.0)
+        label.font = UIFont(name:Config.Font.type.sourceSansBold, size: 18.0)
+        label.shadow()
         label.sizeToFit()
         return label
     }()
@@ -175,18 +176,18 @@ class CameraController: UIViewController, CameraControllerProtocol {
             make.height.equalTo(self.overlayView).dividedBy(1.5)
         }
         // set up capture button
-        self.overlayView.addSubview(photobtn)
-        photobtn.addTarget(self, action: #selector(self.capturePhoto), for: .touchUpInside)
-        photobtn.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.overlayView).offset(-30)
-            make.centerX.equalTo(self.videoPreview)
-            make.width.height.equalTo(60)
-        }
+//        self.overlayView.addSubview(photobtn)
+//        photobtn.addTarget(self, action: #selector(self.capturePhoto), for: .touchUpInside)
+//        photobtn.snp.makeConstraints { (make) in
+//            make.bottom.equalTo(self.overlayView).offset(-30)
+//            make.centerX.equalTo(self.videoPreview)
+//            make.width.height.equalTo(60)
+//        }
 
         // set up intro label
         self.overlayView.addSubview(self.instructionLbl)
         instructionLbl.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.photobtn.snp.top).offset(-30)
+            make.bottom.equalTo(self.overlayView).offset(-30)
             make.centerX.equalTo(self.videoPreview)
             make.height.equalTo(30)
         }
@@ -196,24 +197,37 @@ class CameraController: UIViewController, CameraControllerProtocol {
         reportBtn.addTarget(self, action: #selector(self.reportIssue), for: .touchUpInside)
         reportBtn.snp.makeConstraints{(make) in
             make.top.equalTo(view).offset(45)
-            make.width.equalTo(120)
-            make.height.equalTo(45)
+            make.width.equalTo(102)
+            make.height.equalTo(32)
             make.right.equalTo(-20)
         }
     }
     
     func showSuggestionView(threeWordAddress: String) {
         // set up w3w suggestion view
-        self.w3wSuggestionView.alpha = 0.0
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
-            self.w3wSuggestionView.alpha = 1.0
-            self.w3wSuggestionView.selected3Wa = threeWordAddress
-            self.overlayView.addSubview(self.w3wSuggestionView)
-            self.w3wSuggestionView.snp.makeConstraints { (make) in
+        //self.w3wSuggestionView.alpha = 0.0
+        
+        
+        self.w3wSuggestionView.frame = CGRect(x: 0.0, y: self.overlayView.bounds.height, width: self.view.bounds.width, height: 0)
+
+        self.w3wSuggestionView.selected3Wa = threeWordAddress
+        self.overlayView.addSubview(self.w3wSuggestionView)
+        self.w3wSuggestionView.snp.makeConstraints { (make) in
                 make.bottom.equalTo(self.overlayView)
                 make.width.equalTo(self.overlayView)
                 make.height.equalTo(self.overlayView).dividedBy(2.5)
-            }
+        }
+
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut, .transitionCurlDown], animations: {
+            self.view.layoutIfNeeded()
+        //UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
+            //self.w3wSuggestionView.alpha = 1.0
+//            self.w3wSuggestionView.selected3Wa = threeWordAddress
+//            self.overlayView.addSubview(self.w3wSuggestionView)
+//            self.w3wSuggestionView.snp.makeConstraints { (make) in
+//                make.bottom.equalTo(self.overlayView)
+//                make.width.equalTo(self.overlayView)
+//                make.height.equalTo(self.overlayView).dividedBy(2.5)
         }, completion: nil)
     }
 
@@ -261,18 +275,18 @@ class CameraController: UIViewController, CameraControllerProtocol {
         }
     }
     
-    @objc func capturePhoto(_ sender: UIButton) {
-        photobtn.isSelected = !photobtn.isSelected
-        if photobtn.isSelected {
-            self.videoCapture.photoCapture()
-            self.instructionLbl.text = "Tap to scan again"
-        } else {
-            self.threeWordBoxes.removeAllBoundingBox()
-            self.overlayView.setNeedsDisplay()
-            self.instructionLbl.text = "Frame the 3 word address you want to scan"
-            self.didResumeVideoSession()
-        }
-    }
+//    @objc func capturePhoto(_ sender: UIButton) {
+//        photobtn.isSelected = !photobtn.isSelected
+//        if photobtn.isSelected {
+//            self.videoCapture.photoCapture()
+//            self.instructionLbl.text = "Tap to scan again"
+//        } else {
+//            self.threeWordBoxes.removeAllBoundingBox()
+//            self.overlayView.setNeedsDisplay()
+//            self.instructionLbl.text = "Frame the 3 word address you want to scan"
+//            self.didResumeVideoSession()
+//        }
+//    }
 
     @objc func reportIssue() {
         
@@ -319,7 +333,7 @@ extension CameraController {
             frame: threewordbox.threeWordRect,
             label: "w3w",
             w3w: threeWordAddress,
-                color: UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)),
+                color: UIColor(red: 0.373, green: 0.788, blue: 0.561, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer)),
                 textColor: UIColor(displayP3Red: 0.0, green: 0.0, blue: 0.0, alpha: CGFloat(threewordbox.countDownTimer / Config.w3w.destructBBViewtimer))
             , phase: detectionPhase)
             
@@ -330,6 +344,7 @@ extension CameraController {
             threewordbox.threeWordView?.add(self.overlayView)
             threewordbox.threeWordView?.setNeedsDisplay()
         }
+        
         if threeWordBoxes.threeWordBoxes.count > 0 {
             maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
             maskLayer.path = path.cgPath
@@ -375,10 +390,14 @@ extension CameraController: processPredictionsDelegate {
             if !recognisedtext.isEmpty {
                 detectionPhase = .W3wRecognised
                 counterAdd(count: Counter.totalRecognitions)
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: 0.2) {
                     self.overlayView.backgroundColor = Config.Font.Color.overlayW3w
                 }
-                threeWordBoxes.add(threeWordAddress: recognisedtext[0].threeWordAddress, rect: rect, parent: self.view)
+                
+                if(!rect.intersects(w3wSuggestionView.frame)) {
+                    threeWordBoxes.add(threeWordAddress: recognisedtext[0].threeWordAddress, rect: rect, parent: self.overlayView)
+                }
+                
                 self.showSuggestionView(threeWordAddress: "///\(recognisedtext[0].threeWordAddress)")
                 detectionPhase = .W3wSelected
                 self.drawThreeWordBox()
@@ -421,7 +440,7 @@ extension CameraController: W3wSuggestionViewProtocol {
     func didResumeVideoSession() {
         self.videoCapture.resume()
         self.instructionLbl.text = "Frame the 3 word address you want to scan"
-        self.photobtn.isSelected = false
+       // self.photobtn.isSelected = false
         detectionPhase = .W3wNotStarted
     }
 }

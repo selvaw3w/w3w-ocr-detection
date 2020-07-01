@@ -83,7 +83,9 @@ class ThreeWordBoundingBoxView: UIView {
     }
 
     func hide() {
-        self.isHidden = true
+        UIView.animate(withDuration: 0.25, delay: 0.5, options: [.curveEaseOut, .transitionCurlDown], animations: {
+            self.isHidden = true
+        }, completion: nil)
     }
 }
 

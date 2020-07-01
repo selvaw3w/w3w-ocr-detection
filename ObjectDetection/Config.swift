@@ -24,10 +24,13 @@ struct Config {
             static let textGray         = UIColor(red: 0.322, green: 0.322, blue: 0.322, alpha: 1)
             static let backgroundLight  = UIColor(red: 0.949, green: 0.957, blue: 0.961, alpha: 1)
             static let overlayW3w       = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.3)
+            static let txtBackground    = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 1.0)
             static let overlaynonW3w    = UIColor.clear
             static let overlayError     = UIColor(red: 0.039, green: 0.188, blue: 0.286, alpha: 0.6)
             static let issue            = UIColor(red: 0.882, green: 0.122, blue: 0.149, alpha: 1)
             static let bordercolor      = UIColor(red: 0.373, green: 0.788, blue: 0.561, alpha: 1)
+            static let darkmodeLbl      = UIColor(red: 0.282, green: 0.282, blue: 0.29, alpha: 1)
+            static let darksuggestion   = UIColor(red: 0.173, green: 0.173, blue: 0.18, alpha: 1)
         }
     }
     

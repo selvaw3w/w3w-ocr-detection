@@ -44,15 +44,28 @@ class W3wSuggestionView: UIView {
     internal lazy var w3wLbl: UILabel = {
         let label = PaddingUILabel(withInsets: 8.0, 8.0, 16.0, 8.0)
         label.adjustsFontSizeToFitWidth = true
+//        if #available(iOS 13.0, *) {
+//            if self.traitCollection.userInterfaceStyle == .dark {
+//                label.textColor = UIColor.white
+//                self.backgroundColor = Config.Font.Color.darkmodeLbl
+//            } else {
+//                label.textColor = UIColor.black
+//                self.backgroundColor = UIColor.white
+//            }
+//        } else {
+//            label.textColor = UIColor.black
+//            self.backgroundColor = UIColor.black
+//        }
+//
         label.textColor = UIColor.black
         label.backgroundColor = UIColor.white
         label.textAlignment = .left
         label.font = UIFont.init(name: Config.Font.type.sourceSanRegular, size: 22.0)
-        label.textColor  = Config.Font.Color.text
+        //label.textColor  = Config.Font.Color.text
         label.sizeToFit()
         return label
     }()
-    
+        
     internal lazy var tableview: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: UITableView.Style.plain)
         tableView.backgroundColor = UIColor.clear
@@ -105,10 +118,11 @@ class W3wSuggestionView: UIView {
     }
     
     @objc func closeView() {
-        self.delegate?.didResumeVideoSession()
-        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            self.alpha = 0.0
+        UIView.animate(withDuration: 5, delay: 0, options: [.curveEaseIn, .transitionCurlDown], animations: {
+            //self.alpha = 0.0
             self.removeFromSuperview()
-        }, completion: nil)
+        }, completion: { _ in
+            self.delegate?.didResumeVideoSession()
+        })
     }
 }
