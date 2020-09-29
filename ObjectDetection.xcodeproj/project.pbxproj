@@ -86,6 +86,8 @@
 		00CDC744248AE590003A9900 /* CornerDragView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC742248AE590003A9900 /* CornerDragView.swift */; };
 		00CDC749248AE683003A9900 /* ReportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00CDC748248AE683003A9900 /* ReportController.swift */; };
 		00D1CB2C24ACD32E0061088C /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D1CB2B24ACD32E0061088C /* UILabel.swift */; };
+		00DC1FE1251C9ECC001A7892 /* w3w_yolov5_1.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 00DC1FE0251C9ECC001A7892 /* w3w_yolov5_1.mlmodel */; };
+		00DC1FE4251CA17C001A7892 /* best.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 00DC1FE3251CA17C001A7892 /* best.mlmodel */; };
 		5660C088AF7FB420F6568B12 /* Pods_ObjectDetection.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */; };
 		7BCB411B21C3096100BFC4D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB411A21C3096100BFC4D0 /* AppDelegate.swift */; };
 		7BCB412021C3096100BFC4D0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7BCB411E21C3096100BFC4D0 /* Main.storyboard */; };
@@ -174,6 +176,8 @@
 		00CDC742248AE590003A9900 /* CornerDragView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CornerDragView.swift; sourceTree = "<group>"; };
 		00CDC748248AE683003A9900 /* ReportController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportController.swift; sourceTree = "<group>"; };
 		00D1CB2B24ACD32E0061088C /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		00DC1FE0251C9ECC001A7892 /* w3w_yolov5_1.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = w3w_yolov5_1.mlmodel; sourceTree = "<group>"; };
+		00DC1FE3251CA17C001A7892 /* best.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = best.mlmodel; path = ../../../../../Downloads/best.mlmodel; sourceTree = "<group>"; };
 		4BE4A7192C3D1FF47CECAC43 /* Pods-ObjectDetection.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectDetection.debug.xcconfig"; path = "Target Support Files/Pods-ObjectDetection/Pods-ObjectDetection.debug.xcconfig"; sourceTree = "<group>"; };
 		73AA4EF7377043D05FE722E8 /* Pods_ObjectDetection.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectDetection.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCB411721C3096100BFC4D0 /* ObjectDetection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ObjectDetection.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,7 +237,9 @@
 			isa = PBXGroup;
 			children = (
 				005071D5243F32E600DBC581 /* w3w-data.zip */,
+				00DC1FE3251CA17C001A7892 /* best.mlmodel */,
 				005071D6243F32E600DBC581 /* w3w.mlmodel */,
+				00DC1FE0251C9ECC001A7892 /* w3w_yolov5_1.mlmodel */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -409,6 +415,7 @@
 			children = (
 				00A9A3A3245F54B4003FB518 /* DependencyContainer.swift */,
 				00A9A3A4245F54B4003FB518 /* FactoryProtocolmp */,
+				00A9A3AA245F54FA003FB518 /* Factory */,
 			);
 			path = DependencyContainer;
 			sourceTree = "<group>";
@@ -584,7 +591,6 @@
 			children = (
 				7BCB411A21C3096100BFC4D0 /* AppDelegate.swift */,
 				007B502024689B57000392E4 /* Models */,
-				00A9A3AA245F54FA003FB518 /* Factory */,
 				00A9A3A2245F54B4003FB518 /* DependencyContainer */,
 				00BAA464244B7C5B0036DB0C /* Coordinator */,
 				007B502B24689CA0000392E4 /* View Controllers */,
@@ -767,6 +773,7 @@
 				007B504524689DF4000392E4 /* PaddingUILabel.swift in Sources */,
 				007B502424689B57000392E4 /* AlertMessage.swift in Sources */,
 				007B504924689E70000392E4 /* W3wSuggestionView.swift in Sources */,
+				00DC1FE4251CA17C001A7892 /* best.mlmodel in Sources */,
 				0080318A2485387000260AC1 /* CustomSlider.swift in Sources */,
 				005071E0243F66A700DBC581 /* Config.swift in Sources */,
 				00A9A3BE245F63AA003FB518 /* UIStoryboard.swift in Sources */,
@@ -796,6 +803,7 @@
 				007B503E24689D33000392E4 /* W3wSuggestionDataSource.swift in Sources */,
 				009A6613248C49ED009A74EB /* ReportModel.swift in Sources */,
 				0071D4622486E2F600F7DA5B /* Utils.swift in Sources */,
+				00DC1FE1251C9ECC001A7892 /* w3w_yolov5_1.mlmodel in Sources */,
 				007B503A24689D05000392E4 /* BoundingBoxView.swift in Sources */,
 				007B504B24689E87000392E4 /* W3wSuggestionTableViewCell.swift in Sources */,
 				00BAA46A244BBE4A0036DB0C /* ImageProcess.swift in Sources */,
@@ -950,7 +958,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = YC9564MTQY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -984,7 +992,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = YC9564MTQY;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

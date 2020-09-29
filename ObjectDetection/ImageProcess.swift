@@ -32,7 +32,7 @@ class ImageProcess: NSObject {
     
     //crop image
     func cropImage(_ prediction: VNRecognizedObjectObservation, cvPixelBuffer: CVPixelBuffer) -> UIImage  {
-        let originX = prediction.boundingBox.minX * ImageBufferSize.width
+        let originX = prediction.boundingBox.minX * ImageBufferSize.width 
         let originY = prediction.boundingBox.minY * ImageBufferSize.height
         let cropWidth = (prediction.boundingBox.maxX - prediction.boundingBox.minX) * ImageBufferSize.width
         let cropHeight = (prediction.boundingBox.maxY-prediction.boundingBox.minY)*ImageBufferSize.height

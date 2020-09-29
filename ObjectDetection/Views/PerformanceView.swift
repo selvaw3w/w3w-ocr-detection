@@ -66,6 +66,12 @@ class PerformanceView : UIView {
         return label
     }()
     
+    // uiimage
+    internal lazy var debugImageView: UIImageView = {
+        let imageView = UIImageView()
+        return imageView
+    }()
+    
     //slider
     internal lazy var thresholdSlider : UISlider = {
         let slider = UISlider()
@@ -128,7 +134,6 @@ class PerformanceView : UIView {
             make.width.equalTo(self).dividedBy(2)
             make.height.equalTo(self).dividedBy(5)
         }
-
         
         self.opaqueView.addSubview(FpsLbl)
         self.opaqueView.addSubview(CpuLbl)
@@ -194,6 +199,14 @@ class PerformanceView : UIView {
             make.width.equalTo(self).dividedBy(2)
             make.height.equalTo(40)
         }
+        
+        self.addSubview(self.debugImageView)
+        self.debugImageView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.toggleLbl.snp.bottom)
+            make.centerX.equalTo(self)
+            make.width.equalTo(self).offset(-20)
+            make.height.equalTo(self).dividedBy(5)
+        }
     }
     
     func add(_ parent: UIView) {
@@ -208,7 +221,7 @@ class PerformanceView : UIView {
         self.isHidden = false
     }
     
-    func display(fps: Int, cpu: Int, memory: MemoryUsage) {
+    func display(fps: Int, cpu: Int, memory: MemoryUsage, image: UIImage) {
         UIView.animate(withDuration: 0.5) {
             self.FpsLbl.fadeTransition(0.7)
             self.FpsLbl.text = "FPS: \(fps) fps"
@@ -217,6 +230,7 @@ class PerformanceView : UIView {
             self.MemoryLbl.fadeTransition(0.7)
             self.MemoryLbl.text = "MEMORY:\n \((memory.used/1024)/1024) mb / \(round((Double(memory.used)/Double(memory.total)) * 100)) %"
             self.sliderLbl.text = "\(self.slideValue)%"
+            self.debugImageView.image = image
         }
     }
     

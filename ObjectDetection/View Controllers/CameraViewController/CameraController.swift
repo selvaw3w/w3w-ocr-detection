@@ -45,6 +45,8 @@ class CameraController: UIViewController, CameraControllerProtocol {
     var totalPredictions = 0
     
     var totalRecognitions = 0
+    
+    var tesseractImage = UIImage()
         
     // MARK: - CameraControllerProtocol
     var onShowPhoto: ((UIImage) -> Void)?
@@ -385,7 +387,10 @@ extension CameraController: processPredictionsDelegate {
             }
             let croppedImage = self.imageProcess.cropImage(prediction, cvPixelBuffer: self.coreml.currentBuffer!)
             let rect = self.imageProcess.croppedRect.applying(scale).applying(transform)
+            self.ocrmanager.isInverted(value: false)
             let recognisedtext = self.ocrmanager.find_3wa(image: croppedImage)
+            //let image  = self.ocrmanager.imageToTesseract(image: croppedImage)
+            //tesseractImage = image
             
             if !recognisedtext.isEmpty {
                 detectionPhase = .W3wRecognised
@@ -448,7 +453,7 @@ extension CameraController: W3wSuggestionViewProtocol {
 extension CameraController : PerformanceMonitorDelegate {
 
     func performanceMonitor(didReport performanceReport: PerformanceReport) {
-        performanceView.display(fps: performanceReport.fps, cpu: Int(performanceReport.cpuUsage), memory: performanceReport.memoryUsage)
+        performanceView.display(fps: performanceReport.fps, cpu: Int(performanceReport.cpuUsage), memory: performanceReport.memoryUsage, image: tesseractImage)
     }
 }
 

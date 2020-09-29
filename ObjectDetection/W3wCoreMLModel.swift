@@ -22,8 +22,18 @@ class W3wCoreMLModel: NSObject {
     // set up delegate
     var delegate : processPredictionsDelegate?
     
+    let config = MLModelConfiguration()
     // Initialise coreML model
     let w3wMLModel   = w3w()
+//    let w3wMLModel: best = {
+//    do {
+//            let config = MLModelConfiguration()
+//            return try best(configuration: config)
+//        } catch {
+//            print(error)
+//            fatalError("Couldn't create SleepCalculator")
+//        }
+//    }()
 
     // current pixel buffer
     var currentBuffer: CVPixelBuffer?
@@ -42,6 +52,7 @@ class W3wCoreMLModel: NSObject {
     
     override init() {
         super.init()
+        //_ = loadLabels()
     }
     
     /// - Make new vision request
@@ -69,6 +80,7 @@ class W3wCoreMLModel: NSObject {
     
     /// - process all observations
     func processObservations(for request: VNRequest, error: Error?) {
+        print("processObservations")
         DispatchQueue.main.async {
             if let results = request.results as? [VNRecognizedObjectObservation] {
                 self.detectedObservation(predictions: results)
@@ -80,14 +92,17 @@ class W3wCoreMLModel: NSObject {
     }
     
     func detectedObservation(predictions: [VNRecognizedObjectObservation]) {
+        print("detectedObservation")
         if predictions.count == 0  {
             self.delegate?.noPredictions()
         }
         
         self.delegate?.showPredictions(predictions: predictions.filter({ (prediction) -> Bool in
             if  (Settings.boolForKey(key: Config.w3w.current3waFilter) == true) {
+                print(prediction.labels[0].identifier)
                 return prediction.labels[0].identifier == "w3w" && (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float
             } else {
+                print(prediction.labels[0].identifier)
                 return (prediction.labels[0].confidence * 100) > Settings.objectForKey(key: Config.w3w.currentThreshold) as! Float
             }
         }))

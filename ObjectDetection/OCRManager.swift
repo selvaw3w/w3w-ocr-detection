@@ -76,16 +76,23 @@ class OCRManager: NSObject {
     /// - parameter image: send UIImage to OCR Engine for recognition
     public func find_3wa(image: UIImage) -> [W3wOCRThreeWordAddress] {
         let recognised3wa = ocrEngine?.find_3wa(imageFromBuffer: image)
-
         return recognised3wa!
     }
-    
+
+    public func imageToTesseract(image: UIImage) -> UIImage {
+        let tesseractImage = ocrEngine?.imageSentTesseract(image: image)
+        return tesseractImage!
+    }
     /// - parameter CMbuffer: send CMSamplebuffer to OCR engine for recognition
     public func addVideoBuffer(CMBuffer: CMSampleBuffer) {
         ocrEngine?.addVideoBuffer(buffer: CMBuffer)
     }
     
-    /// - parameter viewBounds: set the region for recognition and draw the overlay area on the uiview
+    public func isInverted(value: Bool) {
+        let objCStr = value ? "YES" : "NO"
+        //ocrEngine?.isInverted(value: objCStr)
+    }
+    /// - parameter viewBounds: set the region for recognition and draw sthe overlay area on the uiview
     public func setAreaOfInterest(viewBounds: CGRect) {
         guard viewBounds.isNull else {
             ocrEngine?.setAreaOfInterest(viewBounds)
@@ -94,8 +101,10 @@ class OCRManager: NSObject {
     }
 }
 
-extension OCRManager: W3WOCRRecognitionDelegate {        
+extension OCRManager: W3WOCRRecognitionDelegate {
     func w3wOCRSuggestions(_ recognisedText: [W3wOCRThreeWordAddress]?) {
         print(recognisedText)
     }
+    
+    
 }
